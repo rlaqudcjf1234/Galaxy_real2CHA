@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.galaxy.dto.ListDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.service.AdminService;
 
@@ -18,18 +19,14 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-	@RequestMapping(value = "/selectCount")
-	public int selectCount(SearchDto dto) throws Exception {
+	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	public ListDto list(SearchDto dto) throws Exception {
+		
 		int count = adminService.selectCount(dto);
-
-		return count;
-	}
-
-	@RequestMapping(value = "/selectList", method = RequestMethod.POST)
-	public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
 		List<Map<String, Object>> list = adminService.selectList(dto);
 
-		return list;
-	}
+		ListDto listDto = new ListDto(count, list);
 
+		return listDto;
+	}
 }

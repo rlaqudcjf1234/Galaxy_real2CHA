@@ -1,5 +1,10 @@
 package com.galaxy.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class PageDto {
 
 	/** 현재페이지 */
@@ -19,52 +24,4 @@ public class PageDto {
 
 	/** recordCountPerPage */
 	private int recordCountPerPage = 10;
-
-	public int getPageIndex() {
-		return pageIndex;
-	}
-
-	public void setPageIndex(int pageIndex) {
-		this.pageIndex = pageIndex;
-	}
-
-	public int getPageUnit() {
-		return pageUnit;
-	}
-
-	public void setPageUnit(int pageUnit) {
-		this.pageUnit = pageUnit;
-	}
-
-	public int getPageSize() {
-		return pageSize;
-	}
-
-	public void setPageSize(int pageSize) {
-		this.pageSize = pageSize;
-	}
-
-	public int getFirstIndex() {
-		return firstIndex;
-	}
-
-	public void setFirstIndex(int firstIndex) {
-		this.firstIndex = firstIndex;
-	}
-
-	public int getLastIndex() {
-		return lastIndex;
-	}
-
-	public void setLastIndex(int lastIndex) {
-		this.lastIndex = lastIndex;
-	}
-
-	public int getRecordCountPerPage() {
-		return recordCountPerPage;
-	}
-
-	public void setRecordCountPerPage(int recordCountPerPage) {
-		this.recordCountPerPage = recordCountPerPage;
-	}
 }
