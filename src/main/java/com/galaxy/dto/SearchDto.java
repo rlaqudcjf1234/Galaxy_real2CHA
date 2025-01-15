@@ -7,8 +7,10 @@ import lombok.Setter;
 @Setter
 public class SearchDto extends PageDto {
 
-	private String email;
+	private String email = "";
 	
-	private String name;
+	private String name = "";
+
+	private String page = "";
 
 }
