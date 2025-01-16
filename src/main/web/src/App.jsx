@@ -1,7 +1,7 @@
 import './App.css';
 
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Link, Routes} from 'react-router-dom';
 
 import Layout from './components/Layout';
 import Home from './pages/Home';
@@ -27,46 +27,71 @@ import Class_Community from './pages/student/Class_Community';
 import Community_Notice from './pages/student/Community_Notice';
 import QNA from './pages/student/QNA';
 import WritePost from './pages/student/WritePost';
-import { PostProvider } from './contexts/PostContext';
-
+import {PostProvider} from './contexts/PostContext';
 
 function App() {
-  return (
-    <PostProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            
-            <Route index element={<Home />} />
-              <Route path="/Notice" element={<Notice />} />
-              <Route path="/Counsel" element={<Counsel />} />
-              <Route path="/Lecture_Plan" element={<Lecture_Plan />} />
-              <Route path="/Apply" element={<Apply />} />
-              <Route path="/Lec_Notice" element={<Lec_Notice />} />
-              <Route path="/Chulseog" element={<Chulseog />} />
-              <Route path="/Qualification_Info" element={<Qualification_Info />} />
-              <Route path="/Timetable" element={<Timetable />} />
-              <Route path="/Stats_Analysis" element={<Stats_Analysis />} />
-              <Route path="/Aftercare_Apply" element={<Aftercare_Apply />} />
-              <Route path="/Aftercare_Progress" element={<Aftercare_Progress />} />
-              <Route path="/Aftercare_Results" element={<Aftercare_Results />} />
-              <Route path="/Survey_YN" element={<Survey_YN />} />
-              <Route path="/Admin_Survey" element={<Admin_Survey />} />
-              <Route path="/Survey_Results" element={<Survey_Results />} />
-              <Route path="/Class_Community" element={<Class_Community />} />
-              <Route path="/WritePost" element={<WritePost />} />
-              <Route path="/Community_Notice" element={<Community_Notice />} />
-              <Route path="/QNA" element={<QNA />} />
+    return (
+        <PostProvider>
+            <Router>
+                <Routes>
+                    <Route path="/" element={<Layout />}>
 
-            <Route path="admin" element={<Container />}>
-              <Route index element={<AdminList />} />
-              <Route path="add" element={<AdminAdd />} />
-            </Route>
-          </Route>
-        </Routes>
-      </Router>
-    </PostProvider>
-  );
+                        <Route index="index" element={<Home />}/>
+
+                        <Route path="admin" element={<Container />}>
+                            <Route index="index" element={<AdminList />}/>
+                            <Route path="add" element={<AdminAdd />}/>
+                        </Route>
+                        
+                        <Route path="lecture" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="add"/>
+                        </Route>
+                        
+                        <Route path="class" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="add"/>
+                            <Route path="read"/>
+                            <Route path="confirm"/>
+                        </Route>
+                        
+                        <Route path="apply" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="read"/>
+                            <Route path="confirm"/>
+                        </Route>
+
+                        <Route path="adminCommunity" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="add"/>
+                            <Route path="read"/>
+                            <Route path="delete"/>
+                        </Route>
+                        <Route path="lectureDocument" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="add"/>
+                            <Route path="read"/>
+                            <Route path="delete"/>
+                        </Route>
+                        <Route path="classComunity" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                            <Route path="add"/>
+                            <Route path="read"/>
+                            <Route path="delete"/>
+                        </Route>
+
+                        <Route path="group" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                        </Route>
+                        <Route path="code" element={<Container />}>
+                            <Route /*index*/ path="list"/>
+                        </Route>
+
+                    </Route>
+                </Routes>
+            </Router>
+        </PostProvider>
+    );
 }
 
 export default App;
