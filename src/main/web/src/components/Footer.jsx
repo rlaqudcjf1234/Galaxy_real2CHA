@@ -20,8 +20,7 @@ function Footer() {
                     <a href="#" className="nav-link px-2 text-body-secondary">About</a>
                 </li>
             </ul>
-            <p className="text-center text-body-secondary">&copy; 2025 Team.Galaxy
-            </p>
+            <p className="text-center text-body-secondary">&copy; 2025 Company, Inc | All Rights Reserved.</p>
         </footer>
     )
 }
