@@ -19,7 +19,7 @@ public class AdminController {
     @Autowired
     AdminService adminService;
 
-	@RequestMapping(value = "/list", method = RequestMethod.POST)
+	@RequestMapping(value = "/list", method = RequestMethod.GET)
 	public ListDto list(SearchDto dto) throws Exception {
 		
 		int count = adminService.selectCount(dto);
