@@ -36,7 +36,7 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Layout />}>
 
-                        <Route index="index" element={<Home />}/>
+                        <Route index="index" element={<Class_Community />}/>
 
                         <Route path="admin" element={<Container />}>
                             <Route index="index" element={<AdminList />}/>

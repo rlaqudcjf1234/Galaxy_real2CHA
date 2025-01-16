@@ -11,6 +11,8 @@ public class SearchDto extends PageDto {
 	
 	private String name = "";
 
+	private String search = "";
+
 	private String page = "";
 
 }
