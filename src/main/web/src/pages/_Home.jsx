@@ -9,7 +9,19 @@ import '../css/Home.css';
 function Home() {
     return (
         <div className="home-container">
-            <h2 className="text-center mb-4">Home Page</h2>\
+            <h2 className="text-center mb-4">Home Page</h2>
+            
+            <div className="slide-container">
+                <ImageSlide />
+            </div>
+            
+            <div className="card-container">
+                <CardSection />
+            </div>
+
+            <div className="TabMenu-container">
+                <TabMenu />
+            </div>
         </div>
     );
 }
