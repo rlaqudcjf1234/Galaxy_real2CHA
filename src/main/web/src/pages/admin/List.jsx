@@ -59,14 +59,14 @@ function List() {
                 <tbody>
                     {
                         items.length > 0
-                            ? items.map((item) => {
+                            ? items.map((item) => (
                                 <tr>
-                                    <td>{item.seq}</td>
-                                    <td>{item.course}</td>
-                                    <td>{item.fullName}</td>
-                                    <td>{item.birthDate}</td>
+                                    <td>{item.EMAIL}</td>
+                                    <td>{item.NAME}</td>
+                                    <td>{item.PHONE}</td>
+                                    <td>{item.USE_YN}</td>
                                 </tr>
-                            })
+                            ))
                             : (
                                 <tr>
                                     <td colSpan="4" className="text-center">데이터가 없습니다.</td>
