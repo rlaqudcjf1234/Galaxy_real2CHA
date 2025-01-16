@@ -3,6 +3,7 @@ import {Outlet} from 'react-router-dom';
 import Header from './header';
 import Footer from './footer';
 import Mode from './mode';
+import React from 'react';
 
 function Layout() {
     return (
