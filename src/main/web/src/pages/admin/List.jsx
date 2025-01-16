@@ -12,7 +12,7 @@ function List() {
     const [params, setParams] = useState({ pageIndex: 1 });
     const [loading, setLoading] = useState(false); // 로딩 상태
 
-    // 페이지 변경 시 목록 업데이트
+    // 선택 페이지 변경 데이터 요청
     const fetchData = async (pageIndex) => {
         setLoading(true);
         try {
@@ -20,7 +20,11 @@ function List() {
                 ...params,
                 pageIndex: pageIndex,
             });
+<<<<<<< HEAD
             const response = await axios.post("/api/admin/list", { params: params });
+=======
+            const response = await axios.get("/api/admin/list", {params: params});
+>>>>>>> 8fbdf051350393ed507df0b72508948d37952ba4
             setItems(response.data.items); // 목록 데이터
             setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
@@ -30,12 +34,12 @@ function List() {
         }
     };
 
-    // 페이지 변경 핸들러
+    // 선택 페이지 변경 핸들러
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    // 페이지 변경 시마다 데이터 요청
+    // 선택 페이지 변경 이벤트
     useEffect(() => {
         fetchData(currentPage);
     }, [currentPage]);
@@ -63,22 +67,22 @@ function List() {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.length > 0 ? (
-                        items.map((item) => (
-                            <tr key={item.seq}>
-                                <td>{item.seq}</td>
-                                <td>{item.course}</td>
-                                <td>{item.fullName}</td>
-                                <td>{item.birthDate}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="4" className="text-center">
-                                데이터가 없습니다.
-                            </td>
-                        </tr>
-                    )}
+                    {
+                        items.length > 0
+                            ? items.map((item) => {
+                                <tr>
+                                    <td>{item.seq}</td>
+                                    <td>{item.course}</td>
+                                    <td>{item.fullName}</td>
+                                    <td>{item.birthDate}</td>
+                                </tr>
+                            })
+                            : (
+                                <tr>
+                                    <td colSpan="4" className="text-center">데이터가 없습니다.</td>
+                                </tr>
+                            )
+                    }
                 </tbody>
             </table>
             <div className="d-flex gap-2 justify-content-center py-1">
