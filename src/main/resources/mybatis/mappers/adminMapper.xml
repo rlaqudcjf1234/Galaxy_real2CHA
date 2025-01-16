@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.AdminMapper">
-    <select id="selectCheck" parameterType="String" resultType="int">
+
+    <select id="selectUse" parameterType="String" resultType="int">
 		SELECT COUNT(*) 
 		FROM ADMIN
 		WHERE EMAIL = #{email}
@@ -34,15 +35,16 @@
 	
 	<insert id="insertAdmin" parameterType="adminDto">
 		INSERT ALL 
-		INTO SEQ_MANAGEMENT(
-			SEQ, TABLE_NM, REG_DT
-		) VALUES (
-			SEQ.NEXTVAL, #{table_nm}, SYSDATE
-		)
-		INTO ADMIN (
-			SEQ, EMAIL, PASSWORD, NAME, PHONE, DIVISION, POST, REG_DT, USE_YN
-		) VALUES (
-			SEQ.NEXTVAL, #{email}, #{password}, #{name}, #{phone}, #{division}, #{post}, SYSDATE, '0'
-		)
+			INTO SEQ_MANAGEMENT(
+				SEQ, TABLE_NM, REG_DT
+			) VALUES (
+				SEQ.NEXTVAL, #{table_nm}, SYSDATE
+			)
+			INTO ADMIN (
+				SEQ, EMAIL, PASSWORD, NAME, PHONE, DIVISION, REG_DT, USE_YN
+			) VALUES (
+				SEQ.NEXTVAL, #{email}, #{password}, #{name}, #{phone}, #{division}, SYSDATE, '0'
+			)
+		SELECT * FROM DUAL
 	</insert>
 </mapper>

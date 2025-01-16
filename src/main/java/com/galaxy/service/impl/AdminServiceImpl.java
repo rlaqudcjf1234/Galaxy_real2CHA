@@ -6,12 +6,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.AdminMapper;
 import com.galaxy.service.AdminService;
 
 @Service
 public class AdminServiceImpl implements AdminService{
+
+	protected final String table_nm = "admin";
 
     @Autowired
     AdminMapper adminMapper;
@@ -24,6 +27,12 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
 		return adminMapper.selectList(dto);
+	}
+
+	@Override
+	public int insertAdmin(AdminDto dto) throws Exception {
+		dto.setTable_nm(table_nm);
+		return adminMapper.insertAdmin(dto);
 	}
 
 }

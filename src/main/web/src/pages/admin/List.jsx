@@ -20,11 +20,7 @@ function List() {
                 ...params,
                 pageIndex: pageIndex,
             });
-<<<<<<< HEAD
-            const response = await axios.post("/api/admin/list", { params: params });
-=======
             const response = await axios.get("/api/admin/list", {params: params});
->>>>>>> 8fbdf051350393ed507df0b72508948d37952ba4
             setItems(response.data.items); // 목록 데이터
             setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
