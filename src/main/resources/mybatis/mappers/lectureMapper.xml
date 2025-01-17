@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.LectureMapper">
+
+    <select id="selectNameList" parameterType="SearchDto" resultType="map">
+        SELECT *
+        FROM LECTURE
+        WHERE 1=1
+        <if test="name != null and name != ''">
+            AND NAME LIKE CONCAT('%', #{name}, '%')
+        </if>
+        ORDER BY REG_DT DESC
+    </select>
+
+    <select id="selectAllList" resultType="map">
+        SELECT *
+        FROM LECTURE
+        ORDER BY REG_DT DESC
+    </select>
+    <select id="selectCount" parameterType="searchDto" resultType="int">
+		SELECT COUNT(*) FROM LECTURE
+	</select>
+
+    <select id="selectList" parameterType="searchDto" resultType="map">
+		SELECT A.*, ROWNUM AS RNUM
+		FROM (
+			SELECT SEQ, ADMIN_SEQ, NAME,REG_DT
+			FROM LECTURE
+		)A ORDER BY SEQ DESC
+	</select>
+
+    <insert id="insertLecture" parameterType="LectureDto">
+        INSERT ALL 
+        INTO SEQ_MANAGEMENT(
+            SEQ,
+            TABLE_NM,
+            REG_DT
+        ) VALUES (
+            SEQ.NEXTVAL,
+            #{table_nm},
+            SYSDATE
+        )
+        INTO LECTURE(
+            SEQ,
+            ADMIN_SEQ,
+            NAME,
+            REG_DT
+        ) VALUES(
+            SEQ.NEXTVAL,
+            #{admin_seq},
+            #{name},
+            SYSDATE
+        )
+    SELECT * FROM DUAL
+    </insert>
+    <select id="selectLectureDetail" parameterType="String" resultType="map">
+    SELECT 
+        SEQ,
+        ADMIN_SEQ,
+        NAME,
+        REG_DT
+    FROM LECTURE
+    WHERE SEQ = #{seq}
+</select>
+
+</mapper>
