@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.AdcListMapper">
+    
+    <sql id="sqlSearch">
+        <where>
+            <if test="searchKeyword != null and searchKeyword != ''">
+                AND (
+                    UPPER(TITLE) LIKE '%' || UPPER(#{searchKeyword}) || '%'
+                    OR UPPER(DETAIL) LIKE '%' || UPPER(#{searchKeyword}) || '%'
+                )
+            </if>
+        </where>
+    </sql>
+    
+    <select id="selectCount" parameterType="searchDto" resultType="int">
+        SELECT COUNT(*) 
+        FROM ADMIN_COMMUNITY
+        <include refid="sqlSearch" />
+    </select>
+    
+    <select id="selectList" parameterType="searchDto" resultType="map">
+        SELECT A.*, ROWNUM AS RNUM
+        FROM (
+            SELECT 
+                SEQ,
+                ADMIN_SEQ,
+                TITLE,
+                DIVISION,
+                DETAIL,
+                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+            FROM ADMIN_COMMUNITY
+            <include refid="sqlSearch" />
+            ORDER BY SEQ DESC
+        )A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
+
+    <insert id="insertPost" parameterType="AdcPostDto">
+    INSERT ALL
+        INTO SEQ_MANAGEMENT(
+				SEQ, TABLE_NM, REG_DT
+			) VALUES (
+				SEQ.NEXTVAL, #{table_nm}, SYSDATE
+			)
+        INTO ADMIN_COMMUNITY (
+            SEQ, ADMIN_SEQ, TITLE, DIVISION, DETAIL, REG_DT
+        ) VALUES (
+            (SELECT SEQ FROM SEQ_MANAGEMENT WHERE TABLE_NM = 'ADMIN_COMMUNITY' AND ROWNUM = 1),
+            #{adminSeq}, #{title}, #{division}, #{detail}, SYSDATE
+        )
+    SELECT * FROM DUAL
+</insert>
+    
+</mapper>
