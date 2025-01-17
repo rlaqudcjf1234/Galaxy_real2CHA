@@ -46,4 +46,11 @@
 			)
 		SELECT * FROM DUAL
 	</insert>
+
+	<select id="selectOne" parameterType="String" resultType="map">
+		SELECT SEQ, EMAIL, NAME, PHONE, DIVISION, POST, 
+			TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, USE_YN
+		FROM ADMIN
+		WHERE SEQ = #{seq}
+	</select>
 </mapper>

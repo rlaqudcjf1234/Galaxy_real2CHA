@@ -2,14 +2,10 @@ package com.galaxy.controller;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.galaxy.dto.CodeDto;
@@ -32,7 +28,10 @@ public class CodeController {
             case "adminAdd":
                     list.add(new CodeDto("division", codeService.selectUse2()));
                 break;
-        
+            case "adminMod":
+                    list.add(new CodeDto("use_yn", codeService.selectUse1()));
+                    list.add(new CodeDto("division", codeService.selectUse2()));
+                break;
             default:
                 break;
         }

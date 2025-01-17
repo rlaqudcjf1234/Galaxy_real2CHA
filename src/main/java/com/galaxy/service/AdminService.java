@@ -14,4 +14,6 @@ public interface AdminService {
 
     int insertAdmin(AdminDto dto) throws Exception;
 
+    Map<String, Object> selectOne(String seq) throws Exception;
+
 }

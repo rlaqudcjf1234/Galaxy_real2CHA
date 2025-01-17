@@ -2,17 +2,19 @@ import "./App.css";
 
 import React from "react";
 import { BrowserRouter as Router, Route, Link, Routes } from "react-router-dom";
-import { PostProvider } from "./contexts/PostContext";
+import { PostProvider } from './pages/lecture/LectureContext';
 
 import Layout from './components/Layout';
 import Home from './pages/Home';
 import Container from './components/Container';
+
 import AdminList from './pages/admin/List';
 import AdminAdd from './pages/admin/Add';
-import List from './pages/lecture/list';
-import Add from './pages/lecture/Add';
-import Detail from './pages/lecture/Detail';
-import { PostProvider } from './pages/lecture/LectureContext';
+import AdminMod from './pages/admin/Mod';
+
+import LectureList from './pages/lecture/List';
+import LectureAdd from './pages/lecture/Add';
+import LectureRead from './pages/lecture/Read';
 
 import ClassList from './pages/class/List';
 import ClassAdd from './pages/class/Add';
@@ -34,12 +36,12 @@ function App() {
                         <Route path="admin" element={<Container />}>
                             <Route index="index" element={<AdminList />}/>
                             <Route path="add" element={<AdminAdd />}/>
+                            <Route path="mod/:seq" element={<AdminMod />}/>
                         </Route>
-                        
                         <Route path="lecture" element={<Container />}>
-                            <Route index element={<List/>}/>
-                            <Route path="detail/:id" element={<Detail/>}/>
-                            <Route path="add" element={<Add/>}/>
+                            <Route index element={<LectureList />}/>
+                            <Route path="detail/:id" element={<LectureRead />}/>
+                            <Route path="add" element={<LectureAdd />}/>
                         </Route>
 
                         <Route path="class" element={<Container/>}>
@@ -56,32 +58,32 @@ function App() {
                         </Route>
                         
                         <Route path="adminCommunity" element={<Container />}>
-                            <Route /*index*/ path="list" />
+                            <Route /*index*/ element="" />
                             <Route path="add" />
                             <Route path="read" />
                             <Route path="delete" />
                         </Route>
 
                         <Route path="lectureDocument" element={<Container />}>
-                            <Route /*index*/ path="list" />
+                            <Route /*index*/ element="" />
                             <Route path="add" />
                             <Route path="read" />
                             <Route path="delete" />
                         </Route>
 
                         <Route path="classComunity" element={<Container />}>
-                            <Route /*index*/ path="list" />
+                            <Route /*index*/ element="" />
                             <Route path="add" />
                             <Route path="read" />
                             <Route path="delete" />
                         </Route>
 
                         <Route path="group" element={<Container />}>
-                            <Route /*index*/ path="list" />
+                            <Route /*index*/ element="" />
                         </Route>
 
                         <Route path="code" element={<Container />}>
-                            <Route /*index*/ path="list" />
+                            <Route /*index*/ element="" />
                         </Route>
                     </Route>
                 </Routes>

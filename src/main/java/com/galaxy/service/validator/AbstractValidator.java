@@ -7,13 +7,15 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public abstract class AbstractValidator<T> implements Validator {
+    
     @Override
+    @SuppressWarnings("null")
     public boolean supports(Class<?> clazz) {
         return true;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
+    @SuppressWarnings({ "unchecked", "null" })
     public void validate(Object target, Errors errors) {
         try{
             doValidate((T) target, errors);

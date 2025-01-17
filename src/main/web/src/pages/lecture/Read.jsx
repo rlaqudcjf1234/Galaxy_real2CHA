@@ -3,7 +3,7 @@ import {useParams, useNavigate} from "react-router-dom";
 import axios from "axios";
 import '../../css/Detail.css';
 
-function Detail() {
+function Read() {
     const params = useParams();
     const navigate = useNavigate();
     const [lecture, setLecture] = useState(null);
@@ -70,4 +70,4 @@ function Detail() {
     );
 }
 
-export default Detail;
+export default Read;

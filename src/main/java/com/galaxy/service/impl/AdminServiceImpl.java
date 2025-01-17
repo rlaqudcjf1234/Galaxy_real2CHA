@@ -35,4 +35,9 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.insertAdmin(dto);
 	}
 
+	@Override
+	public Map<String, Object> selectOne(String seq) throws Exception {
+		return adminMapper.selectOne(seq);
+	}
+
 }
