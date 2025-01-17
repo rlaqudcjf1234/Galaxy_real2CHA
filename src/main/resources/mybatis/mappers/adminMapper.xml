@@ -10,11 +10,8 @@
 	
 	<sql id="sqlSearch">
 		<where>
-			<if test='email != null and email != ""'>
-				AND EMAIL = #{email}
-			</if>
-			<if test='name != null and name != ""'>
-				AND NAME = #{name}
+			<if test='search != null and search != ""'>
+				AND EMAIL LIKE '%'||TRIM(#{search})||'%'
 			</if>
 		</where>
 	</sql>
@@ -24,13 +21,15 @@
 	</select>
 	
 	<select id="selectList" parameterType="searchDto" resultType="map">
-		SELECT A.*, ROWNUM AS RNUM
+		SELECT SEQ, EMAIL, NAME, GET_PHONE_FORMAT(PHONE) AS PHONE, GET_CODE_NAME('2', DIVISION) AS DIVISION, POST, 
+			TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, GET_CODE_NAME('1', USE_YN) AS USE_YN, 
+			ROWNUM AS RNUM
 		FROM (
 			SELECT SEQ, EMAIL, NAME, PHONE, DIVISION, POST, REG_DT, USE_YN
 			FROM ADMIN
 			<include refid="sqlSearch" />
 			ORDER BY SEQ DESC
-		)A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+		) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
 	<insert id="insertAdmin" parameterType="adminDto">

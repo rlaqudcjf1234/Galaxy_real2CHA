@@ -3,7 +3,7 @@ import {Outlet} from 'react-router-dom';
 
 function Container() {
     return (
-        <div className="container">
+        <div className="board-container">
             <Outlet/>
         </div>
     )
