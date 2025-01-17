@@ -50,7 +50,8 @@
     background-color: #f8f9fa;
 }
 
-.board-table .title {
+.board-table .title,
+.board-table .title > a {
     text-align: left;
     color: #0066cc;
     cursor: pointer;

@@ -61,63 +61,69 @@ function List() {
     }, [params]);
 
     return (
-        <> 
-        <div className = "board-header">
-            <div className="search-box">
-            <input
-                type="text"
-                placeholder="이메일을 입력하세요"
-                value={searchInput}
-                onChange={handleSearchChange}
-                onKeyDown={handleKeyPress}/>
-            <button onClick={handleSearch}>검색</button>
-        </div>
-        <Link to="add" className="write-button">등록</Link> </div>
-        <table className="board-table">
-            <colgroup>
-                <col width="95px"/>
-                <col />
-                <col width="120px"/>
-                <col width="230px"/>
-                <col width="180px"/>
-                <col width="145px"/>
-            </colgroup>
-            <thead>
-                <tr>
-                    <th scope="col">번호</th> 
-                    <th scope="col">이메일</th>
-                    <th scope="col">성명</th>
-                    <th scope="col">연락처</th>
-                    <th scope="col">등록일자</th>
-                    <th scope="col">사용여부</th>
-                </tr>
-            </thead>
-            <tbody>
-            {
-                items.length > 0
-                ? items.map((item) => (
-                    <tr key={item.SEQ}>
-                        <td>{item.RNUM}</td>
-                        <td className="title">{item.EMAIL}</td>
-                        <td>{item.NAME}</td>
-                        <td>{item.PHONE}</td>
-                        <td>{item.REG_DT}</td>
-                        <td>{item.USE_YN}</td>
-                    </tr>
-                ))
-                : (
+        <div>
+            <div className="board-header">
+                <div className="search-box">
+                    <input
+                        type="text"
+                        placeholder="이메일을 입력하세요"
+                        value={searchInput}
+                        onChange={handleSearchChange}
+                        onKeyDown={handleKeyPress}/>
+                    <button onClick={handleSearch}>검색</button>
+                </div>
+                <Link to="add" className="write-button">등록</Link>
+            </div>
+            <table className="board-table">
+                <colgroup>
+                    <col width="95px"/>
+                    <col/>
+                    <col width="120px"/>
+                    <col width="230px"/>
+                    <col width="120px"/>
+                    <col width="180px"/>
+                    <col width="145px"/>
+                </colgroup>
+                <thead>
                     <tr>
-                        <td colSpan="6" className="text-center">데이터가 없습니다.</td>
+                        <th scope="col">번호</th>
+                        <th scope="col">이메일</th>
+                        <th scope="col">성명</th>
+                        <th scope="col">연락처</th>
+                        <th scope="col">구분</th>
+                        <th scope="col">등록일자</th>
+                        <th scope="col">사용여부</th>
                     </tr>
-                )
-            } 
-            </tbody>
-        </table >
-        <Pagination
-            currentPage={params.pageIndex}
-            totalCount={totalCount}
-            onPageChange={handlePageChange}/>
-    </>
+                </thead>
+                <tbody>
+                    {
+                        items.length > 0
+                            ? items.map((item) => {
+                                const mod = `mod/${item.SEQ}`;
+                                return (
+                                <tr key={item.SEQ}>
+                                    <td>{item.RNUM}</td>
+                                    <td className="title"><Link to={mod}>{item.EMAIL}</Link></td>
+                                    <td>{item.NAME}</td>
+                                    <td>{item.PHONE}</td>
+                                    <td>{item.DIVISION}</td>
+                                    <td>{item.REG_DT}</td>
+                                    <td>{item.USE_YN}</td>
+                                </tr>
+                            )})
+                            : (
+                                <tr>
+                                    <td colSpan="6" className="text-center">데이터가 없습니다.</td>
+                                </tr>
+                            )
+                    }
+                </tbody>
+            </table >
+            <Pagination
+                currentPage={params.pageIndex}
+                totalCount={totalCount}
+                onPageChange={handlePageChange}/>
+        </div>
     );
 }
 
