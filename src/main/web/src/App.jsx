@@ -8,30 +8,15 @@ import Home from './pages/Home';
 import Container from './components/Container';
 import AdminList from './pages/admin/List';
 import AdminAdd from './pages/admin/Add';
-import Notice from './pages/student/Notice';
-import Counsel from './pages/student/Counsel';
-import Lecture_Plan from './pages/student/Lecture_Plan';
-import Apply from './pages/student/Apply';
-import Lec_Notice from './pages/student/Lec_Notice';
-import Chulseog from './pages/student/Chulseog';
-import Qualification_Info from './pages/student/Qualification_Info';
-import Timetable from './pages/student/Timetable';
-import Stats_Analysis from './pages/student/Stats_Analysis';
-import Aftercare_Apply from './pages/student/Aftercare_Apply';
-import Aftercare_Progress from './pages/student/Aftercare_Progress';
-import Aftercare_Results from './pages/student/Aftercare_Results';
-import Survey_YN from './pages/student/Survey_YN';
-import Admin_Survey from './pages/student/Admin_Survey';
-import Survey_Results from './pages/student/Survey_Results';
-import Class_Community from './pages/student/Class_Community';
-import Community_Notice from './pages/student/Community_Notice';
-import QNA from './pages/student/QNA';
-import WritePost from './pages/student/WritePost';
-import {PostProvider} from './contexts/PostContext';
+import List from './pages/lecture/list';
+import Add from './pages/lecture/Add';
+import Detail from './pages/lecture/Detail';
+import { PostProvider } from './pages/lecture/LectureContext';
+
 
 function App() {
     return (
-        <PostProvider>
+       <PostProvider>
             <Router>
                 <Routes>
                     <Route path="/" element={<Layout />}>
@@ -44,8 +29,9 @@ function App() {
                         </Route>
                         
                         <Route path="lecture" element={<Container />}>
-                            <Route /*index*/ path="list"/>
-                            <Route path="add"/>
+                            <Route index element={<List/>}/>
+                            <Route path="detail/:id" element={<Detail/>}/>
+                            <Route path="add" element={<Add/>}/>
                         </Route>
                         
                         <Route path="class" element={<Container />}>
@@ -90,7 +76,7 @@ function App() {
                     </Route>
                 </Routes>
             </Router>
-        </PostProvider>
+            </PostProvider>
     );
 }
 
