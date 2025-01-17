@@ -15,29 +15,9 @@ import ClassConfirm from './pages/class/Confirm';
 
 import AdminList from "./pages/admin/List";
 import AdminAdd from "./pages/admin/Add";
-
-import Notice from "./pages/student/Notice";
-import Counsel from "./pages/student/Counsel";
-import Lecture_Plan from "./pages/student/Lecture_Plan";
-import Apply from "./pages/student/Apply";
-import Lec_Notice from "./pages/student/Lec_Notice";
-import Chulseog from "./pages/student/Chulseog";
-import Qualification_Info from "./pages/student/Qualification_Info";
-import Timetable from "./pages/student/Timetable";
-import Stats_Analysis from "./pages/student/Stats_Analysis";
-import Aftercare_Apply from "./pages/student/Aftercare_Apply";
-import Aftercare_Progress from "./pages/student/Aftercare_Progress";
-import Aftercare_Results from "./pages/student/Aftercare_Results";
-import Survey_YN from "./pages/student/Survey_YN";
-import Admin_Survey from "./pages/student/Admin_Survey";
-import Survey_Results from "./pages/student/Survey_Results";
 import Class_Community from "./pages/student/Class_Community";
-import Community_Notice from "./pages/student/Community_Notice";
-import QNA from "./pages/student/QNA";
-import WritePost from "./pages/student/WritePost";
-import ApplyAdmReg from "./pages/apply/ApplyAdmReg";
-import ApplyStdReg from "./pages/apply/ApplyStdReg";
-import ApplyList from "./pages/apply/ApplyList";
+
+
 
 function App() {
     return (
@@ -64,13 +44,13 @@ function App() {
                             <Route path="read" element={<ClassRead/>}/>
                             <Route path="confirm" element={<ClassConfirm/>}/>
                         </Route>
-
+                   
                         <Route path="apply" element={<Container />}>
-                            <Route index element={<ApplyList />} />
-                            <Route path="adm" element={<ApplyAdmReg />} />
-                            <Route path="std" element={<ApplyStdReg />} />
+                            <Route index element=""/>
+                            <Route path="adm" />
+                            <Route path="std"  />
                         </Route>
-
+                        
                         <Route path="adminCommunity" element={<Container />}>
                             <Route /*index*/ path="list" />
                             <Route path="add" />

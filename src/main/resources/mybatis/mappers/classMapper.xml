@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.ClassMapper">
+
+<select id="selectCount" parameterType="searchDto" resultType="int">
+		SELECT COUNT(*) FROM CLASS
+	</select>
+	
+	<select id="selectList"  resultType="map">
+		
+			SELECT A.*, ROWNUM AS RNUM
+		FROM (
+			SELECT  
+			ROUND, 
+			ROOM, 
+			TO_CHAR(start_dt, 'YYYY-MM-DD') AS start_dt, 
+			TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
+			START_TM, 
+			END_TM, 
+			PEOPLE, 
+			TO_CHAR(reg_dt, 'YYYY-MM-DD') AS reg_dt, 
+			USE_YN, 
+			TO_CHAR(confirm_dt, 'YYYY-MM-DD') AS confirm_dt
+			FROM CLASS 
+			ORDER BY SEQ DESC
+		)A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	
+	</select>
+
+</mapper>
