@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.ApplyMapper">
+
+    <select id="selectCount"> SELECT COUNT(*) FROM APPLY </select>
+
+    <select id="selectList">
+        SELECT A.*, ROWNUM AS RNUM
+        FROM (
+            SELECT
+            CLASS_SEQ,
+            JUMIN,
+            NAME,
+            REAL_ZIPCODE,
+            REAL_ADDRESS1,
+            REAL_ADDRESS2,
+            ZIPCODE,
+            ADDRESS1,
+            ADDRESS2,
+            EMAIL,
+            PHONE,
+            PATH,
+            REG_DT
+            FROM APPLY ORDER BY REG_DT DESC)
+            A OFFSET (#{pageIndex} - 1) * #{pageSize}
+            ROWS FETCH NEXT #{pageSize} ROWS ONLY </select>
+
+    <insert id="insertApply" parameterType="com.galaxy.dto.ApplyDto">
+        <!-- 신청서 정보를 저장하는 INSERT 쿼리입니다. -->
+            INSERT INTO APPLY (
+                jumin,          /* 주민등록번호 */
+                name,           /* 이름 */
+                real_zipcode,   /* 실거주지 우편번호 */
+                real_address1,  /* 실거주지 주소 */
+                real_address2,  /* 실거주지 상세주소 */
+                email,          /* 이메일 */
+                phone,          /* 전화번호 */
+                path,           /* 지원경로 */
+                reg_dt          /* 등록일시 */
+            ) VALUES (
+                #{jumin},
+                #{name},
+                #{real_zipcode},
+                #{real_address1},
+                #{real_address2},
+                #{email},
+                #{phone},
+                #{path},
+                #{reg_dt}
+            )
+    </insert>
+    <!-- 주민등록번호 중복 체크 -->
+    <select id="selectByJumin" parameterType="string" resultType="int">
+        /* 주민등록번호 중복 여부를 확인하는 SELECT 쿼리입니다. */
+        SELECT COUNT(*)
+        FROM APPLY
+        WHERE JUMIN = #{jumin}
+    </select>
+</mapper>
