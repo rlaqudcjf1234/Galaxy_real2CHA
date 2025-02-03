@@ -14,4 +14,7 @@ public interface ApplyService {
 
     public void insertApply(ApplyDto dto) throws Exception;
 
+    Map<String, Object> getApplyRead(String seq);
+    
+    int deleteApply(Long id);
 }
