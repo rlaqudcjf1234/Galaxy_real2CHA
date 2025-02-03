@@ -51,6 +51,13 @@ public class AdminController {
     public void add(@Valid AdminDto dto)throws Exception {
         adminService.insertAdmin(dto);
     }
+    
+    // 사용 가능한 admin 목록 조회
+    @GetMapping("/use")
+    public List<Map<String, Object>> use()throws Exception {
+        List<Map<String, Object>> list = adminService.selectUseList();
+        return list;
+    }
 
     @GetMapping("/mod")
     public Map<String, Object> mod(@RequestParam(name = "seq")String seq)throws Exception {

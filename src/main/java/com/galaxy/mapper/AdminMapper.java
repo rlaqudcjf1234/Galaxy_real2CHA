@@ -21,4 +21,7 @@ public interface AdminMapper {
 
     Map<String, Object> selectOne(String seq) throws Exception;
 
+    List<Map<String, Object>> selectUseList() throws Exception;
+
 }
+

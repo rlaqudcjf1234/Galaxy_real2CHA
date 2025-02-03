@@ -1,8 +1,6 @@
 package com.galaxy.dto;
 
-import java.time.LocalDate;
-
-
+import java.sql.Date;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -12,26 +10,22 @@ import lombok.Setter;
 @Setter
 public class ClassDto extends SeqDto {
     
-    private int round;
+    private String lecture;
+    
+    private String round;
+    
+    private String admin;
 
     private String room;
 
-    private LocalDate  start_dt;
+    private Date start_dt;
 
-    private LocalDate  end_dt;
+    private Date end_dt;
 
     private String start_tm;
 
     private String end_tm;
 
     private int people;
-
-    private LocalDate  reg_dt;
-
-    private String use_yn;
-
-    private LocalDate  confirm_dt;
-
-
 
 }

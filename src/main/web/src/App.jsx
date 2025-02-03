@@ -20,6 +20,10 @@ import ClassList from './pages/class/List';
 import ClassAdd from './pages/class/Add';
 import ClassRead from './pages/class/Read';
 import ClassConfirm from './pages/class/Confirm';
+import ClassDetail from './pages/class/Detail';
+
+import UserLogin from './pages/user/Login';
+
 
 import Class_Community from "./pages/student/Class_Community";
 
@@ -49,6 +53,11 @@ function App() {
                             <Route path="add" element={<ClassAdd/>}/>
                             <Route path="read" element={<ClassRead/>}/>
                             <Route path="confirm" element={<ClassConfirm/>}/>
+                            <Route path="detail" element={<ClassDetail/>}/>
+                        </Route>
+
+                        <Route path="user" element={<Container/>}>
+                            <Route index element={<UserLogin/>}/>
                         </Route>
                    
                         <Route path="apply" element={<Container />}>

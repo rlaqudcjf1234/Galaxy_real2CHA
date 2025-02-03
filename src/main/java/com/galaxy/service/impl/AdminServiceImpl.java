@@ -40,4 +40,11 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.selectOne(seq);
 	}
 
+	@Override
+	public List<Map<String, Object>> selectUseList() throws Exception {
+		return adminMapper.selectUseList();
+	}
+
+	
+
 }

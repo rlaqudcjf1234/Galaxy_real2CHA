@@ -2,29 +2,42 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.ClassMapper">
 
-<select id="selectCount" parameterType="searchDto" resultType="int">
-		SELECT COUNT(*) FROM CLASS
-	</select>
-	
-	<select id="selectList"  resultType="map">
-		
-			SELECT A.*, ROWNUM AS RNUM
-		FROM (
-			SELECT  
-			ROUND, 
-			ROOM, 
-			TO_CHAR(start_dt, 'YYYY-MM-DD') AS start_dt, 
-			TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
-			START_TM, 
-			END_TM, 
-			PEOPLE, 
-			TO_CHAR(reg_dt, 'YYYY-MM-DD') AS reg_dt, 
-			USE_YN, 
-			TO_CHAR(confirm_dt, 'YYYY-MM-DD') AS confirm_dt
-			FROM CLASS 
-			ORDER BY SEQ DESC
-		)A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
-	
-	</select>
+    <select id="selectCount" parameterType="searchDto" resultType="int">
+        SELECT COUNT(*) FROM CLASS
+    </select>
+
+    <select id="selectList" resultType="map">
+
+        SELECT A.*, ROWNUM AS RNUM FROM ( SELECT ROUND, ROOM, TO_CHAR(start_dt,
+        'YYYY-MM-DD') AS start_dt, TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT, START_TM,
+        END_TM, PEOPLE, TO_CHAR(reg_dt, 'YYYY-MM-DD') AS reg_dt, USE_YN,
+        TO_CHAR(confirm_dt, 'YYYY-MM-DD') AS confirm_dt FROM CLASS ORDER BY SEQ DESC )A
+        OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+
+    </select>
+
+    <select id="getAdminList" resultType="adminDto">
+        SELECT name FROM admin WHERE division = 'admin' or use_yn ='1';
+
+    </select>
+
+    <insert id="insertClass" parameterType="classDto">
+		INSERT ALL 
+			INTO SEQ_MANAGEMENT(
+				SEQ, TABLE_NM, REG_DT
+			) VALUES (
+				SEQ.NEXTVAL, #{table_nm}, SYSDATE
+			)
+			INTO CLASS ( 
+				SEQ, LECTURE_SEQ, ADMIN_SEQ, ROUND, ROOM, 
+				START_DT, END_DT,
+				START_TM, END_TM, PEOPLE, REG_DT, USE_YN
+			) VALUES ( 
+				SEQ.NEXTVAL, #{lecture}, #{admin}, #{round}, #{room}, 
+				#{start_dt}, #{end_dt}, #{start_tm},
+				#{end_tm}, #{people}, SYSDATE, '0'
+			)
+		SELECT * FROM DUAL
+    </insert>
 
 </mapper>
