@@ -20,12 +20,43 @@
 </select>
 
 <insert id="documentInsert" parameterType="LecDocumentDto">
+    INSERT ALL 
+		INTO SEQ_MANAGEMENT(
+			SEQ, TABLE_NM, REG_DT
+		) VALUES (
+			SEQ.NEXTVAL, #{table_nm}, SYSDATE
+		)
+        INTO LECTURE_DOCUMENT (
+            SEQ, LECTURE_SEQ, TITLE, DIVISION, DETAIL, REG_DT
+        ) VALUES(
+            SEQ.NEXTAVAL, #{lecture_seq},#{title},#{division},#{detail},SYSDATE
+        )
+    SELECT * FROM DUAL
+
+</insert>
+
+<insert id="attachInsert">
+    INSERT ALL
+        INTO SEQ_MANAGEMENT(
+			SEQ, TABLE_NM, REG_DT
+		) VALUES (
+			SEQ.NEXTVAL, #{table_nm}, SYSDATE
+	    )INTO ATTACH(
+            SEQ, ROW, FILE_PATH, FILE_ORIGIN_NAME, FILE_SAVE_NAME, USE_YN
+        ) VALUES(
+            SEQ.NEXTVAL, #{row}, #{file_path}, #{file_origin_name}, #{file_save_name}, 0
+        )
+    SELECT * FROM DUAL
 
 </insert>
 
 <select id="documentRead" parameterType="String" resultType="map">
-        
-</select>
+    SELECT 
+       A.*,
+       GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME
+    FROM LECTURE_DOCUMENT A
+    WHERE SEQ = #{seq}
+ </select>
 
 <update id="documentUpdate" parameterType="LecDocumentDto">
        

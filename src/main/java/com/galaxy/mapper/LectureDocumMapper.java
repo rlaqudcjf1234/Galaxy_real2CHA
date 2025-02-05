@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
+import com.galaxy.dto.LecDocumentDto;
 import com.galaxy.dto.SearchDto;
 
 @Mapper
@@ -14,6 +15,8 @@ public interface LectureDocumMapper {
 
     int selectCount(SearchDto dto)throws Exception;
     
-    
+    Map<String, Object> documentRead(String seq);
+
+    int documentInsert(LecDocumentDto dto) throws Exception;
   
 }

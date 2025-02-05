@@ -2,31 +2,24 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.LectureMapper">
 
-    <sql id="searchCondition">
-        <where>
-            <if test="search != null and search != ''">
-                AND NAME LIKE '%'||#{search}||'%'
-            </if>
-        </where>
-    </sql>
-
- <select id="selectNameList" parameterType="SearchDto" resultType="map">
-    SELECT 
-        A.SEQ,
-        B.NAME AS ADMIN_NAME,
-        A.NAME AS LECTURE_NAME,
-        A.REG_DT
-    FROM LECTURE A, ADMIN B 
-    WHERE A.ADMIN_SEQ = B.SEQ
-    <if test="search != null and search != ''">
-        AND (A.NAME LIKE '%' || #{search} || '%' OR B.NAME LIKE '%' || #{search} || '%')
-    </if>
-ORDER BY A.REG_DT DESC
-</select>
+    <sql id="sqlSearch">
+		<where>
+			<if test='text != null and text != ""'>
+				<choose>
+					<when test='select == "1"'>
+						AND EMAIL LIKE '%'||TRIM(#{text})||'%'
+					</when>
+					<when test='select == "2"'>
+						AND NAME LIKE '%'||TRIM(#{text})||'%'
+					</when>					
+				</choose>				
+			</if>
+		</where>
+	</sql>
 
     <select id="selectCount" parameterType="SearchDto" resultType="int">
         SELECT COUNT(*) FROM LECTURE
-        <include refid="searchCondition" />
+        <include refid="sqlSearch" />
     </select>
 
     <select id="selectList" parameterType="SearchDto" resultType="map">
@@ -34,9 +27,10 @@ ORDER BY A.REG_DT DESC
             A.SEQ,
             A.NAME AS LECTURE_NAME,
             B.NAME AS ADMIN_NAME,
-            A.REG_DT
+            TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
         FROM LECTURE A, ADMIN B
         WHERE A.ADMIN_SEQ=B.SEQ
+        <include refid="sqlSearch"/>
         ORDER BY A.SEQ DESC
     </select>
 
