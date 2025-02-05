@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../../components/Pagination';
 import '../../css/Community.css';
+//import { usePost } from '../lecture/LectureContext';
 
 const Class_Community = () => {
     // Context에서 posts를 가져옵니다
@@ -14,7 +15,7 @@ const Class_Community = () => {
     const [searchInput, setSearchInput] = useState('');
 
     const [activeSearchTerm, setActiveSearchTerm] = useState('');
-    
+
     // 한 페이지당 보여줄 게시글 수
     const pageUnit = 10;
 
@@ -23,8 +24,8 @@ const Class_Community = () => {
         if (!activeSearchTerm.trim()) {
             return posts;
         }
-        
-        return posts.filter(post => 
+
+        return posts.filter(post =>
             post.title.toLowerCase().includes(activeSearchTerm.toLowerCase()) ||
             post.content?.toLowerCase().includes(activeSearchTerm.toLowerCase()) ||
             post.author.toLowerCase().includes(activeSearchTerm.toLowerCase())
@@ -36,11 +37,11 @@ const Class_Community = () => {
         const filteredPosts = getFilteredPosts();
         // 최신 글이 먼저 오도록 정렬
         const sortedPosts = [...filteredPosts].sort((a, b) => b.id - a.id);
-        
+
         // 페이지네이션을 위한 간단한 인덱스 계산
         const startIndex = (currentPage - 1) * pageUnit;
         const endIndex = startIndex + pageUnit;
-        
+
         return sortedPosts.slice(startIndex, endIndex);
     };
 
@@ -48,10 +49,10 @@ const Class_Community = () => {
     const handleSearchChange = (e) => {
         setSearchInput(e.target.value);  // searchInput을 업데이트합니다
     };
-    
+
     // 검색 실행 핸들러
     const handleSearch = () => {
-        setActiveSearchTerm(searchInput);  
+        setActiveSearchTerm(searchInput);
         setCurrentPage(1);
     };
 
@@ -73,9 +74,9 @@ const Class_Community = () => {
             {/* 검색 영역 */}
             <div className="board-header">
                 <div className="search-box">
-                <input 
-                        type="text" 
-                        placeholder="검색어를 입력하세요" 
+                    <input
+                        type="text"
+                        placeholder="검색어를 입력하세요"
                         value={searchInput}
                         onChange={handleSearchChange}
                         onKeyPress={handleKeyPress}
@@ -110,7 +111,7 @@ const Class_Community = () => {
             </table>
 
             {/* 페이지네이션 */}
-            <Pagination 
+            <Pagination
                 currentPage={currentPage}
                 totalCount={getFilteredPosts().length}
                 onPageChange={handlePageChange}

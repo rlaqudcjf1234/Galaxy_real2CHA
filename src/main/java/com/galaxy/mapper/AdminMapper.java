@@ -25,4 +25,7 @@ public interface AdminMapper {
 
     int updatePassword(AdminDto dto)throws Exception;
 
+    List<Map<String, Object>> selectUseList() throws Exception;
+
 }
+

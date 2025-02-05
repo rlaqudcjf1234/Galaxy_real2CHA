@@ -64,6 +64,12 @@
 		FROM ADMIN
 		WHERE SEQ = #{seq}
 	</select>
+	
+	<select id="selectUseList" resultType="map">
+		SELECT SEQ, NAME
+		FROM ADMIN 
+    	WHERE DIVISION = 'admin' AND USE_YN = 1
+	</select>
 
 	<update id="updateAdmin" parameterType="adminDto">
 		UPDATE ADMIN SET

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.LectureDocumMapper">
+
+<select id="documentList" parameterType="SearchDto" resultType="map">
+    SELECT    
+        SEQ,
+        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
+        TITLE,
+        GET_CODE_NAME('10', DIVISION) AS DIVISION_NAME,
+        DETAIL,
+        TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+    FROM LECTURE_DOCUMENT A
+    ORDER BY REG_DT DESC
+</select>
+
+<select id="selectCount" parameterType="SearchDto" resultType="int">
+        SELECT COUNT(*) FROM LECTURE_DOCUMENT
+
+</select>
+
+<insert id="documentInsert" parameterType="LecDocumentDto">
+
+</insert>
+
+<select id="documentRead" parameterType="String" resultType="map">
+        
+</select>
+
+<update id="documentUpdate" parameterType="LecDocumentDto">
+       
+</update>
+
+<delete id="documentDelete" parameterType="Long">
+        
+</delete>
+
+</mapper>

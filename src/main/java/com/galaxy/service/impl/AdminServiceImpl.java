@@ -39,6 +39,11 @@ public class AdminServiceImpl implements AdminService{
 	public Map<String, Object> selectOne(String seq) throws Exception {
 		return adminMapper.selectOne(seq);
 	}
+	
+	@Override
+	public List<Map<String, Object>> selectUseList() throws Exception {
+		return adminMapper.selectUseList();
+	}
 
 	@Override
 	public int updateAdmin(AdminDto dto) throws Exception {

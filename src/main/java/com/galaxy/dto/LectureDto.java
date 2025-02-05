@@ -24,6 +24,6 @@ public class LectureDto extends SeqDto {
         private Date reg_dt;
 
         private List<Map<String, Object>> nameSearchResults;
-        private List<Map<String, Object>> allSearchResults;
+        
 
 }

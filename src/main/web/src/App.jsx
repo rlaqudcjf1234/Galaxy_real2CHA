@@ -12,14 +12,19 @@ const AdminAdd = lazy(() => import ('./pages/admin/Add'));
 const AdminMod = lazy(() => import ('./pages/admin/Mod'));
 const AdminPass = lazy(() => import ('./pages/admin/Pass'));
 
-import LectureList from './pages/lecture/List';
-import LectureAdd from './pages/lecture/Add';
-import LectureRead from './pages/lecture/Read';
+import List from './pages/lecture/list';
+import Add from './pages/lecture/Add';
+import Read from './pages/lecture/Read';
+import Update from "./pages/lecture/Update";
+import LectureDocument from "./pages/lectureDocum/Document";
 
 import ClassList from './pages/class/List';
 import ClassAdd from './pages/class/Add';
 import ClassRead from './pages/class/Read';
 import ClassConfirm from './pages/class/Confirm';
+import ClassDetail from './pages/class/Detail';
+
+import UserLogin from './pages/user/Login';
 
 const TempList = lazy(() => import ('./pages/temp/List'));
 const TempAdd = lazy(() => import ('./pages/temp/Add'));
@@ -39,7 +44,9 @@ function App() {
                             <Route path="read" element={<TempRead />}/>
                         </Route>
 
-                        <Route path="user" element={<Container />}></Route>
+                        <Route path="user" element={<Container/>}>
+                            <Route index="index" element={<UserLogin/>}/>
+                        </Route>
 
                         <Route path="admin" element={<Container />}>
                             <Route index="index" element={<AdminList />}/>
@@ -48,9 +55,10 @@ function App() {
                         </Route>
 
                         <Route path="lecture" element={<Container />}>
-                            <Route index="index" element={<LectureList />}/>
-                            <Route path="detail/:id" element={<LectureRead />}/>
-                            <Route path="add" element={<LectureAdd />}/>
+                            <Route index="index" element={<List />}/>
+                            <Route path="read/:id" element={<Read />}/>
+                            <Route path="add" element={<Add />}/>
+                            <Route path="update/:id" element={<Update />}/>
                         </Route>
 
                         <Route path="class" element={<Container/>}>
@@ -58,6 +66,7 @@ function App() {
                             <Route path="add" element={<ClassAdd/>}/>
                             <Route path="read" element={<ClassRead/>}/>
                             <Route path="confirm" element={<ClassConfirm/>}/>
+                            <Route path="detail/:seq" element={<ClassDetail/>}/>
                         </Route>
 
                         <Route path="apply" element={<Container />}>
@@ -75,8 +84,7 @@ function App() {
                         </Route>
 
                         <Route path="lectureDocument" element={<Container />}>
-                            <Route /*index*/
-                                element=""/>
+                            <Route index="index" element={<LectureDocument />}/>
                             <Route path="add"/>
                             <Route path="read"/>
                             <Route path="delete"/>
