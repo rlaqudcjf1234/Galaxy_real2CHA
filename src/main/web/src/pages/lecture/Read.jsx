@@ -1,7 +1,7 @@
-import {useState, useEffect} from "react";
-import {useParams, useNavigate} from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
-import '../../css/Detail.css';
+import "../../css/Detail.css";
 
 function Read() {
     const params = useParams();
@@ -11,12 +11,12 @@ function Read() {
 
     const fetchLecture = async () => {
         try {
-            const response = await axios.get("/api/lecture/detail", {
+            const response = await axios.get("/api/lecture/read", {
                 params: {
-                    "seq": params.id
-                }
+                    seq: params.id,
+                },
             });
-            setLecture(response.data);
+            setLecture(response.data);            
         } catch (error) {
             console.error("Error fetching lecture details:", error);
             alert("강의 정보를 불러오는데 실패했습니다.");
@@ -26,15 +26,34 @@ function Read() {
         }
     };
 
+    // 삭제 함수 추가
+    const handleDelete = async () => {
+        // 삭제 확인
+        if (!window.confirm("정말로 이 강의를 삭제하시겠습니까?")) {
+            return;
+        }
+
+        try {
+            await axios.delete("/api/lecture/delete", {
+                params: {
+                    seq: Number(params.id)
+                },
+            });
+            alert("강의가 성공적으로 삭제되었습니다.");
+            navigate("/lecture"); // 목록 페이지로 이동
+        } catch (error) {
+            console.error("Error deleting lecture:", error);
+            alert("강의 삭제에 실패했습니다.");
+        }
+    };
+
     useEffect(() => {
         fetchLecture();
     }, []);
 
-    if (loading) 
-        return <div>로딩중...</div>;
-    if (!lecture) 
-        return <div>강의를 찾을 수 없습니다.</div>;
-    
+    if (loading) return <div>로딩중...</div>;
+    if (!lecture) return <div>강의를 찾을 수 없습니다.</div>;
+
     return (
         <div className="lecture-detail-container">
             <div className="lecture-detail-wrapper">
@@ -45,8 +64,8 @@ function Read() {
                         <span>{lecture.SEQ}</span>
                     </div>
                     <div className="detail-row">
-                        <label>강사 번호:</label>
-                        <span>{lecture.ADMIN_SEQ}</span>
+                        <label>강사명:</label>
+                        <span>{lecture.ADMIN_NAME}</span>
                     </div>
                     <div className="detail-row">
                         <label>강의명:</label>
@@ -58,10 +77,23 @@ function Read() {
                     </div>
                 </div>
                 <div className="button-group">
-                    <button className="edit-button" onClick={() => navigate(`/lecture/edit/${id}`)}>
+                    <button 
+                        className="edit-button" 
+                        onClick={() => navigate(`/lecture/update/${params.id}`)}
+                    >
                         수정
                     </button>
-                    <button className="back-button" onClick={() => navigate(-1)}>
+                    {/* 삭제 버튼 추가 */}
+                    <button 
+                        className="delete-button" 
+                        onClick={handleDelete}
+                    >
+                        삭제
+                    </button>
+                    <button 
+                        className="back-button" 
+                        onClick={() => navigate("/lecture")}
+                    >
                         목록으로
                     </button>
                 </div>

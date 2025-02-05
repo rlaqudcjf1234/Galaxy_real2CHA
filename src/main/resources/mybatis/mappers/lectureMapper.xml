@@ -2,65 +2,84 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.LectureMapper">
 
-    <select id="selectNameList" parameterType="SearchDto" resultType="map">
-        SELECT *
-        FROM LECTURE
-        WHERE 1=1
-        <if test="name != null and name != ''">
-            AND NAME LIKE CONCAT('%', #{name}, '%')
-        </if>
-        ORDER BY REG_DT DESC
+    <sql id="searchCondition">
+        <where>
+            <if test="search != null and search != ''">
+                AND NAME LIKE '%'||#{search}||'%'
+            </if>
+        </where>
+    </sql>
+
+ <select id="selectNameList" parameterType="SearchDto" resultType="map">
+    SELECT 
+        A.SEQ,
+        B.NAME AS ADMIN_NAME,
+        A.NAME AS LECTURE_NAME,
+        A.REG_DT
+    FROM LECTURE A, ADMIN B 
+    WHERE A.ADMIN_SEQ = B.SEQ
+    <if test="search != null and search != ''">
+        AND (A.NAME LIKE '%' || #{search} || '%' OR B.NAME LIKE '%' || #{search} || '%')
+    </if>
+ORDER BY A.REG_DT DESC
+</select>
+
+    <select id="selectCount" parameterType="SearchDto" resultType="int">
+        SELECT COUNT(*) FROM LECTURE
+        <include refid="searchCondition" />
     </select>
 
-    <select id="selectAllList" resultType="map">
-        SELECT *
-        FROM LECTURE
-        ORDER BY REG_DT DESC
+    <select id="selectList" parameterType="SearchDto" resultType="map">
+      SELECT 
+            A.SEQ,
+            A.NAME AS LECTURE_NAME,
+            B.NAME AS ADMIN_NAME,
+            A.REG_DT
+        FROM LECTURE A, ADMIN B
+        WHERE A.ADMIN_SEQ=B.SEQ
+        ORDER BY A.SEQ DESC
     </select>
-    <select id="selectCount" parameterType="searchDto" resultType="int">
-		SELECT COUNT(*) FROM LECTURE
-	</select>
-
-    <select id="selectList" parameterType="searchDto" resultType="map">
-		SELECT A.*, ROWNUM AS RNUM
-		FROM (
-			SELECT SEQ, ADMIN_SEQ, NAME,REG_DT
-			FROM LECTURE
-		)A ORDER BY SEQ DESC
-	</select>
 
     <insert id="insertLecture" parameterType="LectureDto">
-        INSERT ALL 
-        INTO SEQ_MANAGEMENT(
-            SEQ,
-            TABLE_NM,
-            REG_DT
-        ) VALUES (
-            SEQ.NEXTVAL,
-            #{table_nm},
-            SYSDATE
-        )
+        INSERT ALL INTO 
+        SEQ_MANAGEMENT(
+             SEQ, 
+             TABLE_NM, 
+             REG_DT) 
+        VALUES ( 
+             SEQ.NEXTVAL, 
+             #{table_nm}, 
+             SYSDATE )
         INTO LECTURE(
-            SEQ,
-            ADMIN_SEQ,
-            NAME,
-            REG_DT
-        ) VALUES(
+             SEQ,
+             ADMIN_SEQ, 
+             NAME, 
+             REG_DT ) 
+        VALUES(
             SEQ.NEXTVAL,
-            #{admin_seq},
-            #{name},
-            SYSDATE
-        )
-    SELECT * FROM DUAL
+            #{admin_seq}, 
+            #{name}, 
+            SYSDATE ) 
+        SELECT * FROM DUAL
     </insert>
-    <select id="selectLectureDetail" parameterType="String" resultType="map">
-    SELECT 
-        SEQ,
-        ADMIN_SEQ,
-        NAME,
-        REG_DT
-    FROM LECTURE
-    WHERE SEQ = #{seq}
-</select>
+
+    <select id="selectLectureRead" parameterType="String" resultType="map">
+        SELECT 
+            A.*,
+            GET_ADMIN_NAME(A.ADMIN_SEQ) AS ADMIN_NAME 
+        FROM LECTURE A
+        WHERE SEQ = #{seq}
+    </select>
+
+    <update id="updateLecture" parameterType="LectureDto">
+        UPDATE LECTURE 
+        SET name = #{name} 
+        WHERE SEQ = #{seq}
+    </update>
+
+    <delete id="deleteLecture" parameterType="Long">
+        DELETE FROM LECTURE 
+        WHERE SEQ = #{seq}
+    </delete>
 
 </mapper>
