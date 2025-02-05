@@ -16,7 +16,7 @@ public interface ClassService {
 
     int insertClass(ClassDto dto) throws Exception;
 
-    
+    Map<String, Object> getClassDetail(String seq) throws Exception;
 
     
 }

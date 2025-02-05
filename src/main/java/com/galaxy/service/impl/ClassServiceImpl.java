@@ -37,5 +37,20 @@ public class ClassServiceImpl implements ClassService{
         return classMapper.insertClass(dto);
     }
 
+	
+
+	@Override
+	public Map<String, Object> getClassDetail(String seq) throws Exception {
+        // 1. 기본 유효성 검사
+        if (seq == null || seq.trim().isEmpty()) {
+            throw new IllegalArgumentException("seq는 필수 값입니다.");
+        }
+
+        // 2. 클래스 기본 정보 조회
+        Map<String, Object> classDetail = classMapper.selectClassDetail(seq);
+        
+
+        return classDetail;
+    }
 
 }

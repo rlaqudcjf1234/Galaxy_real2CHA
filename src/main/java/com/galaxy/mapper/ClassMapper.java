@@ -17,4 +17,7 @@ public interface ClassMapper {
 
  
     int insertClass(ClassDto classDto) throws Exception;
+
+        // 클래스 상세 정보 조회
+        Map<String, Object> selectClassDetail(String seq);
 }

@@ -5,6 +5,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,4 +40,25 @@ public class ClassController {
     public void add(ClassDto dto)throws Exception {
         classService.insertClass(dto);
     }
+
+   @GetMapping("/detail")
+    public ResponseEntity<?> getClassDetail(
+        @RequestParam(name = "seq")String seq
+    )throws Exception {
+        try {
+            Map<String, Object> classDetail = classService.getClassDetail(seq);
+            if (classDetail == null) {
+                return ResponseEntity
+                    .notFound()
+                    .build();
+            }
+            return ResponseEntity.ok(classDetail);
+        } catch (Exception e) {
+            return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body("상세 정보 조회 중 오류가 발생했습니다.");
+        }
+    }
+
+
 }

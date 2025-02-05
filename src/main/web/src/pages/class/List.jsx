@@ -1,6 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";  //  useNavigate 추가
 import axios from "axios";
 import './Add';
 
@@ -12,6 +13,7 @@ function List() {
     const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
     const [params, setParams] = useState({ pageIndex: 1 });
     const [loading, setLoading] = useState(false); // 로딩 상태
+    const navigate = useNavigate();  //  useNavigate 사용
 
     // 선택 페이지 변경 데이터 요청
     const fetchData = async (pageIndex) => {
@@ -35,6 +37,12 @@ function List() {
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
+
+      // 클릭하면 상세 페이지로 이동
+      const handleRowClick = (key) => {
+        navigate(`/class/detail/${key}`);
+    };
+
 
     // 선택 페이지 변경 이벤트
     useEffect(() => {
@@ -69,10 +77,13 @@ function List() {
                 <tbody>
                     {items.length > 0 ? (
                         items.map((item) => (
-                            <tr key={item.SEQ ? item.SEQ : `${item.SUBJECT}-${item.ROUND || 'default'}`}>
-                                <td>{item.SUBJECT}</td>
+                            <tr key={item.SEQ}
+                            onClick={() => handleRowClick(item.SEQ)} 
+                            style={{ cursor: "pointer" }} // 클릭 가능한 스타일 추가
+                        >
+                                <td>{item.LECTURE_NAME}</td>
                                 <td>{item.ROUND}</td>
-                                <td>{item.TEACHER}</td>
+                                <td>{item.ADMIN_NAME}</td>
                                 <td>{item.ROOM}</td>
                                 <td>{item.START_DT}</td>
                                 <td>{item.END_DT}</td>

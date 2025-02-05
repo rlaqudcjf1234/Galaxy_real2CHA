@@ -1,75 +1,79 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+
 import axios from "axios";
 
 function Detail() {
-    const { id } = useParams(); // URL에서 ID 가져오기
+    const params = useParams();
     const navigate = useNavigate();
-    const [item, setItem] = useState(null);
-    const [loading, setLoading] = useState(false);
+    const [classData, setClassData] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [editing, setEditing] = useState(false);
     const [formData, setFormData] = useState({});
 
-    useEffect(() => {
-        const fetchData = async () => {
-            setLoading(true);
-            try {
-                const response = await axios.get(`/api/class/detail/${id}`);
-                setItem(response.data);
-                setFormData(response.data); // 수정 폼 초기화
-            } catch (error) {
-                console.error("Error fetching data:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchData();
-    }, [id]);
-
-    const handleChange = (e) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    async function fetchClass() {
         try {
-            await axios.put(`/api/class/update/${id}`, formData);
-            alert("수정되었습니다.");
-            setEditing(false);
-            setItem(formData); // 변경 사항 반영
+            const response = await axios.get("/api/class/list", { params: params });
+            console.log(params.seq);
+            setClassData(response.data);
         } catch (error) {
-            console.error("Error updating data:", error);
+            console.error("Error fetching class details:", error);
+            alert("강의 정보를 불러오는데 실패했습니다.");
+            navigate("/class");
+        } finally {
+            setLoading(false);
         }
+    }
+
+    useEffect(() => {
+        fetchClass();
+    }, [params.seq]);
+
+   
+      // 수정 버튼 클릭 시 실행
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: value
+        }));
     };
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // 데이터를 수정 후 저장하는 로직 작성
+        // 예: axios.put('/api/class/update', formData);
+        console.log("Updated data: ", formData);
+    };
+
+
+    
 
     return (
         <div className="container py-3">
             <button className="btn btn-secondary mb-3" onClick={() => navigate(-1)}>뒤로가기</button>
             {loading ? (
                 <p>로딩 중...</p>
-            ) : item ? (
+            ) : classData ? (
                 <div>
                     {!editing ? (
                         <div>
-                            <h2>{item.SUBJECT} 상세 정보</h2>
+                            <h2>{classData.SUBJECT} 상세 정보</h2>
                             <table className="table">
                                 <tbody>
-                                    <tr><th>과목명</th><td>{item.SUBJECT}</td></tr>
-                                    <tr><th>회차</th><td>{item.ROUND}</td></tr>
-                                    <tr><th>강사</th><td>{item.TEACHER}</td></tr>
-                                    <tr><th>강의실</th><td>{item.ROOM}</td></tr>
-                                    <tr><th>강의 시작일자</th><td>{item.START_DT}</td></tr>
-                                    <tr><th>강의 종료일자</th><td>{item.END_DT}</td></tr>
-                                    <tr><th>강의 시작시간</th><td>{item.START_TM}</td></tr>
-                                    <tr><th>강의 종료시간</th><td>{item.END_TM}</td></tr>
-                                    <tr><th>총인원</th><td>{item.PEOPLE}</td></tr>
-                                    <tr><th>등록일자</th><td>{item.REG_DT}</td></tr>
-                                    <tr><th>강의상태</th><td>{item.USE_YN}</td></tr>
-                                    <tr><th>확정일자</th><td>{item.CONFIRM_DT}</td></tr>
+                                    <tr><th>과목명</th><td>{classData.LECTURE_NAME}</td></tr>
+                                    <tr><th>회차</th><td>{classData.ROUND}</td></tr>
+                                    <tr><th>강사</th><td>{classData.ADMIN_NAME}</td></tr>
+                                    <tr><th>강의실</th><td>{classData.ROOM}</td></tr>
+                                    <tr><th>강의 시작일자</th><td>{classData.START_DT}</td></tr>
+                                    <tr><th>강의 종료일자</th><td>{classData.END_DT}</td></tr>
+                                    <tr><th>강의 시작시간</th><td>{classData.START_TM}</td></tr>
+                                    <tr><th>강의 종료시간</th><td>{classData.END_TM}</td></tr>
+                                    <tr><th>총인원</th><td>{classData.PEOPLE}</td></tr>
+                                    <tr><th>등록일자</th><td>{classData.REG_DT}</td></tr>
+                                    <tr><th>강의상태</th><td>{classData.USE_YN}</td></tr>
+                                    
                                 </tbody>
                             </table>
                             <button className="btn btn-primary" onClick={() => setEditing(true)}>수정</button>
@@ -79,11 +83,11 @@ function Detail() {
                             <h2>수정하기</h2>
                             <div className="mb-2">
                                 <label>과목명</label>
-                                <input type="text" name="SUBJECT" value={formData.SUBJECT} onChange={handleChange} className="form-control" />
+                                <input type="text" name="SUBJECT" value={formData.LECTURE_NAME} onChange={handleChange} className="form-control" />
                             </div>
                             <div className="mb-2">
                                 <label>강사</label>
-                                <input type="text" name="TEACHER" value={formData.TEACHER} onChange={handleChange} className="form-control" />
+                                <input type="text" name="TEACHER" value={formData.ADMIN_NAME} onChange={handleChange} className="form-control" />
                             </div>
                             <div className="mb-2">
                                 <label>강의실</label>
