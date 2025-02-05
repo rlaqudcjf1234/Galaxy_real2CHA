@@ -18,4 +18,10 @@ public interface ApplyMapper {
     void insertApply(ApplyDto dto) throws Exception;
 
     int selectByJumin(String jumin); // 주민번호 중복 체크용 메서드
+
+    int selectByPhone(String phone);
+
+    Map<String, Object> selectApplyRead(String seq);
+
+    int deleteApply(Long id);
 }

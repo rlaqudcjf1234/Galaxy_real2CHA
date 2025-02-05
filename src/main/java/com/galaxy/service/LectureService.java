@@ -12,11 +12,13 @@ public interface LectureService {
 
     List<Map<String,Object>> selectNameList(SearchDto dto) throws Exception;
     
-    List<Map<String,Object>> selectAllList(SearchDto dto)  throws Exception;
-
     List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
     
     int insertLecture(LectureDto dto) throws Exception;
 
-    Map<String, Object> getLectureDetail(String seq);
+    Map<String, Object> getLectureRead(String seq);
+
+    Long updateLecture(LectureDto dto) throws Exception;
+    
+    Long deleteLecture(Long seq) throws Exception;
 }

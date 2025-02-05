@@ -5,7 +5,7 @@ import "../../css/Community.css";
 import Pagination from "../../components/Pagination";
 import Dropdown from 'react-bootstrap/Dropdown';
 
-function List() {
+function LectureDocument() {
     const navigate = useNavigate();
     const [items, setItems] = useState([]);
     const [totalCount, setTotalCount] = useState(0);
@@ -25,7 +25,7 @@ function List() {
                 page: pageIndex.toString()
             };
 
-            const response = await axios.get("/api/lecture/list", { params });
+            const response = await axios.get("/api/document/list", { params });
             setItems(response.data.items);
             setTotalCount(response.data.totalCount);
         } catch (error) {
@@ -42,7 +42,7 @@ function List() {
 
         setLoading(true);
         try {
-            const response = await axios.get("/api/lecture/search", {
+            const response = await axios.get("/api/document/search", {
                 params: {
                     search: searchInput,
                     pageIndex: 1,
@@ -108,8 +108,10 @@ function List() {
                 <thead>
                     <tr>
                         <th>번호</th>
-                        <th>강사명</th>
-                        <th>학과이름</th>
+                        <th>강의</th>
+                        <th>제목</th>
+                        <th>종류</th>
+                        <th>내용</th>
                         <th>등록일자</th>
                     </tr>
                 </thead>
@@ -118,16 +120,18 @@ function List() {
                         items.map((item) => (
                             <tr key={item.SEQ}>
                                 <td>{item.SEQ}</td>
-                                <td>{item.ADMIN_NAME}</td>
-                                <td className="clickable-cell" onClick={() => navigate(`/lecture/read/${item.SEQ}`)}>
-                                    {item.LECTURE_NAME}
+                                <td>{item.LECTURE_NAME}</td>
+                                <td className="clickable-cell" onClick={() => navigate(`/document/read/${item.SEQ}`)}>
+                                    {item.TITLE}
                                 </td>
+                                <td>{item.DIVISION_NAME}</td>
+                                <td>{item.DETAIL}</td>
                                 <td>{new Date(item.REG_DT).toLocaleDateString()}</td>
                             </tr>
                         ))
                     ) : (
                         <tr>
-                            <td colSpan="4" className="text-center">
+                            <td colSpan="6" className="text-center">
                                 {loading ? "로딩중..." : "데이터가 없습니다."}
                             </td>
                         </tr>
@@ -175,4 +179,4 @@ function List() {
     );
 }
 
-export default List;
+export default LectureDocument;

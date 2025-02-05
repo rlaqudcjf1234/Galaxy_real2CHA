@@ -15,11 +15,13 @@ public interface LectureMapper {
     
     List<Map<String,Object>> selectNameList(SearchDto dto) throws Exception;
 
-    List<Map<String,Object>> selectAllList(SearchDto dto) throws Exception;
-
     int insertLecture(LectureDto dto) throws Exception;
     
     List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
 
-    Map<String, Object> selectLectureDetail(String seq);
+    Map<String, Object> selectLectureRead(String seq);
+
+    Long updateLecture(LectureDto dto) throws Exception;
+
+    Long deleteLecture(Long seq) throws Exception;
 }

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApplyDto extends SeqDto {
+    private Long class_seq;
 
     @NotNull
     @NotBlank
@@ -52,6 +53,7 @@ public class ApplyDto extends SeqDto {
     private String path; // 지원경로
 
     @NotNull
-    @NotBlank
     private Date reg_dt; // 등록일자
+
+    private Long id;
 }

@@ -62,9 +62,11 @@ const ApplyList = () => {
                     {items.length > 0 ? (
                         items.map((item) => {
                             return (
-                                <tr>
+                                <tr key={item.ID}>
                                     <td>{item.RNUM}</td>
-                                    <td className="title">{item.NAME}</td>
+                                    <td className="title">
+                                        <Link to={`/apply/read/${item.ID}`}>{item.NAME}</Link>
+                                    </td>
                                     <td>{item.EMAIL}</td>
                                     <td>{item.PHONE}</td>
                                     <td>{item.REG_DT}</td>

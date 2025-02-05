@@ -45,19 +45,33 @@ public class ApplyServiceImpl implements ApplyService {
     // 신청서를 저장하는 메서드
     @Override
     public void insertApply(ApplyDto dto) throws Exception {
-        // Validator는 Errors 객체를 필요로 하므로 BindingResult(Errors의 구현체)를 생성합니다
-        BindingResult bindingResult = new BeanPropertyBindingResult(dto, "applyDto");
+        try {
+            System.out.println("class_seq value: " + dto.getClass_seq());
+            System.out.println("class_seq type: " + ((dto.getClass_seq() != null) ? Long.class.getName() : "null"));
+            if (dto == null || dto.getClass_seq() == null || dto.getClass_seq() <= 0) {
+                throw new ValidationException("클래스를 선택해주세요.");
+            }
 
-        // AbstractValidator의 validate 메서드를 호출합니다
-        // 이 메서드는 내부적으로 doValidate를 호출하고 예외 처리를 담당합니다
-        applyValidator.validate(dto, bindingResult);
+            BindingResult bindingResult = new BeanPropertyBindingResult(dto, "applyDto");
+            applyValidator.validate(dto, bindingResult);
 
-        // 검증 결과 에러가 있다면 예외를 발생시킵니다
-        if (bindingResult.hasErrors()) {
-            throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            if (bindingResult.hasErrors()) {
+                throw new ValidationException(bindingResult.getAllErrors().get(0).getDefaultMessage());
+            }
+
+            applyMapper.insertApply(dto);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new ValidationException("처리 중 오류가 발생했습니다: " + e.getMessage());
         }
+    }
 
-        // 검증을 통과했다면 데이터를 저장합니다
-        applyMapper.insertApply(dto);
+    @Override
+    public Map<String, Object> getApplyRead(String seq) {
+        return applyMapper.selectApplyRead(seq);
+    }
+
+    public int deleteApply(Long id) {
+        return applyMapper.deleteApply(id);
     }
 }
