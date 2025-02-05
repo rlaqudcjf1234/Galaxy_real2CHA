@@ -7,8 +7,8 @@ import Pagination from "../../components/Pagination";
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
-    const [search, setSearch] = useState({select: "2", text: ""});
-    const [params, setParams] = useState({search: "", pageIndex: 1});
+    const [search, setSearch] = useState({select: "1", text: ""});
+    const [params, setParams] = useState({select: "1", text: "", pageIndex: 1});
     const [loading, setLoading] = useState(false); // 로딩 상태
 
     // 하드코딩된 데이터
@@ -45,8 +45,15 @@ const List = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            setItems(data); // 목록 데이터
-            setTotalCount(data.length); // 전체 아이템 수
+            // const response = await axios.get("/api/admin/list", {params: params});
+            const response = {
+                data: {
+                    items: data,
+                    totalCount: data.length
+                }
+            }
+            setItems(response.data); // 목록 데이터
+            setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -132,7 +139,7 @@ const List = () => {
                             )))
                             : (
                                 <tr>
-                                    <td colSpan="4" className="text-center">
+                                    <td colSpan="5" className="text-center">
                                         {
                                             loading
                                                 ? "로딩중..."
