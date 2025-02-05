@@ -7,8 +7,8 @@ import Pagination from "../../components/Pagination";
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
-    const [search, setSearch] = useState({select: "2", text: ""});
-    const [params, setParams] = useState({select: "2", text: "", pageIndex: 1});
+    const [search, setSearch] = useState({select: "1", text: ""});
+    const [params, setParams] = useState({select: "1", text: "", pageIndex: 1});
     const [loading, setLoading] = useState(false); // 로딩 상태
 
     // 선택 페이지 변경 데이터 요청
@@ -98,12 +98,11 @@ const List = () => {
                     {
                         items.length > 0
                             ? items.map((item) => {
-                                const mod = `mod/${item.SEQ}`;
                                 return (
                                     <tr key={item.SEQ}>
                                         <td>{item.RNUM}</td>
                                         <td className="title">
-                                            <Link to={mod}>{item.EMAIL}</Link>
+                                            <Link to={`mod/${item.SEQ}`}>{item.EMAIL}</Link>
                                         </td>
                                         <td>{item.NAME}</td>
                                         <td>{item.PHONE}</td>
