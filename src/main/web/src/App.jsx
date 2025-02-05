@@ -53,12 +53,11 @@ function App() {
                             <Route path="add" element={<ClassAdd/>}/>
                             <Route path="read" element={<ClassRead/>}/>
                             <Route path="confirm" element={<ClassConfirm/>}/>
-                            <Route path="detail" element={<ClassDetail/>}/>
+                            <Route path="detail/:seq" element={<ClassDetail/>}/>
+                            
                         </Route>
 
-                        <Route path="user" element={<Container/>}>
-                            <Route index element={<UserLogin/>}/>
-                        </Route>
+                        
                    
                         <Route path="apply" element={<Container />}>
                             <Route index element=""/>
@@ -95,7 +94,11 @@ function App() {
                             <Route /*index*/ element="" />
                         </Route>
                     </Route>
+                    <Route path="user" element={<Container/>}>
+                            <Route index element={<UserLogin/>}/>
+                        </Route>
                 </Routes>
+
             </Router>
         </PostProvider>
     );
