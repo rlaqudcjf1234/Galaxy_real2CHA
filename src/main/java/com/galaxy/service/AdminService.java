@@ -16,4 +16,8 @@ public interface AdminService {
 
     Map<String, Object> selectOne(String seq) throws Exception;
 
+    int updateAdmin(AdminDto dto) throws Exception;
+
+    int updatePassword(AdminDto dto) throws Exception;
+
 }

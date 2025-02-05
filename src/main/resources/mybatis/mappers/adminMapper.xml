@@ -10,8 +10,19 @@
 	
 	<sql id="sqlSearch">
 		<where>
-			<if test='search != null and search != ""'>
-				AND EMAIL LIKE '%'||TRIM(#{search})||'%'
+			<if test='text != null and text != ""'>
+				<choose>
+					<when test='select == "1"'>
+						AND EMAIL LIKE '%'||TRIM(#{text})||'%'
+					</when>
+					<when test='select == "2"'>
+						AND NAME LIKE '%'||TRIM(#{text})||'%'
+					</when>
+					<when test='select == "3"'>
+						AND PHONE LIKE '%'||TRIM(REPLACE(#{text}, '-', ''))||'%'
+					</when>
+				</choose>
+				
 			</if>
 		</where>
 	</sql>
@@ -53,4 +64,19 @@
 		FROM ADMIN
 		WHERE SEQ = #{seq}
 	</select>
+
+	<update id="updateAdmin" parameterType="adminDto">
+		UPDATE ADMIN SET
+			NAME = #{name},
+			PHONE = #{phone},
+			DIVISION = #{division},
+			USE_YN = #{use_yn}
+		WHERE SEQ = #{seq}
+	</update>
+
+	<update id="updatePassword" parameterType="adminDto">
+		UPDATE ADMIN SET
+			PASSWORD = #{password}
+		WHERE SEQ = #{seq}
+	</update>
 </mapper>

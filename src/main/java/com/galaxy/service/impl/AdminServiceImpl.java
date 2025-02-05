@@ -40,4 +40,14 @@ public class AdminServiceImpl implements AdminService{
 		return adminMapper.selectOne(seq);
 	}
 
+	@Override
+	public int updateAdmin(AdminDto dto) throws Exception {
+		return adminMapper.updateAdmin(dto);
+	}
+
+	@Override
+	public int updatePassword(AdminDto dto) throws Exception {
+		return adminMapper.updatePassword(dto);
+	}
+
 }

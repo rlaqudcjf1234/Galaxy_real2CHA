@@ -60,6 +60,15 @@ public class AdminController {
     }
 
     @PostMapping("/mod")
-    public void mod(@Valid AdminDto dto)throws Exception {}
+    public void mod(@Valid AdminDto dto)throws Exception {
+
+        adminService.updateAdmin(dto);
+    }
+
+    @PostMapping("/pass")
+    public void pass(@Valid AdminDto dto)throws Exception {
+        
+        adminService.updatePassword(dto);
+    }
 
 }
