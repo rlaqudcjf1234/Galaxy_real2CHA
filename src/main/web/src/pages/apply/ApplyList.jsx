@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 
 import Pagination from "../../components/Pagination";
-import "../../css/Community.css";
 const ApplyList = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수

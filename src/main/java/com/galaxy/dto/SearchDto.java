@@ -6,13 +6,9 @@ import lombok.Setter;
 @Getter
 @Setter
 public class SearchDto extends PageDto {
-
-	private String email = "";
 	
-	private String name = "";
-
-	private String search = "";
-
-	private String page = "";
+	private String select = "";
+	
+	private String text = "";
 
 }

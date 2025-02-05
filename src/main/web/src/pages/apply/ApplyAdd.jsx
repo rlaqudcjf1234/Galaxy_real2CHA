@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "bootstrap/dist/css/bootstrap.min.css";
-import "../../css/Community.css";
 //import CryptoJS from "crypto-js";
 
 function ApplyAdd() {

@@ -1,10 +1,11 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import {useState, useEffect} from "react"
-import {Link, useNavigate} from 'react-router-dom';
+import {useEffect, useState} from "react"
+import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
-function Add() {
 
+const Add = () => {
     const navigate = useNavigate();
+
+    /** 뒤로가기 */
     const handleHistoryBack = () => {
         navigate(-1);
     }
@@ -20,7 +21,7 @@ function Add() {
         try {
             const response = await axios.get("/api/code/use", {
                 params: {
-                    "page": "adminAdd"
+                    "text": "adminAdd"
                 }
             });
             response
@@ -61,70 +62,122 @@ function Add() {
     }
 
     return (
-        <div
-            style={{
-                maxWidth: "600px",
-                margin: "auto"
-            }}>
-            <form className="row g-3" onSubmit={handleSubmit}>
-                <div className="col-12">
-                    <label htmlFor="email" className="form-label">이메일</label>
-                    <input
-                        type="email"
-                        className="form-control"
-                        name="email"
-                        placeholder="name@example.com"/>
-                    <div className="invalid-feedback">
-                        {errors.email}
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <label htmlFor="password" className="form-label">비밀번호</label>
-                    <input type="password" className="form-control" name="password"/>
-                    <div className="invalid-feedback">
-                        {errors.password}
-                    </div>
-                </div>
-                <div className="col-md-6">
-                    <label htmlFor="password2" className="form-label">비밀번호 확인</label>
-                    <input type="password" className="form-control" name="password2"/>
-                    <div className="invalid-feedback">
-                        {errors.password2}
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <label htmlFor="name" className="form-label">성명</label>
-                    <input type="text" className="form-control" name="name"/>
-                    <div className="invalid-feedback">
-                        {errors.name}
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <label htmlFor="phone" className="form-label">연락처</label>
-                    <input type="text" className="form-control" name="phone"/>
-                    <div className="invalid-feedback">
-                        {errors.phone}
-                    </div>
-                </div>
-                <div className="col-md-4">
-                    <label htmlFor="division" className="form-label">구분</label>
-                    <select name="division" className="form-select" defaultValue="">
-                        <option value="">선택</option>
-                        {
-                            codes
-                                .division
-                                .map(
-                                    (item) => (<option key={item.CODE_ID} value={item.CODE_ID}>{item.CODE_NAME}</option>)
-                                )
-                        }
-                    </select>
-                    <div className="invalid-feedback">
-                        {errors.division}
-                    </div>
-                </div>
-                <div className="d-flex gap-2 justify-content-end py-1">
-                    <button className="btn btn-primary" type="submit">등록</button>
-                    <button className="btn btn-primary" type="button" onClick={handleHistoryBack}>취소</button>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <table className="table">
+                    {/* 헤더 영역 */}
+                    <caption>
+                        <span>
+                            <em>홈</em>
+                            <em>강사현황</em>
+                            <strong>강사등록</strong>
+                        </span>
+                    </caption>
+                    <colgroup>
+                        <col width="20%"/>
+                        <col/>
+                        <col width="30%"/>
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>이메일</th>
+                            <td>
+                                <input
+                                    type="email"
+                                    className="form-control"
+                                    name="email"
+                                    placeholder="name@example.com"
+                                    required="required"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.email}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호</th>
+                            <td>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    name="password"
+                                    required="required"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.password}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>비밀번호 확인</th>
+                            <td>
+                                <input
+                                    type="password"
+                                    className="form-control"
+                                    name="password2"
+                                    required="required"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.password2}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>성명</th>
+                            <td>
+                                <input type="text" className="form-control" name="name" required="required"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.name}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>연락처</th>
+                            <td>
+                                <input type="text" className="form-control" name="phone"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.phone}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>구분</th>
+                            <td>
+                                <select
+                                    name="division"
+                                    className="form-control"
+                                    defaultValue=""
+                                    required="required">
+                                    <option value="">선택</option>
+                                    {
+                                        codes
+                                            .division
+                                            .map(
+                                                (item) => (<option key={item.CODE_ID} value={item.CODE_ID}>{item.CODE_NAME}</option>)
+                                            )
+                                    }
+                                </select>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.division}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {/* 버튼 영역 */}
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                    <button type="submit" className="btn btn-primary">등록</button>
+                    <button type="button" className="btn btn-secondary" onClick={handleHistoryBack}>취소</button>
                 </div>
             </form>
         </div>

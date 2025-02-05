@@ -24,7 +24,7 @@ public class CodeController {
         
         List<CodeDto> list = new ArrayList<CodeDto>();
 
-        switch (dto.getPage()) {
+        switch (dto.getText()) {
             case "adminAdd":
                     list.add(new CodeDto("division", codeService.selectUse2()));
                 break;

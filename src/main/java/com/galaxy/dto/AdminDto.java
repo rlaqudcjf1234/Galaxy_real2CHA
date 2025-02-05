@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class AdminDto extends SeqDto implements RequestDto{
+public class AdminDto extends SeqDto {
 
 	@Email
 	@NotNull
@@ -36,9 +36,5 @@ public class AdminDto extends SeqDto implements RequestDto{
 	private String uri;
 
 	private String method;
-
-	public boolean isConfirm() {
-		return this.password.equals(this.password2);
-	}
 	
 }

@@ -8,16 +8,45 @@ const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
     const [search, setSearch] = useState({select: "2", text: ""});
-    const [params, setParams] = useState({select: "2", text: "", pageIndex: 1});
+    const [params, setParams] = useState({search: "", pageIndex: 1});
     const [loading, setLoading] = useState(false); // 로딩 상태
+
+    // 하드코딩된 데이터
+    const data = [
+        {
+            SEQ: 1,
+            ADMIN_NAME: "김강사",
+            LECTURE_NAME: "컴퓨터공학과",
+            REG_DT: "2024-01-15"
+        }, {
+            SEQ: 2,
+            ADMIN_NAME: "이강사",
+            LECTURE_NAME: "전자공학과",
+            REG_DT: "2024-01-16"
+        }, {
+            SEQ: 3,
+            ADMIN_NAME: "박강사",
+            LECTURE_NAME: "기계공학과",
+            REG_DT: "2024-01-17"
+        }, {
+            SEQ: 4,
+            ADMIN_NAME: "최강사",
+            LECTURE_NAME: "화학공학과",
+            REG_DT: "2024-01-18"
+        }, {
+            SEQ: 5,
+            ADMIN_NAME: "정강사",
+            LECTURE_NAME: "건축공학과",
+            REG_DT: "2024-01-19"
+        }
+    ];
 
     // 선택 페이지 변경 데이터 요청
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("/api/admin/list", {params: params});
-            setItems(response.data.items); // 목록 데이터
-            setTotalCount(response.data.totalCount); // 전체 아이템 수
+            setItems(data); // 목록 데이터
+            setTotalCount(data.length); // 전체 아이템 수
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -70,57 +99,51 @@ const List = () => {
                 <caption>
                     <span>
                         <em>홈</em>
-                        <strong>강사현황</strong>
+                        <strong>간의게시판</strong>
                     </span>
                     <Link to="add" className="btn btn-primary">등록</Link>
                 </caption>
                 <colgroup>
-                    <col width="95px"/>
-                    <col/>
-                    <col width="120px"/>
-                    <col width="230px"/>
-                    <col width="120px"/>
-                    <col width="180px"/>
-                    <col width="145px"/>
+                    <col width="25%"/>
+                    <col width="25%"/>
+                    <col width="25%"/>
+                    <col width="25%"/>
                 </colgroup>
                 <thead>
                     <tr>
-                        <th scope="col">번호</th>
-                        <th scope="col">이메일</th>
-                        <th scope="col">성명</th>
-                        <th scope="col">연락처</th>
-                        <th scope="col">구분</th>
-                        <th scope="col">등록일자</th>
-                        <th scope="col">사용여부</th>
+                        <th>번호</th>
+                        <th>강사명</th>
+                        <th>학과이름</th>
+                        <th>등록일자</th>
                     </tr>
                 </thead>
                 <tbody>
                     {
                         items.length > 0
-                            ? items.map((item) => {
-                                const mod = `mod/${item.SEQ}`;
-                                return (
-                                    <tr key={item.SEQ}>
-                                        <td>{item.RNUM}</td>
-                                        <td className="title">
-                                            <Link to={mod}>{item.EMAIL}</Link>
-                                        </td>
-                                        <td>{item.NAME}</td>
-                                        <td>{item.PHONE}</td>
-                                        <td>{item.DIVISION}</td>
-                                        <td>{item.REG_DT}</td>
-                                        <td>{item.USE_YN}</td>
-                                    </tr>
-                                )
-                            })
+                            ? (items.map((item) => (
+                                <tr key={item.SEQ}>
+                                    <td>{item.SEQ}</td>
+                                    <td>{item.ADMIN_NAME}</td>
+                                    <td className="clickable-cell">
+                                        {item.LECTURE_NAME}
+                                    </td>
+                                    <td>{new Date(item.REG_DT).toLocaleDateString()}</td>
+                                </tr>
+                            )))
                             : (
                                 <tr>
-                                    <td colSpan="6" className="text-center">데이터가 없습니다.</td>
+                                    <td colSpan="4" className="text-center">
+                                        {
+                                            loading
+                                                ? "로딩중..."
+                                                : "데이터가 없습니다."
+                                        }
+                                    </td>
                                 </tr>
                             )
                     }
                 </tbody>
-            </table >
+            </table>
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
@@ -130,13 +153,13 @@ const List = () => {
                 <div>
                     <select
                         name="select"
-                        defaultValue={search.select}
+                        value={search.select}
                         onChange={handleSearchChange}
                         className="form-control"
                         required="required">
-                        <option value="1">이메일</option>
-                        <option value="2">성명</option>
-                        <option value="3">연락처</option>
+                        <option value="1">제목</option>
+                        <option value="2">내용</option>
+                        <option value="3">제목+내용</option>
                     </select>
                 </div>
                 <div className="col-4">

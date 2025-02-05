@@ -1,17 +1,17 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {useState, useEffect} from "react"
-import {useParams, useNavigate} from 'react-router-dom';
-import axios from 'axios';
+import {useParams, useNavigate} from "react-router-dom";
+import axios from "axios";
 
 function Mod() {
 
     const navigate = useNavigate();
-    const handleHistoryBack = () => {
+    const handleCancel = () => {
         navigate(-1);
     }
 
     const params = useParams();
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({use_yn: [], division: []});
     const [admin, setAdmin] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -26,18 +26,18 @@ function Mod() {
                     "page": "adminMod"
                 }
             });
-            if(!response || !response.data){
+            if (!response || !response.data) {
                 alert("대상을 찾을 수 없습니다.");
                 navigate("/admin");
+                return;
             }
+            const data = {}
             response
                 .data
                 .forEach(item => {
-                    setCodes({
-                        ...codes,
-                        [item.name]: item.value
-                    });
+                    data[item.name] = item.value
                 });
+            setCodes(data);
         } catch (error) {
             console.error('Error fetching data:', error);
             alert("대상을 찾을 수 없습니다.");
@@ -70,6 +70,13 @@ function Mod() {
         fetchParams();
     }, []);
 
+    const handleAdmin = (e) => {
+        setAdmin({
+            ...admin,
+            [e.target.name.toUpperCase()]: e.target.value
+        });
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
@@ -87,6 +94,11 @@ function Mod() {
         }
     }
 
+    const handlePreview = () => {
+        const url = `/admin/pass/${admin.SEQ}`;
+        window.open(url, "mozillaWindow", "popup");
+    }
+
     return (
         <div
             style={{
@@ -94,9 +106,8 @@ function Mod() {
                 margin: "auto"
             }}>
             <div className="board-header">
-                <div className="search-box">
-                </div>
-                <a className="write-button">비밀번호 변경</a>
+                <div className="search-box"></div>
+                <a className="write-button" onClick={handlePreview}>비밀번호 변경</a>
             </div>
             <form className="row g-3" onSubmit={handleSubmit}>
                 <div className="col-12">
@@ -111,14 +122,24 @@ function Mod() {
                 </div>
                 <div className="col-md-4">
                     <label htmlFor="name" className="form-label">성명</label>
-                    <input type="text" className="form-control" name="name" value={admin.NAME}/>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="name"
+                        value={admin.NAME}
+                        onChange={handleAdmin}/>
                     <div className="invalid-feedback">
                         {errors.name}
                     </div>
                 </div>
                 <div className="col-md-4">
                     <label htmlFor="phone" className="form-label">연락처</label>
-                    <input type="text" className="form-control" name="phone" value={admin.PHONE}/>
+                    <input
+                        type="text"
+                        className="form-control"
+                        name="phone"
+                        value={admin.PHONE}
+                        onChange={handleAdmin}/>
                     <div className="invalid-feedback">
                         {errors.phone}
                     </div>
@@ -129,7 +150,8 @@ function Mod() {
                         name="division"
                         className="form-select"
                         defaultValue=""
-                        value={admin.DIVISION}>
+                        value={admin.DIVISION}
+                        onChange={handleAdmin}>
                         <option value="">선택</option>
                         {
                             codes
@@ -143,9 +165,40 @@ function Mod() {
                         {errors.division}
                     </div>
                 </div>
+                <div className="col-md-6">
+                    <input type="hidden" name="seq" value={admin.SEQ} readOnly="readOnly"/>
+                    <label htmlFor="reg_dt" className="form-label">등록일자</label>
+                    <input
+                        type="text"
+                        className="form-control-plaintext"
+                        name="reg_dt"
+                        value={admin.REG_DT}
+                        readOnly="readOnly"/>
+                </div>
+                <div className="col-md-6">
+                    <label htmlFor="use_yn" className="form-label">사용여부</label>
+                    <select
+                        name="use_yn"
+                        className="form-select"
+                        defaultValue=""
+                        value={admin.USE_YN}
+                        onChange={handleAdmin}>
+                        <option value="">선택</option>
+                        {
+                            codes
+                                .use_yn
+                                .map(
+                                    (item) => (<option key={item.CODE_ID} value={item.CODE_ID}>{item.CODE_NAME}</option>)
+                                )
+                        }
+                    </select>
+                    <div className="invalid-feedback">
+                        {errors.use_yn}
+                    </div>
+                </div>
                 <div className="d-flex gap-2 justify-content-end py-1">
                     <button className="btn btn-primary" type="submit">저장</button>
-                    <button className="btn btn-primary" type="button" onClick={handleHistoryBack}>취소</button>
+                    <button className="btn btn-primary" type="button" onClick={handleCancel}>취소</button>
                 </div>
             </form>
         </div>

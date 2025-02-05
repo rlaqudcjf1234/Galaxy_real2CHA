@@ -21,11 +21,11 @@ public interface AdminMapper {
 
     Map<String, Object> selectOne(String seq)throws Exception;
 
+    List<Map<String, Object>> selectUseList() throws Exception;
+
     int updateAdmin(AdminDto dto)throws Exception;
 
     int updatePassword(AdminDto dto)throws Exception;
-
-    List<Map<String, Object>> selectUseList() throws Exception;
 
 }
 

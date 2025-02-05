@@ -10,7 +10,8 @@ import com.galaxy.interceptor.SessionInterceptor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @SuppressWarnings("null")
-    @Override public void addInterceptors(InterceptorRegistry registry) {
+    @Override 
+    public void addInterceptors(InterceptorRegistry registry) {
         registry
             .addInterceptor(new SessionInterceptor())
             .excludePathPatterns("/api/**");

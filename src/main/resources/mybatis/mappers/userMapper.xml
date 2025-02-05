@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.UserMapper">
+
+    <select id="selectUse" parameterType="userDto" resultType="int">
+        SELECT GET_USER_LOGIN(#{email}, #{passwords}) FROM DUAL
+    </select>
+
+    <select id="selectOne" parameterType="userDto" resultType="map">
+        SELECT SEQ, EMAIL, NAME, PHONE, 
+            DIVISION, POST, REG_DT, USE_YN
+        FROM ADMIN
+        WHERE EMAIL = #{email}
+    </select>
+
+</mapper>
