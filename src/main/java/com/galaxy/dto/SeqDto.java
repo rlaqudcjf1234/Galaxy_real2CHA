@@ -5,10 +5,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SeqDto {
+public class SeqDto extends SearchDto {
 
-	private Long seq;
-	
-	private String table_nm;
+    private Long seq;
+
+    private String table_nm;
 
 }

@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.galaxy.mapper.LectureDocumMapper">
+<mapper namespace="com.galaxy.mapper.LectureDocMapper">
 
-<select id="documentList" parameterType="SearchDto" resultType="map">
+<select id="selectCount" parameterType="SearchDto" resultType="int">
+        SELECT COUNT(*) FROM LECTURE_DOCUMENT
+</select>
+
+<select id="selectList" parameterType="SearchDto" resultType="map">
     SELECT    
         SEQ,
         GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
@@ -14,12 +18,7 @@
     ORDER BY REG_DT DESC
 </select>
 
-<select id="selectCount" parameterType="SearchDto" resultType="int">
-        SELECT COUNT(*) FROM LECTURE_DOCUMENT
-
-</select>
-
-<insert id="documentInsert" parameterType="LecDocumentDto">
+<insert id="insertDoc" parameterType="LecDocumentDto">
     INSERT ALL 
 		INTO SEQ_MANAGEMENT(
 			SEQ, TABLE_NM, REG_DT
@@ -50,7 +49,7 @@
 
 </insert>
 
-<select id="documentRead" parameterType="String" resultType="map">
+<select id="selectOne" parameterType="String" resultType="map">
     SELECT 
        A.*,
        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME
