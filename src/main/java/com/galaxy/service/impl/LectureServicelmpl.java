@@ -71,4 +71,9 @@ public class LectureServicelmpl implements LectureService {
     public Long deleteLecture(Long seq) throws Exception {
         return lectureMapper.deleteLecture(seq);
     }
+
+    @Override
+    public List<Map<String, Object>> selectLectureList() throws Exception {
+        return lectureMapper.selectLectureList();
+    }
 }

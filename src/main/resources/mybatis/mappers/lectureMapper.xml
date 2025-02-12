@@ -82,4 +82,12 @@ ORDER BY A.REG_DT DESC
         WHERE SEQ = #{seq}
     </delete>
 
+
+    <select id="selectLectureList" resultType="map">
+    SELECT 
+        SEQ, NAME
+    FROM 
+        LECTURE
+</select>
+
 </mapper>

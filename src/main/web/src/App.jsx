@@ -7,6 +7,9 @@ import Layout from './components/Layout';
 import Home from './pages/Home';
 import Container from './components/Container';
 
+const UserLogin = lazy(() => import('./pages/user/Login'));
+const UserModify = lazy(() => import('./pages/user/Modify'));
+
 const TempList = lazy(() => import ('./pages/temp/List'));
 const TempAdd = lazy(() => import ('./pages/temp/Add'));
 const TempRead = lazy(() => import ('./pages/temp/Read'));
@@ -19,8 +22,8 @@ const AdminPass = lazy(() => import ('./pages/admin/Pass'));
 const ClassList = lazy(() => import ('./pages/class/List'));
 const ClassAdd = lazy(() => import ('./pages/class/Add'));
 const ClassRead = lazy(() => import ('./pages/class/Read'));
-const ClassConfirm = lazy(() => import ('./pages/class/Confirm'));
-const ClassDetail = lazy(() => import ('./pages/class/Detail'));
+const ClassUpdate = lazy(() => import ('./pages/class/Update'));
+
 
 const LectureList = lazy(() => import ('./pages/lecture/List'));
 const LectureAdd = lazy(() => import ('./pages/lecture/Add'));
@@ -29,7 +32,7 @@ const LectureMod = lazy(() => import ('./pages/lecture/Mod'));
 
 const LectureDocList = lazy(() => import ('./pages/lectureDoc/List'));
 
-import UserLogin from './pages/user/Login';
+
 
 function App() {
     return (
@@ -45,10 +48,6 @@ function App() {
                             <Route path="read" element={<TempRead />}/>
                         </Route>
 
-                        <Route path="user" element={<Container/>}>
-                            <Route index="index" element={<UserLogin/>}/>
-                        </Route>
-
                         <Route path="admin" element={<Container />}>
                             <Route index="index" element={<AdminList />}/>
                             <Route path="add" element={<AdminAdd />}/>
@@ -58,9 +57,8 @@ function App() {
                         <Route path="class" element={<Container/>}>
                             <Route index="index" element={<ClassList/>}/>
                             <Route path="add" element={<ClassAdd/>}/>
-                            <Route path="read" element={<ClassRead/>}/>
-                            <Route path="confirm" element={<ClassConfirm/>}/>
-                            <Route path="detail/:seq" element={<ClassDetail/>}/>
+                            <Route path="read/:seq" element={<ClassRead/>}/>
+                            <Route path="update/:seq" element={<ClassUpdate/>}/>
                         </Route>
 
                         <Route path="lecture" element={<Container />}>
@@ -110,7 +108,13 @@ function App() {
                         </Route>
                     </Route>
                     <Route path="/admin/pass/:seq" element={<AdminPass />}/>
+
+                    <Route path="user" element={<Container/>}>
+                            <Route index="index" element={<UserLogin/>}/>
+                            <Route path="modify" element={<UserModify/>}/>
+                        </Route>
                 </Routes>
+                
             </Suspense>
         </Router>
     );

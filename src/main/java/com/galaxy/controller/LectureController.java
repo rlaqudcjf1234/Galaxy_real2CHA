@@ -138,4 +138,20 @@ public class LectureController {
             return ResponseEntity.internalServerError().body(response);
         }
     }
+
+     // 사용 가능한 강의 목록 조회(이재욱)
+     @GetMapping("/use")
+public ResponseEntity<?> use() throws Exception {
+    try {
+        List<Map<String, Object>> list = lectureService.selectLectureList();
+        return ResponseEntity.ok(list);
+    } catch (Exception e) {
+        // 예외 로깅
+        e.printStackTrace();
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
+            .body("강의 목록 조회 중 오류가 발생했습니다: " + e.getMessage());
+    }
+}
+
 }
