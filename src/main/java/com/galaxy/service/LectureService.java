@@ -22,5 +22,9 @@ public interface LectureService {
 
     Long updateLecture(LectureDto dto) throws Exception;
     
+    Long deleteLecture(Long seq) throws Exception;
+
+    List<Map<String, Object>> selectLectureList() throws Exception;
+    
     Map<String, Object> selectOne(String seq)throws Exception;
 }

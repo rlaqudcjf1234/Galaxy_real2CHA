@@ -23,5 +23,5 @@ public interface LectureMapper {
 
     Map<String, Object> selectOne(String seq)throws Exception;
 
-    
+    List<Map<String, Object>> selectLectureList() throws Exception;
 }

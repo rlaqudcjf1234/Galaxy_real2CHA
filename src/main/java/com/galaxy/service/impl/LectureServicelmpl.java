@@ -49,5 +49,16 @@ public class LectureServicelmpl implements LectureService {
     public Map<String, Object> selectOne(String seq)throws Exception{
         return lectureMapper.selectOne(seq);
     }
+
+    @Override
+    public List<Map<String, Object>> selectLectureList() throws Exception {
+        return lectureMapper.selectLectureList();
+    }
+
+    @Override
+    public Long deleteLecture(Long seq) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteLecture'");
+    }
  
 }

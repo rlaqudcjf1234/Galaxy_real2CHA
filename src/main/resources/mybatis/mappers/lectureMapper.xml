@@ -104,4 +104,17 @@
         WHERE SEQ = #{seq}
     </update>
 
+    <delete id="deleteLecture" parameterType="Long">
+        DELETE FROM LECTURE 
+        WHERE SEQ = #{seq}
+    </delete>
+
+
+    <select id="selectLectureList" resultType="map">
+    SELECT 
+        SEQ, NAME
+    FROM 
+        LECTURE
+</select>
+
 </mapper>
