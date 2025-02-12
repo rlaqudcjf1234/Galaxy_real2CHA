@@ -2,17 +2,17 @@ package com.galaxy.dto;
 
 import java.sql.Date;
 
-import jakarta.validation.constraints.NotBlank;
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
-public class LecDocumentDto extends SeqDto{
+public class LectureDocDto extends SeqDto{
 
     @NotNull
-    @NotBlank
     private Long Lecture_seq;
 
     private String Title;
@@ -22,5 +22,7 @@ public class LecDocumentDto extends SeqDto{
     private String Detail;
 
     private Date reg_dt;
+
+    private MultipartFile[] file;
     
 }

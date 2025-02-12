@@ -29,6 +29,7 @@
 	
 	<select id="selectCount" parameterType="searchDto" resultType="int">
 		SELECT COUNT(*) FROM ADMIN
+		<include refid="sqlSearch" />
 	</select>
 	
 	<select id="selectList" parameterType="searchDto" resultType="map">

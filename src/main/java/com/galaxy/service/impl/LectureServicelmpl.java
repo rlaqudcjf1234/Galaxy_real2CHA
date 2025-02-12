@@ -28,29 +28,7 @@ public class LectureServicelmpl implements LectureService {
     public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
         return lectureMapper.selectList(dto);
     }
-
-    @Override
-    public List<Map<String, Object>> selectNameList(SearchDto dto) throws Exception {
-        System.out
-                .println("=== Service: selectNameList ===");
-        System.out
-                .println("Input SearchDto: " + dto.toString());
-
-        try {
-            List<Map<String, Object>> result = lectureMapper.selectNameList(dto);
-            System.out
-                    .println("Query result: " + result);
-            return result;
-        } catch (Exception e) {
-            System.out
-                    .println("=== Service Error ===");
-            System.out
-                    .println("Error message: " + e.getMessage());
-            e.printStackTrace();
-            throw e;
-        }
-    }
-
+    
     @Override
     public int insertLecture(LectureDto dto) throws Exception {
         dto.setTable_nm(table_nm);
@@ -58,7 +36,7 @@ public class LectureServicelmpl implements LectureService {
     }
 
     @Override
-    public Map<String, Object> getLectureRead(String seq) {
+    public Map<String, Object> getLectureRead(String seq) throws Exception{
         return lectureMapper.selectLectureRead(seq);
     }
 
@@ -68,12 +46,19 @@ public class LectureServicelmpl implements LectureService {
     }
 
     @Override
-    public Long deleteLecture(Long seq) throws Exception {
-        return lectureMapper.deleteLecture(seq);
+    public Map<String, Object> selectOne(String seq)throws Exception{
+        return lectureMapper.selectOne(seq);
     }
 
     @Override
     public List<Map<String, Object>> selectLectureList() throws Exception {
         return lectureMapper.selectLectureList();
     }
+
+    @Override
+    public Long deleteLecture(Long seq) throws Exception {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'deleteLecture'");
+    }
+ 
 }

@@ -17,13 +17,15 @@ public class LectureDto extends SeqDto {
         @NotBlank
         private String name;
 
-        @NotNull
-        @NotBlank
         private Long admin_seq;
 
-        private Date reg_dt;
+        @NotNull       
+        private String division;
+        
+        @NotNull              
+        private String category;
 
-        private List<Map<String, Object>> nameSearchResults;
+        private Date reg_dt;       
         
 
 }
