@@ -1,103 +1,169 @@
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
 
-
-function Read() {
-    const params = useParams();
+const Read = () => {
     const navigate = useNavigate();
+    const params = useParams();
+
     const [lecture, setLecture] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
+    const [codes, setCodes] = useState({
+        division: [],
+        category: []
+    });
 
     const fetchLecture = async () => {
+        setLoading(true);
         try {
             const response = await axios.get("/api/lecture/read", {
                 params: {
-                    seq: params.id,
+                    seq: params.seq,
                 },
             });
-            setLecture(response.data);            
+            setLecture(response.data);
         } catch (error) {
-            console.error("Error fetching lecture details:", error);
+            console.error('Error fetching lecture:', error);
             alert("강의 정보를 불러오는데 실패했습니다.");
             navigate("/lecture");
         } finally {
             setLoading(false);
         }
     };
-
-    // 삭제 함수 추가
-    const handleDelete = async () => {
-        // 삭제 확인
-        if (!window.confirm("정말로 이 강의를 삭제하시겠습니까?")) {
-            return;
-        }
-
+    const fetchCodes = async () => {
+        setLoading(true);
         try {
-            await axios.delete("/api/lecture/delete", {
+            const response = await axios.get("/api/code/use", {
                 params: {
-                    seq: Number(params.id)
-                },
+                    "text": "lectureMod"
+                }
             });
-            alert("강의가 성공적으로 삭제되었습니다.");
-            navigate("/lecture"); // 목록 페이지로 이동
+            response.data.forEach(item => {
+                setCodes(prevCodes => ({
+                    ...prevCodes,
+                    [item.name]: item.value
+                }));
+            });
         } catch (error) {
-            console.error("Error deleting lecture:", error);
-            alert("강의 삭제에 실패했습니다.");
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
         }
     };
 
+
     useEffect(() => {
         fetchLecture();
+        fetchCodes();
     }, []);
+
+    // 이전 페이지로 가기
+    const handleGoBack = () => {
+        navigate(-1);
+    };
+
+ 
 
     if (loading) return <div>로딩중...</div>;
     if (!lecture) return <div>강의를 찾을 수 없습니다.</div>;
 
     return (
-        <div className="lecture-detail-container">
-            <div className="lecture-detail-wrapper">
-                <h2>강의 상세정보</h2>
-                <div className="detail-content">
-                    <div className="detail-row">
-                        <label>강의 번호:</label>
-                        <span>{lecture.SEQ}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>강사명:</label>
-                        <span>{lecture.ADMIN_NAME}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>강의명:</label>
-                        <span>{lecture.NAME}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>등록일:</label>
-                        <span>{lecture.REG_DT}</span>
-                    </div>
-                </div>
-                <div className="button-group">
-                    <button 
-                        className="edit-button" 
-                        onClick={() => navigate(`/lecture/update/${params.id}`)}
-                    >
+        <div>
+            <form>
+                <table className="table">
+                    {/* 헤더 영역 */}
+                    <caption>
+                        <span>
+                            <em>홈</em>
+                            <em>교육과정현황</em>
+                            <strong>강의상세</strong>
+                        </span>
+                    </caption>
+                    <colgroup>
+                        <col width="18%" />
+                        <col />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>구분</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="division"
+                                    value={codes.division.find(item => 
+                                        String(item.CODE_ID) === String(lecture.DIVISION)
+                                    )?.CODE_NAME || ''}
+                                    className="form-control-plaintext"
+                                    readOnly
+                                />  
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>카테고리</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    name="category"
+                                    value={codes.category.find(item => 
+                                        String(item.CODE_ID) === String(lecture.CATEGORY)
+                                    )?.CODE_NAME || ''}
+                                    className="form-control-plaintext"
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>강의명</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={lecture.NAME || ''}
+                                    className="form-control-plaintext"
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>등록자</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={lecture.ADMIN_NAME || ''}
+                                    className="form-control-plaintext"
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>등록일자</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    value={lecture.REG_DT || ''}
+                                    className="form-control-plaintext"
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                {/* 버튼 영역 */}
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => navigate(`/lecture/mod/${params.seq}`)}>
                         수정
-                    </button>
-                    {/* 삭제 버튼 추가 */}
-                    <button 
-                        className="delete-button" 
-                        onClick={handleDelete}
-                    >
-                        삭제
-                    </button>
-                    <button 
-                        className="back-button" 
-                        onClick={() => navigate("/lecture")}
-                    >
-                        목록으로
+                    </button>                   
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={handleGoBack}>
+                        목록
                     </button>
                 </div>
-            </div>
+            </form>
         </div>
     );
 }

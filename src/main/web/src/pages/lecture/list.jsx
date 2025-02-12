@@ -1,33 +1,23 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
-import "../../css/Community.css";
 import Pagination from "../../components/Pagination";
-import Dropdown from 'react-bootstrap/Dropdown';
 
-function List() {
-    const navigate = useNavigate();
-    const [items, setItems] = useState([]);
-    const [totalCount, setTotalCount] = useState(0);
-    const [currentPage, setCurrentPage] = useState(1);
-    const [loading, setLoading] = useState(false);
-    const [searchInput, setSearchInput] = useState("");
-    const [isSearchMode, setIsSearchMode] = useState(false);
 
-    const fetchData = async (pageIndex) => {
+const List = () => {
+    const [items, setItems] = useState([]); // 목록 데이터
+    const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
+    const [search, setSearch] = useState({ select: "1", text: "" });
+    const [params, setParams] = useState({ select: "1", text: "", pageIndex: 1 });
+    const [loading, setLoading] = useState(false); // 로딩 상태
+
+    // 선택 페이지 변경 데이터 요청
+    const fetchData = async () => {
         setLoading(true);
         try {
-            const params = {
-                pageIndex: pageIndex,
-                pageUnit: 10,
-                pageSize: 10,
-                recordCountPerPage: 10,
-                page: pageIndex.toString()
-            };
-
-            const response = await axios.get("/api/lecture/list", { params });
-            setItems(response.data.items);
-            setTotalCount(response.data.totalCount);
+            const response = await axios.get("/api/lecture/list", { params: params });
+            setItems(response.data.items); // 목록 데이터
+            setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
@@ -35,64 +25,62 @@ function List() {
         }
     };
 
-    const handleSearch = async () => {
-        if (!searchInput.trim()) {
-            return;
-        }
-
-        setLoading(true);
-        try {
-            const response = await axios.get("/api/lecture/search", {
-                params: {
-                    search: searchInput,
-                    pageIndex: 1,
-                    pageSize: 10
-                }
-            });
-
-            if (response.data && response.data.items) {
-                setItems(response.data.items);
-                setTotalCount(response.data.totalCount || 0);
-                setIsSearchMode(true);
-            }
-        } catch (error) {
-            console.error("Error searching:", error);
-        } finally {
-            setLoading(false);
-        }
+    // 선택 페이지 변경 핸들러
+    const handlePageChange = (pageIndex) => {
+        setParams({
+            ...params,
+            pageIndex: pageIndex
+        });
     };
-
-    useEffect(() => {
-        if (!isSearchMode) {
-            fetchData(currentPage);
-        }
-    }, [currentPage, isSearchMode]);
-
-    const handlePageChange = (page) => {
-        if (!isSearchMode) {
-            setCurrentPage(page);
-        }
-    };
-
+    
+    // 검색어 변경 핸들러
     const handleSearchChange = (e) => {
-        setSearchInput(e.target.value);
+        setSearch({
+            ...search,
+            [e.target.name]: e.target.value // search를 업데이트합니다
+        });
     };
 
+    // Enter 키로도 검색할 수 있도록 하는 핸들러
     const handleKeyPress = (e) => {
         if (e.key === "Enter") {
             handleSearch();
         }
     };
-
-    const handleClearSearch = () => {
-        setSearchInput("");
-        setIsSearchMode(false);
-        setCurrentPage(1);
+    // 검색 실행 핸들러
+    const handleSearch = () => {
+        setParams({
+            ...params,
+            pageIndex: 1,
+            select: search.select,
+            text: search.text
+        });
     };
 
+    // 선택 페이지 변경 이벤트
+    useEffect(() => {
+        fetchData();
+    }, [params]);
+
+    // 팝업 창을 여는 핸들러 추가
+    const handleDocumentClick = (seq) => {
+        // 팝업창 크기와 위치 설정
+        const width = 800;
+        const height = 600;
+        const left = (window.screen.width - width) / 2;
+        const top = (window.screen.height - height) / 2;
+        // 팝업창 열기
+        window.open(
+            `/lecture/attach/${seq}`,  // URL 경로
+            '학과문서',  // 팝업창 이름
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+    };
+
+
     return (
-        <div className="board-container">
-            <div className="board-header">
+        <div>
+            {/* <div className="board-header">
                 <div className="board-navigation">
                     <span onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>홈</span>
                     <span>{'>'}</span>
@@ -101,78 +89,105 @@ function List() {
                 <div className="header-right">
                     <button onClick={() => navigate('/lecture/add')} className="write-button">등록</button>
                 </div>
-            </div>
-            
+            </div> */
+            }
 
-            <table className="board-table">
+            <table className="table">
+                {/* 제목 영역 */}
+                <caption>
+                    <span>
+                        <em>홈</em>
+                        <strong>교육과정현황</strong>
+                    </span>
+                    <Link to="add" className="btn btn-primary">등록</Link>
+                </caption>
+
+                <colgroup>
+                    <col width="8%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="10%" />
+                    <col width="10%" />
+                    <col width="8%" />
+                </colgroup>
                 <thead>
                     <tr>
                         <th>번호</th>
-                        <th>강사명</th>
+                        <th>구분</th>
+                        <th>카테고리</th>
                         <th>학과이름</th>
+                        <th>등록자</th>
                         <th>등록일자</th>
+                        <th>문서</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {items.length > 0 ? (
-                        items.map((item) => (
-                            <tr key={item.SEQ}>
-                                <td>{item.SEQ}</td>
-                                <td>{item.ADMIN_NAME}</td>
-                                <td className="clickable-cell" onClick={() => navigate(`/lecture/read/${item.SEQ}`)}>
-                                    {item.LECTURE_NAME}
-                                </td>
-                                <td>{new Date(item.REG_DT).toLocaleDateString()}</td>
-                            </tr>
-                        ))
-                    ) : (
-                        <tr>
-                            <td colSpan="4" className="text-center">
-                                {loading ? "로딩중..." : "데이터가 없습니다."}
-                            </td>
-                        </tr>
-                    )}
+                    {
+                        items.length > 0
+                            ? (items.map((item) => {
+                                const read = `read/${item.SEQ}`;
+                                return (
+                                    <tr key={item.SEQ}>
+                                        <td>{item.RNUM}</td>
+                                        <td>{item.DIVISION}</td>
+                                        <td>{item.CATEGORY}</td>
+                                        <td>
+                                            <Link to={read}>{item.LECTURE_NAME}</Link>
+                                        </td>
+                                        <td>{item.ADMIN_NAME}</td>
+                                        <td>{item.REG_DT}</td>
+                                        <td>
+                                            {/*attach=임의경로*/}
+                                            <button
+                                                onClick={() => handleDocumentClick(item.SEQ)}
+                                                className="btn btn-primary"
+                                            >
+                                                문서
+                                            </button>
+                                        </td>
+                                    </tr>
+                                )
+                            }))
+                            : (
+                                <tr>
+                                    <td colSpan="5" className="text-center">데이터가 없습니다.</td>
+                                </tr>
+                            )
+                    }
                 </tbody>
             </table>
 
-            <div className="pagination">
-                {!isSearchMode && items.length > 0 && (
-                    <Pagination
-                        currentPage={currentPage}
-                        totalCount={totalCount}
-                        onPageChange={handlePageChange}
-                    />
-                )}
-            </div>
+            <Pagination
+                currentPage={params.pageIndex}
+                totalCount={totalCount}
+                onPageChange={handlePageChange} />
 
-            <div className="search-box">
-
-                <Dropdown>
-                    <Dropdown.Toggle variant="secondary">
-                        검검색색
-                    </Dropdown.Toggle>
-                    <Dropdown.Menu>
-                        <Dropdown.Item href="#">작성자</Dropdown.Item>
-                        <Dropdown.Item href="#">작성자작성자</Dropdown.Item>
-                        <Dropdown.Item href="#">작작성성자자</Dropdown.Item>
-                    </Dropdown.Menu>
-                </Dropdown>
-                <input
-                    type="text"
-                    placeholder="학과 검색"
-                    value={searchInput}
-                    onChange={handleSearchChange}
-                    onKeyPress={handleKeyPress}
-                />
-
-
-                <button onClick={handleSearch}>검색</button>
-                {isSearchMode && (
-                    <button onClick={handleClearSearch}>목록으로</button>
-                )}
+            <div className="d-flex gap-2 justify-content-center py-1">
+                <div>
+                    <select
+                        name="select"
+                        defaultValue={search.select}
+                        onChange={handleSearchChange}
+                        className="form-control"
+                        required="required">
+                        <option value="1">학과명</option>
+                        <option value="2">강사명</option>
+                    </select>
+                </div>
+                <div className="col-4">
+                    <input
+                        type="text"
+                        name="text"
+                        value={search.text}
+                        onChange={handleSearchChange}
+                        onKeyDown={handleKeyPress}
+                        className="form-control"
+                        placeholder="검색어를 입력하세요" />
+                </div>
+                <button onClick={handleSearch} className="btn btn-primary">검색</button>
             </div>
         </div>
     );
 }
-
 export default List;

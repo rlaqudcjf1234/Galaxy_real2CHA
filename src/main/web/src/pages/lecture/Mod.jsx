@@ -1,35 +1,66 @@
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-
-function Update() {
-    const params = useParams();
+function Mod() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const params = useParams();
+
+    // 실제로 수정 가능한 필드만 formData에 포함
     const [formData, setFormData] = useState({
-        name: "",
-        admin_seq: "",
+        name: ''
     });
 
-    // 기존 강의 정보 불러오기
-    const fetchLecture = async () => {
+    const [codes, setCodes] = useState({
+        division: [],
+        category: []
+    });
+
+    const [lecture, setLecture] = useState({});
+    const [errors, setErrors] = useState({});
+    const [loading, setLoading] = useState(false);
+
+    // 코드 데이터 요청
+    const fetchCodes = async () => {
+        setLoading(true);
         try {
-            const response = await axios.get("/api/lecture/read", {
+            const response = await axios.get("/api/code/use", {
                 params: {
-                    seq: params.id,
-                },
+                    "text": "lectureMod"
+                }
             });
-            setFormData({
-                name: response.data.NAME,
-                admin_seq: response.data.ADMIN_SEQ,
+            response.data.forEach(item => {
+                setCodes(prevCodes => ({
+                    ...prevCodes,
+                    [item.name]: item.value
+                }));
             });
         } catch (error) {
-            console.error("Error fetching lecture details:", error);
-            alert("강의 정보를 불러오는데 실패했습니다.");
-            navigate("/lecture");
+            console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
+        }
+    };
+    // 기존 강의 정보 불러오기    
+    const fetchLecture = async () => {
+        try {
+            const response = await axios.get('/api/lecture/mod', {
+                params: { seq: params.seq }
+            });
+
+            if (response.data) {
+                setLecture(response.data);
+                setFormData({
+                    name: response.data.NAME || ''
+                });
+            }
+        } catch (error) {
+            console.error('Error fetching lecture:', error);
+            setErrors(prev => ({
+                ...prev,
+                general: '강의 정보를 불러오는데 실패했습니다.'
+            }));
         }
     };
 
@@ -40,81 +71,193 @@ function Update() {
             ...prev,
             [name]: value
         }));
+        // 에러 메시지 초기화
+        if (errors[name]) {
+            setErrors(prev => ({
+                ...prev,
+                [name]: undefined
+            }));
+        }
     };
 
-    // 수정 제출 처리
+    const validateForm = () => {
+        const newErrors = {};
+        if (!formData.name.trim()) {
+            newErrors.name = '강의명을 입력해주세요.';
+        }
+        return newErrors;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        if (!formData.name.trim()) {
-            alert("강의명을 입력해주세요.");
+        setLoading(true);
+
+        // 폼 검증
+        const validationErrors = validateForm();
+        if (Object.keys(validationErrors).length > 0) {
+            setErrors(validationErrors);
+            setLoading(false);
             return;
         }
 
         try {
-            await axios.put("/api/lecture/update", {
-                seq: Number(params.id),
-                name: formData.name,
-                admin_seq: formData.admin_seq, // 기존 강사 번호 유지
-            });
-            
-            alert("강의가 성공적으로 수정되었습니다.");
-            navigate(`/lecture/read/${params.id}`);
+            const data = {
+                seq: params.seq,
+                name: formData.name.trim(),
+                division: lecture.DIVISION, 
+                category: lecture.CATEGORY
+            };
+
+            const response = await axios.post('/api/lecture/mod', data);
+                
+            if (response.data) {
+                navigate("/lecture");
+            }
         } catch (error) {
-            console.error("Error updating lecture:", error);
-            alert("강의 수정에 실패했습니다.");
+            console.error('Error:', error);
+            setErrors({
+                general: error.response?.data?.message || '강의 수정 중 오류가 발생했습니다.'
+            });
+        } finally {
+            setLoading(false);
         }
     };
 
+    const handleCancel = () => {
+        navigate(-1);
+    };
+
     useEffect(() => {
-        fetchLecture();
+        const loadData = async () => {
+            setLoading(true);
+            await Promise.all([fetchCodes(), fetchLecture()]);
+            setLoading(false);
+        };
+
+        loadData();
     }, []);
 
-    if (loading) return <div>로딩중...</div>;
+    if (loading) return (
+        <div className="d-flex justify-content-center align-items-center" style={{ minHeight: '200px' }}>
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">로딩중...</span>
+            </div>
+        </div>
+    );
 
     return (
-        <div className="lecture-edit-container">
-            <div className="lecture-edit-wrapper">
-                <h2>강의 수정</h2>
-                <form onSubmit={handleSubmit} className="edit-form">
-                    <div className="form-group">
-                        <label htmlFor="name">강의명</label>
-                        <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            placeholder="강의명을 입력하세요"
-                        />
-                    </div>
-                    <div className="form-group">
-                        <label htmlFor="admin_seq">강사 번호</label>
-                        <input
-                            type="text"
-                            id="admin_seq"
-                            name="admin_seq"
-                            value={formData.admin_seq}
-                            disabled  // 입력 비활성화
-                            className="disabled-input"  // 스타일링을 위한 클래스 추가
-                        />
-                    </div>
-                    <div className="button-group">
-                        <button type="submit" className="save-button">
-                            저장
-                        </button>
-                        <button 
-                            type="button" 
-                            className="cancel-button"
-                            onClick={() => navigate("/lecture")}
-                        >
-                            취소
-                        </button>
-                    </div>
-                </form>
-            </div>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <table className="table">
+                    <caption>
+                        <span>
+                            <em>홈</em>
+                            <em>교육과정현황</em>
+                            <em>강의상세</em>
+                            <strong>교육과정수정</strong>
+                        </span>
+                    </caption>
+                    <colgroup>
+                        <col width="20%" />
+                        <col width="80%" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>구분</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={codes.division.find(item =>
+                                        String(item.CODE_ID) === String(lecture.DIVISION)
+                                    )?.CODE_NAME || ''}
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>카테고리</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={codes.category.find(item =>
+                                        String(item.CODE_ID) === String(lecture.CATEGORY)
+                                    )?.CODE_NAME || ''}
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>강의명</th>
+                            <td>
+                                <input
+                                    id="name"
+                                    type="text"
+                                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleChange}
+                                    placeholder="강의명을 입력해주세요."
+                                />
+                                {errors.name && (
+                                    <div className="invalid-feedback">
+                                        {errors.name}
+                                    </div>
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>등록자</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={lecture.ADMIN_NAME || ''}
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>등록일자</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={lecture.REG_DT || ''}
+                                    readOnly
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                    <button
+                        type="submit"
+                        className="btn btn-primary"
+                        disabled={loading}
+                    >
+                        {loading ? '처리중...' : '수정'}
+                    </button>
+                    <button
+                        type="button"
+                        className="btn btn-secondary"
+                        onClick={handleCancel}
+                        disabled={loading}
+                    >
+                        취소
+                    </button>
+                </div>
+            </form>
+
+            {errors.general && (
+                <div className="alert alert-danger mt-3" role="alert">
+                    {errors.general}
+                </div>
+            )}
         </div>
     );
 }
 
-export default Update;
+export default Mod;

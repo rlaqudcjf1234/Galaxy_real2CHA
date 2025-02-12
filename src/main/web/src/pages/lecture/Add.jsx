@@ -1,108 +1,159 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react"
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
-function Add() {
+const Add = () => {
     const navigate = useNavigate();
-    const [formData, setFormData] = useState({
-        admin_seq : 1,
-        name: '', // 강의명(과목명)      
-        regDate: new Date().toISOString().split('T')[0]
+
+    /** 뒤로가기 */
+    const handleHistoryBack = () => {
+        navigate(-1);
+    }
+    const [codes, setCodes] = useState({
+        division: [],
+        category: []
     });
+
+    const [errors, setErrors] = useState({});
     const [loading, setLoading] = useState(false);
-
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    // 페이지 최초 데이터 요청
+    const fetchCodes = async () => {
         setLoading(true);
-        
         try {
-            const requestData = {
-                table_nm: 'lecture',
-                admin_seq: formData.admin_seq,
-                name: formData.name,
-              // reg_dt는 서버에서 SYSDATE로 처리되므로 제외
-            };
-    
-            console.log('Sending data:', requestData);
-    
-            const response = await axios.post("/api/lecture/insert", requestData, {
-                headers: {
-                    'Content-Type': 'application/json'
+            const response = await axios.get("/api/code/use", {
+                params: {
+                    "text": "lectureMod"
                 }
             });
-            
-            if (response.data >= 0) {
-                alert("강의가 성공적으로 등록되었습니다.");
-                navigate('/lecture');
-            }
+            response.data.forEach(item => {
+                setCodes(prevCodes => ({
+                    ...prevCodes,
+                    [item.name]: item.value
+                }));
+            });
         } catch (error) {
-            console.error("Error submitting data:", error);
-            console.error("Server error:", error.response?.data);
-            alert("등록 중 오류가 발생했습니다.");
+            console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
         }
     };
 
+    // 페이지 최초 이벤트
+    useEffect(() => {
+        fetchCodes();
+    }, []);
+
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        try {
+            // 폼 데이터를 객체로 변환
+            const formElement = e.target;
+            const data = {
+                division: formElement.division.value,
+                category: formElement.category.value,
+                name: formElement.name.value
+            };
+            const response = await axios.post("/api/lecture/add", data, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            navigate("/lecture");
+        } catch (error) {
+            const response = error.response;
+            if (response && response.data) {
+                setErrors(response.data)
+            }
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
-        <div className="lecture-add-container">
-            <div className="lecture-add-form-wrapper">
-                <h2>강의 등록</h2>
-                <form onSubmit={handleSubmit} className="lecture-add-form">
-                    <div className="form-row">
-                        <div className="form-group">
-                            <label>등록일자</label>
-                            <input
-                                type="date"
-                                name="regDate"
-                                value={formData.regDate}
-                                onChange={handleChange}
-                                required
-                                className="date-input"
-                            />
-                        </div>
-                    </div>
+        <div>
+            <form onSubmit={handleSubmit}>
+                <table className="table">
+                    <caption>
+                        <span>
+                            <em>홈</em>
+                            <em>교육과정현황</em>
+                            <strong>교육과정등록</strong>
+                        </span>
+                    </caption>
+                    <colgroup>
+                        <col width="20%" />
+                        <col width="80%" />
+                    </colgroup>
+                    <tbody>
+                        <tr>
+                            <th>구분</th>
+                            <td>
+                                <select
+                                    name="division"
+                                    className="form-control"
+                                    defaultValue=""
+                                    required="required">
+                                    <option value="">선택</option>
+                                    {codes.division.map((item) => (
+                                        <option key={item.CODE_ID} value={item.CODE_ID}>
+                                            {item.CODE_NAME}
+                                        </option>
+                                    ))}
+                                </select>
+                                {errors.division && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.division}
+                                    </div>
+                                )}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>카테고리</th>
+                            <td>
+                                <select
+                                    name="category"
+                                    className="form-control"
+                                    defaultValue=""
+                                    required="required">
+                                    <option value="">선택</option>
+                                    {codes.category.map((item) => (
+                                        <option key={item.CODE_ID} value={item.CODE_ID}>
+                                            {item.CODE_NAME}
+                                        </option>
+                                    ))}
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>강의명</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+                                    name="name"
+                                    required="required"
+                                    placeholder="강의명을 입력해주세요."
+                                />
+                                {errors.name && (
+                                    <div className="invalid-feedback d-block">
+                                        {errors.name}
+                                    </div>
+                                )}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-                    <div className="form-group">
-                        <label>강의명</label>
-                        <input
-                            type="text"
-                            name="name"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                            placeholder="강의명을 입력하세요"
-                        />
-                    </div>
-
-                    <div className="button-group">
-                        <button 
-                            type="submit" 
-                            className="submit-button"
-                            disabled={loading}
-                        >
-                            {loading ? '등록 중...' : '등록하기'}
-                        </button>
-                        <button 
-                            type="button" 
-                            className="cancel-button"
-                            onClick={() => navigate(-1)}
-                        >
-                            취소
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+                {/* 버튼 영역 */}
+                <div className="d-flex justify-content-center gap-2 mt-4">
+                    <button type="submit" className="btn btn-primary">등록</button>
+                    <button type="button" className="btn btn-secondary" onClick={handleHistoryBack}>취소</button>
+                </div>
+            </form>
+        </div >
+    )
 }
 
 export default Add;
