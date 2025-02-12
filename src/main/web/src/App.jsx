@@ -31,6 +31,8 @@ const LectureDocList = lazy(() => import('./pages/lectureDoc/List'));
 
 
 const CodeList = lazy(()=> import('./pages/codegroup/List'))
+const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
+
 
 import UserLogin from './pages/user/Login';
 
@@ -104,6 +106,7 @@ function App() {
 
                         <Route path="group" element={<Container />}>
                             <Route index="index" element={<CodeList />} />
+                            <Route path="add" element={<CodeAdd />} />
                         </Route>
 
                         <Route path="code" element={<Container />}>

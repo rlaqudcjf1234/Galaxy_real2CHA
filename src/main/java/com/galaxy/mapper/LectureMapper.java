@@ -12,16 +12,16 @@ import com.galaxy.dto.SearchDto;
 public interface LectureMapper {
 
     int selectCount(SearchDto dto) throws Exception;
-    
-    List<Map<String,Object>> selectNameList(SearchDto dto) throws Exception;
-
+        
     int insertLecture(LectureDto dto) throws Exception;
     
     List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
 
-    Map<String, Object> selectLectureRead(String seq);
+    Map<String, Object> selectLectureRead(String seq) throws Exception;
 
     Long updateLecture(LectureDto dto) throws Exception;
 
-    Long deleteLecture(Long seq) throws Exception;
+    Map<String, Object> selectOne(String seq)throws Exception;
+
+    
 }
