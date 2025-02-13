@@ -17,5 +17,7 @@ public interface AdcListMapper {
     List<Map<String, Object>> selectList(AdcSearchDto searchDto) throws Exception;
 
     void insertPost(Map<String, Object> params) throws Exception;
+
+    Map<String, Object> selectPost(Long seq);
     
 }

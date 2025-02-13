@@ -11,4 +11,5 @@ public interface AdcListService {
 
     void addPost(AdcPostDto postDto) throws Exception;
 
+    AdcListDto.AdcItem selectPost(Long seq) throws Exception;
 }
