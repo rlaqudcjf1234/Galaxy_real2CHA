@@ -22,7 +22,7 @@ const AdminPass = lazy(() => import('./pages/admin/Pass'));
 const ClassList = lazy(() => import ('./pages/class/List'));
 const ClassAdd = lazy(() => import ('./pages/class/Add'));
 const ClassRead = lazy(() => import ('./pages/class/Read'));
-// const ClassUpdate = lazy(() => import ('./pages/class/Update'));
+const ClassUpdate = lazy(() => import ('./pages/class/Update'));
 
 
 const LectureList = lazy(() => import('./pages/lecture/List'));
@@ -62,7 +62,7 @@ function App() {
                             <Route index="index" element={<ClassList/>}/>
                             <Route path="add" element={<ClassAdd/>}/>
                             <Route path="read/:seq" element={<ClassRead/>}/>
-                            {/* <Route path="update/:seq" element={<ClassUpdate/>}/> */}
+                            <Route path="update/:seq" element={<ClassUpdate/>}/>
                         </Route>
 
                         <Route path="lecture" element={<Container />}>

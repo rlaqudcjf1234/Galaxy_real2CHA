@@ -30,4 +30,6 @@ public class CodeServiceImpl implements CodeService {
     public List<Map<String, Object>> selectUse2() throws Exception {
         return codeMapper.selectUseCode(2);
     }
+
+    
 }
