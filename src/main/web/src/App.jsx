@@ -27,17 +27,17 @@ const ApplyAdmin = lazy(() => import("./pages/apply/ApplyAdmin"));
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
 const ClassRead = lazy(() => import("./pages/class/Read"));
-const ClassUpdate = lazy(() => import ('./pages/class/Update'));
+const ClassUpdate = lazy(() => import("./pages/class/Update"));
 
 const LectureList = lazy(() => import("./pages/lecture/List"));
 const LectureAdd = lazy(() => import("./pages/lecture/Add"));
 const LectureRead = lazy(() => import("./pages/lecture/Read"));
 const LectureMod = lazy(() => import("./pages/lecture/Mod"));
 
-const LectureDocList = lazy(() => import ('./pages/lectureDoc/List'));
-const LectureDocAdd = lazy(() => import ('./pages/lectureDoc/Add'));
-const LectureDocRead = lazy(() => import ('./pages/lectureDoc/Read'));
-const LectureDocMod = lazy(() => import ('./pages/lectureDoc/Mod'));
+const LectureDocList = lazy(() => import("./pages/lectureDoc/List"));
+const LectureDocAdd = lazy(() => import("./pages/lectureDoc/Add"));
+const LectureDocRead = lazy(() => import("./pages/lectureDoc/Read"));
+const LectureDocMod = lazy(() => import("./pages/lectureDoc/Mod"));
 
 // const CodeList = lazy(()=> import('./pages/codegroup/List'))
 // const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
@@ -49,39 +49,34 @@ function App() {
                 <Routes>
                     <Route path="/" element={<Layout />}>
                         <Route index="index" element={<Home />} />
-
                         <Route path="temp" element={<Container />}>
                             <Route index="index" element={<TempList />} />
                             <Route path="add" element={<TempAdd />} />
                             <Route path="read" element={<TempRead />} />
                         </Route>
-
                         <Route path="admin" element={<Container />}>
                             <Route index="index" element={<AdminList />} />
                             <Route path="add" element={<AdminAdd />} />
                             <Route path="mod/:seq" element={<AdminMod />} />
                         </Route>
-
-                        <Route path="class" element={<Container/>}>
-                            <Route index="index" element={<ClassList/>}/>
-                            <Route path="add" element={<ClassAdd/>}/>
-                            <Route path="read/:seq" element={<ClassRead/>}/>
-                            <Route path="update/:seq" element={<ClassUpdate/>}/>
+                        <Route path="class" element={<Container />}>
+                            <Route index="index" element={<ClassList />} />
+                            <Route path="add" element={<ClassAdd />} />
+                            <Route path="read/:seq" element={<ClassRead />} />
+                            <Route path="update/:seq" element={<ClassUpdate />} />
                         </Route>
-
                         <Route path="lecture" element={<Container />}>
                             <Route index="index" element={<LectureList />} />
                             <Route path="add" element={<LectureAdd />} />
                             <Route path="read/:seq" element={<LectureRead />} />
                             <Route path="mod/:seq" element={<LectureMod />} />
                             <Route path="doc/:lecture_seq" element={<Container />}>
-                                <Route index="index" element={<LectureDocList />}/>
-                                <Route path="add" element={<LectureDocAdd />}/>
-                                <Route path="read/:seq" element={<LectureDocRead />}/>
-                                <Route path="mod/:seq" element={<LectureDocMod />}/>
+                                <Route index="index" element={<LectureDocList />} />
+                                <Route path="add" element={<LectureDocAdd />} />
+                                <Route path="read/:seq" element={<LectureDocRead />} />
+                                <Route path="mod/:seq" element={<LectureDocMod />} />
                             </Route>
                         </Route>
-
                         <Route path="apply" element={<Container />}>
                             <Route index="index" element={<ApplyList />} />
                             <Route path="add" element={<ApplyAdd />} />
@@ -95,19 +90,16 @@ function App() {
                             <Route path="read" />
                             <Route path="delete" />
                         </Route>
-
                         <Route path="classComunity" element={<Container />}>
                             <Route /*index*/ element="" />
                             <Route path="add" />
                             <Route path="read" />
                             <Route path="delete" />
                         </Route>
-
                         <Route path="group" element={<Container />}>
                             {/* <Route index="index" element={<CodeList />} />
                             <Route path="add" element={<CodeAdd />} /> */}
                         </Route>
-
                         <Route path="code" element={<Container />}>
                             <Route /*index*/ element="" />
                         </Route>

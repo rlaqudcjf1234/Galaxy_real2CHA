@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ApplyDelete from "./ApplyDelete";
+import ApplyApprove from "./ApplyApprove";
 
 function ApplyRead() {
     const [apply, setApply] = useState(null);
@@ -29,11 +30,10 @@ function ApplyRead() {
 
     const handleDelete = async (id) => {
         try {
-            // 기존: /api/apply/read/1
-            const response = await axios.delete(`/api/apply/delete/${id}`); // URL 경로 수정
+            const response = await axios.delete(`/api/apply/delete/${id}`);
             if (response.status === 200) {
                 alert("성공적으로 삭제되었습니다.");
-                navigate("/apply"); // 삭제 후 목록 페이지로 이동
+                navigate("/apply");
             }
         } catch (error) {
             console.error("Error:", error);
@@ -41,9 +41,25 @@ function ApplyRead() {
         }
     };
 
+    const handleApprove = async () => {
+        try {
+            const response = await axios.post("/api/apply/approve", { id: id });
+            if (response.data && response.data.message) {
+                alert(response.data.message);
+            } else {
+                alert("승인이 완료되었습니다.");
+            }
+            fetchApply(); // 데이터 새로고침
+        } catch (error) {
+            console.error("승인 처리 중 오류:", error);
+            const errorMessage = error.response?.data?.message || "승인 처리 중 오류가 발생했습니다.";
+            alert(errorMessage);
+        }
+    };
+
     useEffect(() => {
         fetchApply();
-    }, [id]); // 의존성 배열에 id 추가
+    }, [id]);
 
     if (loading) return <div>로딩중...</div>;
     if (!apply) return <div>등록 정보를 찾을 수 없습니다.</div>;
@@ -53,10 +69,17 @@ function ApplyRead() {
             <div className="apply-detail-wrapper">
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                     <h3>상세정보</h3>
-                    <ApplyDelete onDelete={handleDelete} itemId={id}>
-                        신청 취소
-                    </ApplyDelete>
+                    <div style={{ display: "flex", gap: "10px" }}>
+                        <span>승인상태: {apply.USE_YN === "Y" ? "승인완료" : "승인대기"}</span>
+                        {apply.USE_YN !== "Y" && ( // 'N' 대신 'Y'가 아닐 때로 조건 변경
+                            <ApplyApprove onApprove={handleApprove} itemId={id} />
+                        )}
+                        <ApplyDelete onDelete={handleDelete} itemId={id}>
+                            신청 취소
+                        </ApplyDelete>
+                    </div>
                 </div>
+
                 <div className="detail-content">
                     <div className="detail-row">
                         <label>반 명: </label>
@@ -99,8 +122,26 @@ function ApplyRead() {
                         <span>{apply.REG_DT}</span>
                     </div>
                 </div>
-                <div className="button-group">
-                    <button className="back-button" onClick={() => navigate(-1)}>
+
+                <div
+                    style={{
+                        marginTop: "20px",
+                        padding: "20px 0",
+                        borderTop: "1px solid #eee",
+                        textAlign: "center",
+                    }}
+                >
+                    <button
+                        onClick={() => navigate(-1)}
+                        style={{
+                            padding: "6px 12px",
+                            backgroundColor: "#6c757d",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                        }}
+                    >
                         목록으로
                     </button>
                 </div>
