@@ -2,12 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.CodeMapper">
 
+    
+    <sql id="sqlSearch">
+       <where>
+        <if test='text != null and text != ""'>
+            <choose>
+                <when test='select == "1"'>
+                    AND GROUP_ID LIKE '%'||TRIM(#{text})||'%'
+                </when>
+                <when test='select == "2"'>
+                    AND GROUP_NAME LIKE '%'||TRIM(#{text})||'%'
+                </when>					
+            </choose>				
+         </if>
+        </where>
+	</sql>
+
+    <select id="selectCount" parameterType="SearchDto" resultType="int">
+        SELECT COUNT(*) 
+        FROM CODE_GROUP  
+        <include refid="sqlSearch"/>     
+    </select>
+
+
     <select id="selectGroupList" parameterType="searchDto" resultType="map">
         SELECT A.*, ROWNUM AS RNUM
 		FROM (
-			SELECT GROUP_ID, GROUP_NAME, GROUP_SORT, REG_DT, USE_YN
+			SELECT GROUP_ID, GROUP_NAME, GROUP_SORT, 
+            TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, 
+            GET_CODE_NAME('1', USE_YN) AS USE_YN
 			FROM CODE_GROUP
-			ORDER BY GROUP_SORT ASC
+			ORDER BY GROUP_SORT ASC,GROUP_ID ASC
 		)A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
@@ -31,5 +56,30 @@
         AND A.GROUP_ID = #{group_id}
         ORDER BY B.CODE_SORT ASC
     </select>
+
+    <insert id="insertCode" parameterType="CodeDto">
+        INSERT INTO CODE_GROUP(
+            GROUP_ID, GROUP_NAME, GROUP_SORT, REG_DT, USE_YN
+        ) SELECT NVL(MAX(GROUP_ID)+1,0), #{group_name}, NVL(MAX(GROUP_SORT)+1,0), SYSDATE, 1 FROM CODE_GROUP
+    </insert>
+
+    <select id="readCode" parameterType="String" resultType="map">
+        SELECT 
+            GROUP_ID,GROUP_NAME,GROUP_SORT,
+            TO_CHAR(REG_DT,'YYYY-MM-DD') AS REG_DT,
+            GET_CODE_NAME('1', USE_YN) AS USE_YN
+          FROM CODE_GROUP 
+        WHERE GROUP_ID = #{group_id}      
+    </select>
+
+    <update id="updateCode" parameterType="CodeDto">
+        UPDATE CODE_GROUP 
+        SET
+         GROUP_NAME = #{ group_name},
+         GROUP_SORT = #{group_sort},
+         USE_YN = #{use_yn},
+         REG_DT=SYSDATE
+        WHERE GROUP_ID = #{group_id}        
+    </update>
 
 </mapper>
