@@ -10,18 +10,18 @@ import Container from './components/Container';
 const UserLogin = lazy(() => import('./pages/user/Login'));
 // const UserModify = lazy(() => import('./pages/user/Modify'));
 
-const TempList = lazy(() => import ('./pages/temp/List'));
-const TempAdd = lazy(() => import ('./pages/temp/Add'));
-const TempRead = lazy(() => import ('./pages/temp/Read'));
+const TempList = lazy(() => import('./pages/temp/List'));
+const TempAdd = lazy(() => import('./pages/temp/Add'));
+const TempRead = lazy(() => import('./pages/temp/Read'));
 
 const AdminList = lazy(() => import('./pages/admin/List'));
 const AdminAdd = lazy(() => import('./pages/admin/Add'));
 const AdminMod = lazy(() => import('./pages/admin/Mod'));
 const AdminPass = lazy(() => import('./pages/admin/Pass'));
 
-const ClassList = lazy(() => import ('./pages/class/List'));
-const ClassAdd = lazy(() => import ('./pages/class/Add'));
-const ClassRead = lazy(() => import ('./pages/class/Read'));
+const ClassList = lazy(() => import('./pages/class/List'));
+const ClassAdd = lazy(() => import('./pages/class/Add'));
+const ClassRead = lazy(() => import('./pages/class/Read'));
 // const ClassUpdate = lazy(() => import ('./pages/class/Update'));
 
 
@@ -30,13 +30,17 @@ const LectureAdd = lazy(() => import('./pages/lecture/Add'));
 const LectureRead = lazy(() => import('./pages/lecture/Read'));
 const LectureMod = lazy(() => import('./pages/lecture/Mod'));
 
-const LectureDocList = lazy(() => import ('./pages/lectureDoc/List'));
+const LectureDocList = lazy(() => import('./pages/lectureDoc/List'));
 // const LectureDocAdd = lazy(() => import ('./pages/lectureDoc/Add'));
 // const LectureDocRead = lazy(() => import ('./pages/lectureDoc/Read'));
 // const LectureDocMod = lazy(() => import ('./pages/lectureDoc/Mod'));
 
-// const CodeList = lazy(()=> import('./pages/codegroup/List'))
-// const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
+const CodeList = lazy(() => import('./pages/codegroup/List'))
+const CodeAdd = lazy(() => import('./pages/codegroup/Add'))
+const CodeRead = lazy(() => import('./pages/codegroup/Read'))
+const CodeMod = lazy(() => import('./pages/codegroup/Mod'))
+
+
 
 function App() {
     return (
@@ -58,10 +62,10 @@ function App() {
                             <Route path="mod/:seq" element={<AdminMod />} />
                         </Route>
 
-                        <Route path="class" element={<Container/>}>
-                            <Route index="index" element={<ClassList/>}/>
-                            <Route path="add" element={<ClassAdd/>}/>
-                            <Route path="read/:seq" element={<ClassRead/>}/>
+                        <Route path="class" element={<Container />}>
+                            <Route index="index" element={<ClassList />} />
+                            <Route path="add" element={<ClassAdd />} />
+                            <Route path="read/:seq" element={<ClassRead />} />
                             {/* <Route path="update/:seq" element={<ClassUpdate/>}/> */}
                         </Route>
 
@@ -71,7 +75,7 @@ function App() {
                             <Route path="read/:seq" element={<LectureRead />} />
                             <Route path="mod/:seq" element={<LectureMod />} />
                             <Route path="doc/:lecture_seq" element={<Container />}>
-                                <Route index="index" element={<LectureDocList />}/>
+                                <Route index="index" element={<LectureDocList />} />
                                 {/* <Route path="add" element={<LectureDocAdd />}/>
                                 <Route path="read/:seq" element={<LectureDocMod />}/>
                                 <Route path="mod/:seq" element={<LectureDocMod />}/> */}
@@ -101,8 +105,10 @@ function App() {
                         </Route>
 
                         <Route path="group" element={<Container />}>
-                            {/* <Route index="index" element={<CodeList />} />
-                            <Route path="add" element={<CodeAdd />} /> */}
+                            <Route index="index" element={<CodeList />} />
+                            <Route path="add" element={<CodeAdd />} />
+                            <Route path="read/:group_id" element={<CodeRead />} />
+                            <Route path="mod/:group_id" element={<CodeMod />} />
                         </Route>
 
                         <Route path="code" element={<Container />}>
@@ -110,14 +116,14 @@ function App() {
                                 element="" />
                         </Route>
                     </Route>
-                    <Route path="/admin/pass/:seq" element={<AdminPass />}/>
+                    <Route path="/admin/pass/:seq" element={<AdminPass />} />
 
-                    <Route path="user" element={<Container/>}>
-                            <Route index="index" element={<UserLogin/>}/>
-                            {/* <Route path="modify" element={<UserModify/>}/> */}
-                        </Route>
+                    <Route path="user" element={<Container />}>
+                        <Route index="index" element={<UserLogin />} />
+                        {/* <Route path="modify" element={<UserModify/>}/> */}
+                    </Route>
                 </Routes>
-                
+
             </Suspense>
         </Router>
     );
