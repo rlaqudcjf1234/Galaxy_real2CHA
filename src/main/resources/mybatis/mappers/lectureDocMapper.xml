@@ -18,7 +18,7 @@
     ORDER BY REG_DT DESC
 </select>
 
-<insert id="insertDoc" parameterType="LecDocumentDto">
+<insert id="insertDoc" parameterType="lectureDocDto">
     INSERT ALL 
 		INTO SEQ_MANAGEMENT(
 			SEQ, TABLE_NM, REG_DT
@@ -56,13 +56,5 @@
     FROM LECTURE_DOCUMENT A
     WHERE SEQ = #{seq}
  </select>
-
-<update id="documentUpdate" parameterType="LecDocumentDto">
-       
-</update>
-
-<delete id="documentDelete" parameterType="Long">
-        
-</delete>
 
 </mapper>

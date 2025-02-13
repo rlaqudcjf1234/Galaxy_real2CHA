@@ -1,91 +1,153 @@
-import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import "bootstrap/dist/css/bootstrap.min.css";
 
-import Pagination from "../../components/Pagination";
+const Read = () => {
+    const { seq } = useParams();
+    const navigate = useNavigate();
+    const [items, setItems] = useState(null);
+    const [loading, setLoading] = useState(false);
 
-function List() {
-    const [items, setItems] = useState([]); // 목록 데이터
-    const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
-    const [params, setParams] = useState({ pageIndex: 1 });
-    const [loading, setLoading] = useState(false); // 로딩 상태
-
-    // 선택 페이지 변경 데이터 요청
-    const fetchData = async (pageIndex) => {
+    // 데이터 요청
+    const fetchData = async () => {
         setLoading(true);
         try {
-            setParams({
-                ...params,
-                pageIndex: pageIndex,
-            });
-            const response = await axios.get("/api/Class/read", {params: params});
-            setItems(response.data.items); // 목록 데이터
-            setTotalCount(response.data.totalCount); // 전체 아이템 수
+            const params = {};
+            const response = await axios.get(`/api/class/read/${seq}`, { params });
+            setItems(response.data);
         } catch (error) {
             console.error("Error fetching data:", error);
+            alert("강의 정보를 불러오는데 실패했습니다.");
+            navigate("/class");
         } finally {
             setLoading(false);
         }
     };
 
-    // 선택 페이지 변경 핸들러
-    const handlePageChange = (page) => {
-        setCurrentPage(page);
+    const handleConfirm = async () => {
+        if (!window.confirm("강의를 확정하시겠습니까?")) return;
+
+        try {
+            await axios.put(`/api/class/confirm/${seq}`);
+            await fetchData();
+            alert("강의가 확정되었습니다.");
+        } catch (error) {
+            console.error("Error confirming lecture:", error);
+            alert("강의 확정에 실패했습니다.");
+        }
     };
 
-    // 선택 페이지 변경 이벤트
+    const handleCancel = async () => {
+        if (!window.confirm("강의 확정을 취소하시겠습니까?")) return;
+
+        try {
+            await axios.put(`/api/class/cancel/${seq}`);
+            await fetchData();
+            alert("강의 확정이 취소되었습니다.");
+        } catch (error) {
+            console.error("Error canceling lecture:", error);
+            alert("강의 확정 취소에 실패했습니다.");
+        }
+    };
+
     useEffect(() => {
-        fetchData(currentPage);
-    }, [currentPage]);
+        fetchData();
+    }, [seq]);
+
+    // 버튼 표시 여부를 결정하는 함수
+    const renderActionButton = () => {
+        if (items.CODE_NAME === '강의취소' || items.CODE_NAME === '종료') {
+            return null;
+        }
+        
+        if (items.CONFIRM_DT && items.CONFIRM_DT !== '') {
+            return <button className="btn btn-danger" onClick={handleCancel}>확정취소</button>;
+        }
+        
+        return <button className="btn btn-success" onClick={handleConfirm}>강의확정</button>;
+    };
 
     return (
         <div>
-            <div className="d-flex gap-2 justify-content-start py-1">
-                <Link to="add">
-                    <button className="btn btn-primary">등록</button>
-                </Link>
-                <Link to="courses">
-                    <button className="btn btn-primary">과목 및 클래스</button>
-                </Link>
-                <Link to="application">
-                    <button className="btn btn-primary">신청목록</button>
-                </Link>
-            </div>
-            <table className="table table-hover">
-                <thead>
-                    <tr>
-                        <th scope="col">이메일</th>
-                        <th scope="col">성명</th>
-                        <th scope="col">연락처</th>
-                        <th scope="col">사용여부</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {
-                        items.length > 0
-                            ? items.map((item) => (
-                                <tr>
-                                    <td>{item.EMAIL}</td>
-                                    <td>{item.NAME}</td>
-                                    <td>{item.PHONE}</td>
-                                    <td>{item.USE_YN}</td>
-                                </tr>
-                            ))
-                            : (
-                                <tr>
-                                    <td colSpan="4" className="text-center">데이터가 없습니다.</td>
-                                </tr>
-                            )
-                    }
-                </tbody>
+            <table className="table">
+                <caption>
+                    <span>
+                        <em>홈</em>
+                        <em>강의현황</em>
+                        <strong>강의 상세정보</strong>
+                    </span>
+                </caption>
+                <colgroup>
+                    <col width="15%" />
+                    <col width="35%" />
+                    <col width="15%" />
+                    <col width="35%" />
+                </colgroup>
+                {loading ? (
+                    <tbody>
+                        <tr>
+                            <td colSpan="4" className="text-center">로딩 중...</td>
+                        </tr>
+                    </tbody>
+                ) : items ? (
+                    <tbody>
+                        <tr>
+                            <th scope="row">과목명</th>
+                            <td>{items.LECTURE_NAME}</td>
+                            <th scope="row">회차</th>
+                            <td>{items.ROUND}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">강사</th>
+                            <td>{items.ADMIN_NAME}</td>
+                            <th scope="row">강의실</th>
+                            <td>{items.ROOM}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">강의 시작일자</th>
+                            <td>{items.START_DT}</td>
+                            <th scope="row">강의 종료일자</th>
+                            <td>{items.END_DT}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">강의 시작시간</th>
+                            <td>{items.START_TM}</td>
+                            <th scope="row">강의 종료시간</th>
+                            <td>{items.END_TM}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">총인원</th>
+                            <td>{items.PEOPLE}</td>
+                            <th scope="row">등록일자</th>
+                            <td>{items.REG_DT}</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">강의상태</th>
+                            <td>{items.CODE_NAME}</td>
+                            <th scope="row">확정일자</th>
+                            <td>{items.CONFIRM_DT === null ? '확정대기' : items.CONFIRM_DT}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="4" className="text-center">
+                                <div className="d-flex justify-content-center gap-2">
+                                    <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
+                                    <button className="btn btn-primary" onClick={() => navigate(`/class/update/${seq}`)}>수정</button>
+                                    {renderActionButton()}
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                ) : (
+                    <tbody>
+                        <tr>
+                            <td colSpan="4" className="text-center">데이터를 찾을 수 없습니다.</td>
+                        </tr>
+                    </tbody>
+                )}
             </table>
-            <div className="d-flex gap-2 justify-content-center py-1">
-                <Pagination currentPage={currentPage} totalCount={totalCount} onPageChange={handlePageChange} />
-            </div>
         </div>
     );
-}
+};
 
-export default List;
+export default Read;

@@ -16,7 +16,13 @@ public interface ClassService {
 
     int insertClass(ClassDto dto) throws Exception;
 
-    Map<String, Object> getClassDetail(String seq) throws Exception;
+    Map<String, Object> getClassRead(int seq) throws Exception;
+    
+    void confirmClass(int seq) throws Exception;
+
+    void cancelClass(int seq) throws Exception;
+
+    void updateClass(Map<String, Object> params) throws Exception;
 
     
 }
