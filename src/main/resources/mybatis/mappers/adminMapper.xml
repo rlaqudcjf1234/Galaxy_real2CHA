@@ -22,7 +22,6 @@
 						AND PHONE LIKE '%'||TRIM(REPLACE(#{text}, '-', ''))||'%'
 					</when>
 				</choose>
-				
 			</if>
 		</where>
 	</sql>
@@ -31,7 +30,7 @@
 		SELECT COUNT(*) FROM ADMIN
 		<include refid="sqlSearch" />
 	</select>
-	
+
 	<select id="selectList" parameterType="searchDto" resultType="map">
 		SELECT SEQ, EMAIL, NAME, GET_PHONE_FORMAT(PHONE) AS PHONE, GET_CODE_NAME('2', DIVISION) AS DIVISION, POST, 
 			TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, GET_CODE_NAME('1', USE_YN) AS USE_YN, 
@@ -44,7 +43,7 @@
 		) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
 	
-	<insert id="insertAdmin" parameterType="adminDto">
+	<insert id="insertOne" parameterType="adminDto">
 		INSERT ALL 
 			INTO SEQ_MANAGEMENT(
 				SEQ, TABLE_NM, REG_DT
@@ -72,7 +71,7 @@
     	WHERE DIVISION = 'admin' AND USE_YN = 1
 	</select>
 
-	<update id="updateAdmin" parameterType="adminDto">
+	<update id="updateOne" parameterType="adminDto">
 		UPDATE ADMIN SET
 			NAME = #{name},
 			PHONE = #{phone},

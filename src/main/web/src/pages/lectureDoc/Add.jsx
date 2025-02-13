@@ -1,6 +1,8 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from 'react-router-dom';
+import {useEffect, useState} from "react"
+import {useNavigate, useParams} from 'react-router-dom';
 import axios from 'axios';
+
+import Editor from '../../components/Editor';
 
 const Add = () => {
     const navigate = useNavigate();
@@ -11,9 +13,13 @@ const Add = () => {
     }
 
     const [codes, setCodes] = useState({division: []});
+    const [lecture, setLecture] = useState({});
     const [errors, setErrors] = useState({}); // 오류 내용
 
+    const params = useParams();
     const [loading, setLoading] = useState(false); // 로딩 상태
+
+    const [detail, setDetail] = useState(""); // Editor
 
     // 페이지 최초 데이터 요청
     const fetchCodes = async () => {
@@ -21,7 +27,7 @@ const Add = () => {
         try {
             const response = await axios.get("/api/code/use", {
                 params: {
-                    "text": "adminAdd"
+                    "text": "lectureDoc"
                 }
             });
             const data = {}
@@ -38,9 +44,27 @@ const Add = () => {
         }
     };
 
+    // 페이지 최초 데이터 요청
+    const fetchFormData = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get("/api/lecture/read", {
+                params: {
+                    seq: params.lecture_seq
+                }
+            });
+            setLecture(response.data);
+        } catch (error) {
+            console.error('Error fetching data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     // 페이지 최초 이벤트
     useEffect(() => {
         fetchCodes();
+        fetchFormData();
     }, []);
 
     const handleSubmit = async (e) => {
@@ -48,8 +72,8 @@ const Add = () => {
         setLoading(true);
         try {
             const formData = new FormData(e.target);
-            const response = await axios.post("/api/admin/add", formData);
-            navigate("/admin");
+            const response = await axios.post("/api/lectureDoc/add", formData);
+            navigate(`/lecture/doc/${params.lecture_seq}`);
         } catch (error) {
             const response = error.response;
             if (response && response.data) {
@@ -63,12 +87,18 @@ const Add = () => {
     return (
         <div>
             <form onSubmit={handleSubmit}>
+                <input
+                    type="hidden"
+                    name="lecture_seq"
+                    value={params.lecture_seq}
+                    readOnly="readOnly"/>
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
                         <span>
                             <em>홈</em>
-                            <strong>강사현황</strong>
+                            <em>교육과정현황</em>
+                            <strong>안내문서(<small>{lecture.NAME}</small>)</strong>
                         </span>
                     </caption>
                     <colgroup>
@@ -78,70 +108,18 @@ const Add = () => {
                     </colgroup>
                     <tbody>
                         <tr>
-                            <th>이메일</th>
+                            <th>제목</th>
                             <td>
                                 <input
-                                    type="email"
+                                    type="text"
                                     className="form-control"
-                                    name="email"
-                                    placeholder="name@example.com"
+                                    name="title"
+                                    placeholder="제목을 입력해주세요"
                                     required="required"/>
                             </td>
                             <td>
                                 <div className="invalid-feedback">
-                                    {errors.email}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>비밀번호</th>
-                            <td>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    name="password"
-                                    required="required"/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.password}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>비밀번호 확인</th>
-                            <td>
-                                <input
-                                    type="password"
-                                    className="form-control"
-                                    name="password2"
-                                    required="required"/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.password2}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>성명</th>
-                            <td>
-                                <input type="text" className="form-control" name="name" required="required"/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.name}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>연락처</th>
-                            <td>
-                                <input type="text" className="form-control" name="phone"/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.phone}
+                                    {errors.title}
                                 </div>
                             </td>
                         </tr>
@@ -167,6 +145,30 @@ const Add = () => {
                                 <div className="invalid-feedback">
                                     {errors.division}
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>순번</th>
+                            <td>
+                                <input
+                                    type="number"
+                                    className="form-control"
+                                    name="sort"
+                                    defaultValue="1"
+                                    min="1"
+                                    required="required"/>
+                            </td>
+                            <td>
+                                <div className="invalid-feedback">
+                                    {errors.division}
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td className="edit" colSpan="2">
+                                <input type="hidden" name="detail" value={detail}/>
+                                <Editor htmlStr={detail} setHtmlStr={setDetail}/>
                             </td>
                         </tr>
                     </tbody>

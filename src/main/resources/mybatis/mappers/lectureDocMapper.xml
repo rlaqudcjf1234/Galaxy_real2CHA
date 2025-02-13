@@ -2,67 +2,75 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.LectureDocMapper">
 
-<select id="selectCount" parameterType="SearchDto" resultType="int">
+    <resultMap id="clobDataResult" type="map">
+        <result property="DETAIL" column="DETAIL" jdbcType="CLOB" javaType="java.lang.String"/>
+    </resultMap>
+    
+	<sql id="sqlSearch">
+        <if test='text != null and text != ""'>	
+            <choose>
+                <when test='select == "1"'>
+                    AND TITLE LIKE '%'||TRIM(#{text})||'%'
+                </when>
+            </choose>
+        </if>
+	</sql>
+
+    <select id="selectCount" parameterType="SearchDto" resultType="int">
         SELECT COUNT(*) FROM LECTURE_DOCUMENT
-</select>
+        WHERE LECTURE_SEQ = #{lecture_seq}
+        <include refid="sqlSearch" />
+    </select>
 
-<select id="selectList" parameterType="SearchDto" resultType="map">
-    SELECT    
-        SEQ,
-        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
-        TITLE,
-        GET_CODE_NAME('10', DIVISION) AS DIVISION_NAME,
-        DETAIL,
-        TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
-    FROM LECTURE_DOCUMENT A
-    ORDER BY REG_DT DESC
-</select>
+    <select id="selectList" parameterType="SearchDto" resultType="map">
+        SELECT SEQ, TITLE, DIVISION, 
+            GET_CODE_NAME('10', DIVISION) AS DIVISION_NAME, 
+            TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, 
+			ROWNUM AS RNUM
+        FROM (
+            SELECT SEQ, TITLE, DIVISION, REG_DT
+            FROM LECTURE_DOCUMENT
+            WHERE LECTURE_SEQ = #{lecture_seq}
+            <include refid="sqlSearch" />
+            ORDER BY DIVISION, SORT
+        ) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+    </select>
 
-<insert id="insertDoc" parameterType="LecDocumentDto">
-    INSERT ALL 
-		INTO SEQ_MANAGEMENT(
-			SEQ, TABLE_NM, REG_DT
-		) VALUES (
-			SEQ.NEXTVAL, #{table_nm}, SYSDATE
-		)
-        INTO LECTURE_DOCUMENT (
-            SEQ, LECTURE_SEQ, TITLE, DIVISION, DETAIL, REG_DT
-        ) VALUES(
-            SEQ.NEXTAVAL, #{lecture_seq},#{title},#{division},#{detail},SYSDATE
-        )
-    SELECT * FROM DUAL
+    <insert id="insertOne" parameterType="lectureDocDto">
+        INSERT ALL 
+            INTO SEQ_MANAGEMENT(
+                SEQ, TABLE_NM, REG_DT
+            ) VALUES (
+                SEQ.NEXTVAL, #{table_nm}, SYSDATE
+            )
+            INTO LECTURE_DOCUMENT (
+                SEQ, LECTURE_SEQ, TITLE, DIVISION, SORT, 
+                DETAIL, REG_DT
+            ) VALUES (
+                SEQ.NEXTVAL, #{lecture_seq}, #{title}, #{division}, #{sort},
+                #{detail: CLOB}, SYSDATE
+            )
+        SELECT * FROM DUAL
+    </insert>
 
-</insert>
+    <select id="selectOne" parameterType="String" resultMap="clobDataResult">
+        SELECT SEQ, LECTURE_SEQ, 
+            GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME, 
+            TITLE, DIVISION, 
+            GET_CODE_NAME('10', DIVISION) AS DIVISION_NAME, 
+            SORT, DETAIL,
+            TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
+        FROM LECTURE_DOCUMENT A
+        WHERE SEQ = #{seq}
+    </select>
 
-<insert id="attachInsert">
-    INSERT ALL
-        INTO SEQ_MANAGEMENT(
-			SEQ, TABLE_NM, REG_DT
-		) VALUES (
-			SEQ.NEXTVAL, #{table_nm}, SYSDATE
-	    )INTO ATTACH(
-            SEQ, ROW, FILE_PATH, FILE_ORIGIN_NAME, FILE_SAVE_NAME, USE_YN
-        ) VALUES(
-            SEQ.NEXTVAL, #{row}, #{file_path}, #{file_origin_name}, #{file_save_name}, 0
-        )
-    SELECT * FROM DUAL
-
-</insert>
-
-<select id="selectOne" parameterType="String" resultType="map">
-    SELECT 
-       A.*,
-       GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME
-    FROM LECTURE_DOCUMENT A
-    WHERE SEQ = #{seq}
- </select>
-
-<update id="documentUpdate" parameterType="LecDocumentDto">
-       
-</update>
-
-<delete id="documentDelete" parameterType="Long">
-        
-</delete>
+	<update id="updateOne" parameterType="lectureDocDto">
+		UPDATE LECTURE_DOCUMENT SET
+			TITLE = #{title}, 
+            DIVISION = #{division}, 
+            SORT = #{sort},
+            DETAIL = #{detail: CLOB}
+		WHERE SEQ = #{seq}
+	</update>
 
 </mapper>

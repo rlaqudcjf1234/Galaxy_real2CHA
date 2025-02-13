@@ -8,8 +8,12 @@ import React from 'react';
 function Layout() {
     return (
         <div className="d-flex flex-column h-100">
-            <Mode/>
-            <Header/>
+            {/* <Mode/>  */}
+            {
+                !opener || opener.closed
+                    ? <Header/>
+                    : null
+            }
             <main className="flex-shrink-0">
                 <Outlet/>
             </main>

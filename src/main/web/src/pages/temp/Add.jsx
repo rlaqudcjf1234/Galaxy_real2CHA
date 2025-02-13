@@ -19,27 +19,29 @@ const Add = () => {
     const fetchCodes = async () => {
         setLoading(true);
         try {
-            const data = [
-                {
-                    name: "division",
-                    value: [
-                        {
-                            CODE_ID: "1",
-                            CODE_NAME: "공지"
-                        },
-                        {
-                            CODE_ID: "2",
-                            CODE_NAME: "일반"
-                        }
-                    ]
-                }
-            ]
-            data.forEach(item => {
-                setCodes({
-                    ...codes,
-                    [item.name]: item.value
+            const response = {
+                data: [
+                    {
+                        name: "division",
+                        value: [
+                            {
+                                CODE_ID: "1",
+                                CODE_NAME: "공지"
+                            }, {
+                                CODE_ID: "2",
+                                CODE_NAME: "일반"
+                            }
+                        ]
+                    }
+                ]
+            }
+            const data = {}
+            response
+                .data
+                .forEach(item => {
+                    data[item.name] = item.value
                 });
-            });
+            setCodes(data);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -71,7 +73,7 @@ const Add = () => {
                     </caption>
                     <colgroup>
                         <col width="20%"/>
-                        <col />
+                        <col/>
                     </colgroup>
                     <tbody>
                         <tr>

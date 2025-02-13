@@ -49,7 +49,7 @@ public class AdminController {
 
     @PostMapping("/add")
     public void add(@Valid AdminDto dto)throws Exception {
-        adminService.insertAdmin(dto);
+        adminService.insertOne(dto);
     }
     
     // 사용 가능한 admin 목록 조회
@@ -59,8 +59,8 @@ public class AdminController {
         return list;
     }
 
-    @GetMapping("/mod")
-    public Map<String, Object> mod(@RequestParam(name = "seq")String seq)throws Exception {
+    @GetMapping("/read")
+    public Map<String, Object> read(@RequestParam(name = "seq")String seq)throws Exception {
         Map<String, Object> map = adminService.selectOne(seq);
 
         return map;
@@ -69,7 +69,7 @@ public class AdminController {
     @PostMapping("/mod")
     public void mod(@Valid AdminDto dto)throws Exception {
 
-        adminService.updateAdmin(dto);
+        adminService.updateOne(dto);
     }
 
     @PostMapping("/pass")

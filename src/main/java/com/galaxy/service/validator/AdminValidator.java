@@ -60,7 +60,7 @@ public class AdminValidator extends AbstractValidator<AdminDto> {
                 }
 
                 if (dto.getUse_yn() == null || dto.getUse_yn().isBlank()) {
-                    errors.rejectValue("division", "구분 공백", "이 항목은 필수입니다.");
+                    errors.rejectValue("use_yn", "구분 공백", "이 항목은 필수입니다.");
                 }
             } else if (uri.indexOf("/pass") > -1) {
                 if (dto.getSeq() == null || dto.getSeq() == 0) {
