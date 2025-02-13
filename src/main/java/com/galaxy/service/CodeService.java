@@ -11,4 +11,6 @@ public interface CodeService {
     
     List<Map<String, Object>> selectUse2() throws Exception;
 
+    List<Map<String, Object>> selectUse10() throws Exception;
+
 }

@@ -31,9 +31,9 @@ const LectureRead = lazy(() => import('./pages/lecture/Read'));
 const LectureMod = lazy(() => import('./pages/lecture/Mod'));
 
 const LectureDocList = lazy(() => import ('./pages/lectureDoc/List'));
-// const LectureDocAdd = lazy(() => import ('./pages/lectureDoc/Add'));
-// const LectureDocRead = lazy(() => import ('./pages/lectureDoc/Read'));
-// const LectureDocMod = lazy(() => import ('./pages/lectureDoc/Mod'));
+const LectureDocAdd = lazy(() => import ('./pages/lectureDoc/Add'));
+const LectureDocRead = lazy(() => import ('./pages/lectureDoc/Read'));
+const LectureDocMod = lazy(() => import ('./pages/lectureDoc/Mod'));
 
 // const CodeList = lazy(()=> import('./pages/codegroup/List'))
 // const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
@@ -72,9 +72,9 @@ function App() {
                             <Route path="mod/:seq" element={<LectureMod />} />
                             <Route path="doc/:lecture_seq" element={<Container />}>
                                 <Route index="index" element={<LectureDocList />}/>
-                                {/* <Route path="add" element={<LectureDocAdd />}/>
-                                <Route path="read/:seq" element={<LectureDocMod />}/>
-                                <Route path="mod/:seq" element={<LectureDocMod />}/> */}
+                                <Route path="add" element={<LectureDocAdd />}/>
+                                <Route path="read/:seq" element={<LectureDocRead />}/>
+                                <Route path="mod/:seq" element={<LectureDocMod />}/>
                             </Route>
                         </Route>
 
