@@ -3,28 +3,38 @@ import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import ApplyDelete from "./ApplyDelete";
 import ApplyApprove from "./ApplyApprove";
+import "bootstrap/dist/css/bootstrap.min.css";
 
 function ApplyRead() {
     const [apply, setApply] = useState(null);
+    const [classInfo, setClassInfo] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
     const { id } = useParams();
 
-    const fetchApply = async () => {
-        if (!id || id === "undefined") {
-            console.error("Invalid ID");
-            navigate("/apply");
-            return;
-        }
+    const fetchData = async () => {
         try {
-            const response = await axios.get(`/api/apply/read/${id}`);
-            setApply(response.data);
-        } catch (error) {
-            console.error("Error fetching apply info:", error);
-            alert("등록 정보를 불러오는데 실패했습니다.");
-            navigate("/apply");
-        } finally {
+            // Apply 정보 가져오기 (클래스 정보도 함께 포함되어 있음)
+            const applyResponse = await axios.get(`/api/apply/read/${id}`);
+            console.log("Apply 응답 데이터:", applyResponse.data);
+            console.log("LECTURE_SEQ:", applyResponse.data.LECTURE_SEQ);
+
+            // 응답 데이터에서 직접 클래스 정보 추출
+            const classData = {
+                seq: applyResponse.data.seq,
+                round: applyResponse.data.ROUND,
+                lecture_name: applyResponse.data.LECTURE_NAME,
+                start_dt: applyResponse.data.START_DT,
+                end_dt: applyResponse.data.END_DT,
+            };
+
+            setApply(applyResponse.data);
+            setClassInfo(classData);
             setLoading(false);
+        } catch (error) {
+            console.error("Error fetching data:", error);
+            alert("정보를 불러오는데 실패했습니다.");
+            navigate("/apply");
         }
     };
 
@@ -49,7 +59,7 @@ function ApplyRead() {
             } else {
                 alert("승인이 완료되었습니다.");
             }
-            fetchApply(); // 데이터 새로고침
+            fetchData(); // fetchApply를 fetchData로 변경
         } catch (error) {
             console.error("승인 처리 중 오류:", error);
             const errorMessage = error.response?.data?.message || "승인 처리 중 오류가 발생했습니다.";
@@ -58,94 +68,98 @@ function ApplyRead() {
     };
 
     useEffect(() => {
-        fetchApply();
+        if (id) {
+            fetchData();
+        }
     }, [id]);
 
     if (loading) return <div>로딩중...</div>;
     if (!apply) return <div>등록 정보를 찾을 수 없습니다.</div>;
 
     return (
-        <div className="apply-detail-container">
-            <div className="apply-detail-wrapper">
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                    <h3>상세정보</h3>
-                    <div style={{ display: "flex", gap: "10px" }}>
+        <div>
+            <table className="table">
+                <caption>
+                    <span className="d-flex justify-content-between">
+                        <span>
+                            <em>홈</em>
+                            <em>접수현황</em>
+                            <strong>수강생 상세정보</strong>
+                        </span>
                         <span>승인상태: {apply.USE_YN === "Y" ? "승인완료" : "승인대기"}</span>
-                        {apply.USE_YN !== "Y" && ( // 'N' 대신 'Y'가 아닐 때로 조건 변경
-                            <ApplyApprove onApprove={handleApprove} itemId={id} />
-                        )}
-                        <ApplyDelete onDelete={handleDelete} itemId={id}>
-                            신청 취소
-                        </ApplyDelete>
-                    </div>
-                </div>
-
-                <div className="detail-content">
-                    <div className="detail-row">
-                        <label>반 명: </label>
-                        <span>{apply.SEQ}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>학생명: </label>
-                        <span>{apply.NAME}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>주민등록번호: </label>
-                        <span>{apply.JUMIN}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>전화번호: </label>
-                        <span>{apply.PHONE}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>이메일: </label>
-                        <span>{apply.EMAIL}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>실거주지: </label>
-                        <span>
+                    </span>
+                </caption>
+                <colgroup>
+                    <col width="15%" />
+                    <col width="35%" />
+                    <col width="15%" />
+                    <col width="35%" />
+                </colgroup>
+                <tbody>
+                    <tr>
+                        <th scope="row">강의</th>
+                        <td>{classInfo ? `${classInfo.round}회 - ${classInfo.lecture_name}` : "정보 없음"}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">교육 기간</th>
+                        <td>{classInfo ? `${classInfo.start_dt} ~ ${classInfo.end_dt}` : "정보 없음"}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">학생명</th>
+                        <td>{apply.NAME}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">주민등록번호</th>
+                        <td>{apply.JUMIN}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">전화번호</th>
+                        <td>{apply.PHONE}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">이메일</th>
+                        <td>{apply.EMAIL}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">실거주지</th>
+                        <td>
                             {apply.REAL_ZIPCODE} | {apply.REAL_ADDRESS1}, {apply.REAL_ADDRESS2}
-                        </span>
-                    </div>
-                    <div className="detail-row">
-                        <label>등본상 주소: </label>
-                        <span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">등본상 주소</th>
+                        <td>
                             {apply.ZIPCODE} | {apply.ADDRESS1}, {apply.ADDRESS2}
-                        </span>
-                    </div>
-                    <div className="detail-row">
-                        <label>지원경로: </label>
-                        <span>{apply.PATH}</span>
-                    </div>
-                    <div className="detail-row">
-                        <label>등록일자: </label>
-                        <span>{apply.REG_DT}</span>
-                    </div>
-                </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">지원경로</th>
+                        <td>{apply.PATH}</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">등록일자</th>
+                        <td>{apply.REG_DT}</td>
+                    </tr>
 
-                <div
-                    style={{
-                        marginTop: "20px",
-                        padding: "20px 0",
-                        borderTop: "1px solid #eee",
-                        textAlign: "center",
-                    }}
-                >
-                    <button
-                        onClick={() => navigate(-1)}
-                        style={{
-                            padding: "6px 12px",
-                            backgroundColor: "#6c757d",
-                            color: "white",
-                            border: "none",
-                            borderRadius: "4px",
-                            cursor: "pointer",
-                        }}
-                    >
-                        목록으로
-                    </button>
-                </div>
-            </div>
+                    <tr>
+                        <td colSpan="4" className="text-center">
+                            <div className="d-flex justify-content-center gap-2">
+                                <button className="btn btn-secondary" onClick={() => navigate(-1)}>
+                                    목록
+                                </button>
+                                <button className="btn btn-danger" onClick={() => handleDelete(id)}>
+                                    신청 취소
+                                </button>
+                                {apply.USE_YN !== "Y" && (
+                                    <button className="btn btn-primary" onClick={handleApprove}>
+                                        승인
+                                    </button>
+                                )}
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     );
 }
