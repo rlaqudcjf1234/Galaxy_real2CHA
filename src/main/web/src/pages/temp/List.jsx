@@ -7,34 +7,40 @@ import Pagination from "../../components/Pagination";
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
+
     const [search, setSearch] = useState({select: "1", text: ""});
-    const [params, setParams] = useState({select: "1", text: "", pageIndex: 1});
+    const [params, setParams] = useState({});
     const [loading, setLoading] = useState(false); // 로딩 상태
 
     // 하드코딩된 데이터
     const data = [
         {
-            SEQ: 1,
+            SEQ: 0,
+            RNUM: 1,
             ADMIN_NAME: "김강사",
             LECTURE_NAME: "컴퓨터공학과",
             REG_DT: "2024-01-15"
         }, {
-            SEQ: 2,
+            SEQ: 1,
+            RNUM: 2,
             ADMIN_NAME: "이강사",
             LECTURE_NAME: "전자공학과",
             REG_DT: "2024-01-16"
         }, {
-            SEQ: 3,
+            SEQ: 2,
+            RNUM: 3,
             ADMIN_NAME: "박강사",
             LECTURE_NAME: "기계공학과",
             REG_DT: "2024-01-17"
         }, {
-            SEQ: 4,
+            SEQ: 3,
+            RNUM: 4,
             ADMIN_NAME: "최강사",
             LECTURE_NAME: "화학공학과",
             REG_DT: "2024-01-18"
         }, {
-            SEQ: 5,
+            SEQ: 4,
+            RNUM: 5,
             ADMIN_NAME: "정강사",
             LECTURE_NAME: "건축공학과",
             REG_DT: "2024-01-19"
@@ -72,7 +78,7 @@ const List = () => {
     // 검색어 변경 핸들러
     const handleSearchChange = (e) => {
         setSearch({
-            ...params,
+            ...search,
             [e.target.name]: e.target.value // search를 업데이트합니다
         });
     };
@@ -129,7 +135,7 @@ const List = () => {
                         items.length > 0
                             ? (items.map((item) => (
                                 <tr key={item.SEQ}>
-                                    <td>{item.SEQ}</td>
+                                    <td>{item.RNUM}</td>
                                     <td>{item.ADMIN_NAME}</td>
                                     <td className="clickable-cell">
                                         {item.LECTURE_NAME}

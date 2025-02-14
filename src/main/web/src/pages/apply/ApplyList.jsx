@@ -1,52 +1,29 @@
-// ApplyStdReg.jsx
-import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+// ApplyList.js
+import { Link, Navigate } from "react-router-dom";
+import "../../css/Community.css";
 
-import Pagination from "../../components/Pagination";
 const ApplyList = () => {
-    const [items, setItems] = useState([]); // 목록 데이터
-    const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
-    const [searchInput, setSearchInput] = useState(""); // 검색어
-    const [params, setParams] = useState({ pageIndex: 1 });
-    const [loading, setLoading] = useState(false); // 로딩 상태
+    // 관리자 인증 상태 확인
+    const isAuthenticated = sessionStorage.getItem("isAuthenticated") === "true";
+    const isAdmin = sessionStorage.getItem("authType") === "admin";
 
-    // 선택 페이지 변경 데이터 요청
-    const fetchData = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get("/api/apply/list", { params: params });
-            setItems(response.data.items); // 목록 데이터
-            setTotalCount(response.data.totalCount); // 전체 아이템 수
-        } catch (error) {
-            console.error("Error fetching data:", error);
-        } finally {
-            setLoading(false);
-        }
-    };
+    // 관리자면 admin 페이지로 리다이렉션
+    if (isAuthenticated && isAdmin) {
+        return <Navigate to="/apply/admin" replace />;
+    }
 
-    // 선택 페이지 변경 핸들러
-    const handlePageChange = (pageIndex) => {
-        setParams({
-            ...params,
-            pageIndex: pageIndex,
-        });
-    };
-
-    // 선택 페이지 변경 이벤트
-    useEffect(() => {
-        fetchData();
-    }, [params]);
-
+    // 일반 사용자용 리스트 화면
     return (
         <div>
             <div className="board-header">
-                <Link to="add" className="write-button">
+                <Link to="/apply/add" className="write-button">
                     등록
+                </Link>
+                <Link to="/apply/student" className="write-button">
+                    로그인
                 </Link>
             </div>
             <table className="board-table">
-                <colgroup></colgroup>
                 <thead>
                     <tr>
                         <th scope="col">번호</th>
@@ -58,31 +35,13 @@ const ApplyList = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    {items.length > 0 ? (
-                        items.map((item) => {
-                            return (
-                                <tr key={item.ID}>
-                                    <td>{item.RNUM}</td>
-                                    <td className="title">
-                                        <Link to={`/apply/read/${item.ID}`}>{item.NAME}</Link>
-                                    </td>
-                                    <td>{item.EMAIL}</td>
-                                    <td>{item.PHONE}</td>
-                                    <td>{item.REG_DT}</td>
-                                    <td>N</td>
-                                </tr>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <td colSpan="6" className="text-center">
-                                데이터가 없습니다.
-                            </td>
-                        </tr>
-                    )}
+                    <tr>
+                        <td colSpan="6" className="text-center">
+                            데이터가 없습니다.
+                        </td>
+                    </tr>
                 </tbody>
             </table>
-            <Pagination currentPage={params.pageIndex} totalCount={totalCount} onPageChange={handlePageChange} />
         </div>
     );
 };

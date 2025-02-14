@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.LectureDocDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.LectureDocMapper;
@@ -29,14 +30,20 @@ public class LectureDocServiceImpl implements LectureDocService {
         return lectureDocMapper.selectList(dto);
     }
 
+	@Override
+	public int insertOne(LectureDocDto dto) throws Exception {
+		dto.setTable_nm(table_nm);
+		return lectureDocMapper.insertOne(dto);
+	}
+
     @Override
-    public Map<String, Object> selectOne(String seq) {
+    public Map<String, Object> selectOne(String seq) throws Exception {
         return lectureDocMapper.selectOne(seq);
     }
 
     @Override
-    public int insertDoc(LectureDocDto dto) throws Exception{
-        dto.setTable_nm(table_nm);
-        return lectureDocMapper.insertDoc(dto);
+    public void updateOne(LectureDocDto dto) throws Exception {
+        // TODO Auto-generated method stub
+        lectureDocMapper.updateOne(dto);
     }
 }

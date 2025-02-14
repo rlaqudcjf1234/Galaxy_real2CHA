@@ -1,7 +1,7 @@
 import {useEffect, useState} from 'react';
 import {useNavigate, useParams} from 'react-router-dom';
-
 import axios from 'axios';
+import Dompurify from 'dompurify';
 
 const Read = () => {
     const navigate = useNavigate();
@@ -10,27 +10,35 @@ const Read = () => {
     const handleHistoryBack = () => {
         navigate(-1);
     }
-    
+
+    const [lecture, setLecture] = useState({});
+    const [lectureDoc, setLectureDoc] = useState({});
+
     const params = useParams();
-
-    const [formData, setFormData] = useState(
-        {adminSeq: 0, title: '', division: '', detail: ''}
-    );
-
     const [loading, setLoading] = useState(false); // 로딩 상태
 
+    // 페이지 최초 데이터 요청
     const fetchFormData = async () => {
         setLoading(true);
         try {
-            setFormData(
-                {adminSeq: 1, title: '제목을 입력해주세요', division: '선택해주세요', detail: '내용을 입력해주세요'}
-            );
+            const response1 = await axios.get("/api/lecture/read", {
+                params: {
+                    seq: params.lecture_seq
+                }
+            });
+            setLecture(response1.data);
+            const response2 = await axios.get("/api/lectureDoc/read", {
+                params: {
+                    "seq": params.seq
+                }
+            });
+            setLectureDoc(response2.data);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     // 페이지 최초 이벤트
     useEffect(() => {
@@ -39,11 +47,7 @@ const Read = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-    };
-
-    // 이전 페이지로 가기 처리
-    const handleGoBack = () => {
-        navigate(-1); // 브라우저의 이전 페이지로 이동
+        navigate(`../mod/${params.seq}`);
     };
 
     return (
@@ -55,40 +59,55 @@ const Read = () => {
                     <caption>
                         <span>
                             <em>홈</em>
-                            <strong>간의게시판</strong>
+                            <em>교육과정현황</em>
+                            <strong>안내문서(<small>{lecture.NAME}</small>)</strong>
                         </span>
                     </caption>
+                    <colgroup>
+                        <col width="20%"/>
+                        <col/>
+                    </colgroup>
                     <tbody>
-                        <tr>
-                            <th>구분</th>
-                            <td>
-                                <input
-                                    name="division"
-                                    value={formData.division}
-                                    className="form-control-plaintext"
-                                    readOnly="readOnly"/>
-                            </td>
-                        </tr>
                         <tr>
                             <th>제목</th>
                             <td>
                                 <input
                                     type="text"
-                                    name="title"
-                                    value={formData.title}
                                     className="form-control-plaintext"
+                                    value={lectureDoc.TITLE}
+                                    readOnly="readOnly"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>구분</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={lectureDoc.DIVISION_NAME}
+                                    readOnly="readOnly"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>순번</th>
+                            <td>
+                                <input
+                                    type="text"
+                                    className="form-control-plaintext"
+                                    value={lectureDoc.SORT}
                                     readOnly="readOnly"/>
                             </td>
                         </tr>
                         <tr>
                             <th>내용</th>
-                            <td>
-                                <textarea
-                                    name="detail"
-                                    value={formData.detail}
-                                    className="form-control-plaintext"
-                                    rows="10"
-                                    readOnly="readOnly"/>
+                            <td className="edit">
+                                <div
+                                    dangerouslySetInnerHTML={{
+                                        __html: Dompurify.sanitize(String(
+                                            lectureDoc
+                                                ?.DETAIL || ""
+                                        ))
+                                    }}></div>
                             </td>
                         </tr>
                     </tbody>
@@ -99,7 +118,7 @@ const Read = () => {
                     <button type="submit" className="btn btn-primary">
                         수정
                     </button>
-                    <button type="button" onClick={handleGoBack} className="btn btn-secondary">
+                    <button type="button" onClick={handleHistoryBack} className="btn btn-secondary">
                         취소
                     </button>
                 </div>

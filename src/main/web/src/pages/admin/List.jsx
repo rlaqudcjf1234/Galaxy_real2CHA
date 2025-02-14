@@ -7,8 +7,9 @@ import Pagination from "../../components/Pagination";
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
+    
     const [search, setSearch] = useState({select: "1", text: ""});
-    const [params, setParams] = useState({select: "1", text: "", pageIndex: 1});
+    const [params, setParams] = useState({});
     const [loading, setLoading] = useState(false); // 로딩 상태
 
     // 선택 페이지 변경 데이터 요청
@@ -36,7 +37,7 @@ const List = () => {
     // 검색어 변경 핸들러
     const handleSearchChange = (e) => {
         setSearch({
-            ...params,
+            ...search,
             [e.target.name]: e.target.value // search를 업데이트합니다
         });
     };

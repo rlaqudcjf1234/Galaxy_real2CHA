@@ -4,19 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 
-import com.galaxy.dto.AdminDto;
+import com.galaxy.dto.LectureDocDto;
 import com.galaxy.mapper.LectureDocMapper;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
-public class LectureDocValidator extends AbstractValidator<AdminDto> {
+public class LectureDocValidator extends AbstractValidator<LectureDocDto> {
 
     @Autowired LectureDocMapper lectureDocMapper;
 
     @Autowired HttpServletRequest request;
 
-    @Override protected void doValidate(AdminDto dto, Errors errors) {
+    @Override protected void doValidate(LectureDocDto dto, Errors errors) {
         try {
             String uri = request.getRequestURI();
         } catch (Exception e) {

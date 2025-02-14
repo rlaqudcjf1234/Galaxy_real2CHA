@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import '../../css/Community.css';
 
 function AdcAdd() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        adminSeq: 1, 
+        adminSeq: 1,
         title: '',
         division: '',
-        detail: ''
+        detail: '',
     });
 
     const handleInputChange = (e) => {
@@ -22,15 +24,33 @@ function AdcAdd() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log('서버로 보내는 데이터:', formData);
-        
+        // 서버로 보내는 데이터 형식 확인
+        console.log('서버로 보내는 데이터:', {
+            url: '/api/adminCommunity/add',
+            method: 'POST',
+            data: formData
+        });
+
         try {
             const response = await axios.post('/api/adminCommunity/add', formData);
+
+            console.log('서버 응답:', response);  // 성공 응답 확인
+
+
             if (response.status === 200) {
                 alert('게시글이 성공적으로 등록되었습니다.');
                 navigate('/adminCommunity');
             }
         } catch (error) {
+
+            console.error('에러 상세 정보:', {
+                status: error.response?.status,
+                data: error.response?.data,
+                headers: error.response?.headers,
+                config: error.config
+            });
+
+
             alert(error.response?.data || '게시글 등록 중 오류가 발생했습니다.');
         }
     };
@@ -101,15 +121,15 @@ function AdcAdd() {
 
                 {/* 버튼 영역 */}
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <button 
-                        type="button" 
+                    <button
+                        type="button"
                         onClick={handleGoBack}
                         className="btn btn-secondary"
                     >
                         이전으로
                     </button>
-                    <button 
-                        type="submit" 
+                    <button
+                        type="submit"
                         className="btn btn-primary"
                     >
                         등록하기

@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApplyDto extends SeqDto {
+    
     private Long class_seq;
 
     @NotNull
@@ -56,4 +57,6 @@ public class ApplyDto extends SeqDto {
     private Date reg_dt; // 등록일자
 
     private Long id;
+
+    private String use_yn; // 승인여부
 }

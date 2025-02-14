@@ -23,7 +23,7 @@
 .table > :not(:first-child) {
     border-top: none;
 }
-.table td,
+.table td:not(.edit),
 .table th {
     padding: 0.75rem;
     text-align: center;

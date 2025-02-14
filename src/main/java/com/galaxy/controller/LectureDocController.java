@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
-import com.galaxy.dto.FileDto;
+import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.LectureDocDto;
 import com.galaxy.dto.ListDto;
 import com.galaxy.service.FileService;
@@ -39,9 +38,6 @@ public class LectureDocController {
     @Autowired
     private LectureDocService lectureDocService;
 
-    @Autowired
-    private FileService fileService;
-
     @GetMapping("/list")
     public ListDto list(@Valid LectureDocDto dto) throws Exception {
 
@@ -53,38 +49,21 @@ public class LectureDocController {
         return listDto;
     }
 
-    @GetMapping("/read")
-    public ResponseEntity<?> getLectureRead(
-            @RequestParam(name = "seq") String seq) throws Exception {
-        try {
-            Map<String, Object> lecture = lectureDocService.selectOne(seq);
-            if (lecture == null) {
-                return ResponseEntity
-                        .notFound()
-                        .build();
-            }
-            return ResponseEntity.ok(lecture);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("강의 상세 정보 조회 중 오류가 발생했습니다.");
-        }
+    @PostMapping("/add")
+    public void insert(@Valid LectureDocDto dto) throws Exception {
+        lectureDocService.insertOne(dto);
     }
 
-    @PostMapping("/insert")
-    public ResponseEntity<?> insert(@Valid LectureDocDto dto) throws Exception {
-        try {
-            int result = lectureDocService.insertDoc(dto);
-            for (MultipartFile file : dto.getFile()) {
-                FileDto fileDto = fileService.saveFile(file);
-                // lectureDocService.insertDoc(fileDto);
-            }
-            return ResponseEntity.ok(result);
-        } catch (Exception e) {
-            return ResponseEntity
-                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(e.getMessage());
-        }
+    @GetMapping("/read")
+    public Map<String, Object> read(@RequestParam(name = "seq")String seq)throws Exception {
+        Map<String, Object> map = lectureDocService.selectOne(seq);
+
+        return map;
+    }
+
+    @PostMapping("/mod")
+    public void mod(@Valid LectureDocDto dto)throws Exception {
+        lectureDocService.updateOne(dto);
     }
 
 }

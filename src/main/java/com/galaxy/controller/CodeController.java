@@ -85,6 +85,9 @@ public class CodeController {
                 list.add(new CodeDto("division", codeService.selectUse14()));
                 list.add(new CodeDto("category", codeService.selectUse15()));
                 break;
+            case "lectureDoc":
+                    list.add(new CodeDto("division", codeService.selectUse10()));
+                break;
             default:
                 break;
 

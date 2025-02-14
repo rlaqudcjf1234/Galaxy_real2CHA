@@ -1,10 +1,12 @@
 package com.galaxy.controller;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.ApplyDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.ApplyMapper;
@@ -52,10 +55,6 @@ public class ApplyController {
     @PostMapping("/add")
     public ResponseEntity<Map<String, String>> add(@RequestBody ApplyDto dto) {
         try {
-            // System.out.println("Controller received class_seq: " + dto.getClass_seq());
-            // System.out.println("Controller received class_seq type: "
-            //         + (dto.getClass_seq() != null ? dto.getClass_seq().getClass().getName() : "null"));
-
             applyService.insertApply(dto);
             return ResponseEntity.ok(Collections.singletonMap("message", "신청이 완료되었습니다."));
         } catch (ValidationException e) {
@@ -83,17 +82,8 @@ public class ApplyController {
         }
     }
 
-    // @GetMapping("/class/list")
-    // public ResponseEntity<List<Map<String, Object>>> getClassList() {
-    //     try {
-    //         List<Map<String, Object>> classes = classMapper.selectClassList();
-    //         return ResponseEntity.ok(classes);
-    //     } catch (Exception e) {
-    //         return ResponseEntity.internalServerError().build();
-    //     }
-    // }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteApply(@PathVariable("id") Long id) { // 명시적으로 "id" 지정
+    public ResponseEntity<?> deleteApply(@PathVariable("id") Long id) {
         try {
             int result = applyService.deleteApply(id);
             if (result > 0) {
@@ -103,6 +93,70 @@ public class ApplyController {
             }
         } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @PostMapping("/student-info")
+    public ResponseEntity<?> getStudentApplyInfo(@RequestBody ApplyDto applyDto) {
+        try {
+            ApplyDto applyInfo = applyService.getStudentApplyInfo(
+                    applyDto.getName(),
+                    applyDto.getEmail(),
+                    applyDto.getJumin());
+
+            if (applyInfo == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("신청 정보를 찾을 수 없습니다.");
+            }
+
+            return ResponseEntity.ok(applyInfo);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("서버 오류가 발생했습니다.");
+        }
+    }
+    
+    @PostMapping("/admin-login")
+    public ResponseEntity<?> adminLogin(@RequestBody AdminDto adminDto) {
+        try {
+            AdminDto admin = applyMapper.selectAdminByEmailAndPassword(adminDto);
+            if (admin != null) {
+                Map<String, Object> response = new HashMap<>();
+                response.put("seq", admin.getSeq());
+                response.put("email", admin.getEmail());
+                response.put("name", admin.getName());
+                response.put("phone", admin.getPhone());
+                response.put("division", admin.getDivision());
+                response.put("post", admin.getPost());
+                response.put("reg_dt", admin.getReg_dt());
+                response.put("use_yn", admin.getUse_yn());
+                
+                return ResponseEntity.ok(response);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.internalServerError().body("Server error");
+        }
+    }
+
+    @PostMapping("/approve")
+    public ResponseEntity<?> approveApply(@RequestBody Map<String, Long> payload) {
+        Long id = payload.get("id");
+        try {
+            applyService.CreateStudent(id);
+            return ResponseEntity.ok()
+                    .body(Map.of(
+                            "success", true,
+                            "message", "승인이 완료되었습니다."));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError()
+                    .body(Map.of(
+                            "success", false,
+                            "message", "승인 처리 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
 }

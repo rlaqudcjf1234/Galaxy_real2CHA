@@ -63,15 +63,15 @@ const List = () => {
     }, [params]);
 
     // 팝업 창을 여는 핸들러 추가
-    const handleDocumentClick = (seq) => {
+    const handleClick = (seq) => {
         // 팝업창 크기와 위치 설정
-        const width = 800;
-        const height = 600;
-        const left = (window.screen.width - width) / 2;
-        const top = (window.screen.height - height) / 2;
+        const width = 1030;
+        const height = 930;
+        const left = 15;
+        const top = 15;
         // 팝업창 열기
         window.open(
-            `/lecture/attach/${seq}`,  // URL 경로
+            `/lecture/doc/${seq}`,  // URL 경로
             '학과문서',  // 팝업창 이름
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
@@ -140,7 +140,7 @@ const List = () => {
                                         <td>
                                             {/*attach=임의경로*/}
                                             <button
-                                                onClick={() => handleDocumentClick(item.SEQ)}
+                                                onClick={() => handleClick(item.SEQ)}
                                                 className="btn btn-primary"
                                             >
                                                 문서

@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class SearchDto extends PageDto {
 	
-	private String select = "";
+	private String select = "1";
 	
 	private String text = "";
 

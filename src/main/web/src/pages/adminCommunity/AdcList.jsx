@@ -1,7 +1,9 @@
+import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Pagination from "../../components/Pagination";
+import '../../css/Community.css';
 
 function AdcList() {
     // 기본적인 상태 관리
@@ -107,7 +109,7 @@ function AdcList() {
                             <tr key={item.seq}>
                                 <td>{item.seq}</td>
                                 <td>
-                                    <Link to={`/adminCommunity/${item.seq}`}>
+                                    <Link to={`/adminCommunity/read/${item.seq}`}>
                                         {item.title}
                                     </Link>
                                 </td>

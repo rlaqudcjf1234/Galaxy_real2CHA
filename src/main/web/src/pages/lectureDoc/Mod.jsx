@@ -2,6 +2,8 @@ import {useEffect, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import axios from "axios";
 
+import Editor from '../../components/Editor';
+
 function Mod() {
     const navigate = useNavigate();
 
@@ -10,12 +12,15 @@ function Mod() {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({use_yn: [], division: []});
-    const [admin, setAdmin] = useState({});
+    const [codes, setCodes] = useState({division: []});
+    const [lecture, setLecture] = useState({});
+    const [lectureDoc, setLectureDoc] = useState({});
     const [errors, setErrors] = useState({});
 
     const params = useParams();
     const [loading, setLoading] = useState(false); // 로딩 상태
+
+    const [detail, setDetail] = useState(""); // Editor
 
     // 페이지 최초 데이터 요청
     const fetchCodes = async () => {
@@ -23,7 +28,7 @@ function Mod() {
         try {
             const response = await axios.get("/api/code/use", {
                 params: {
-                    "text": "adminMod"
+                    "text": "lectureDoc"
                 }
             });
             const data = {}
@@ -44,12 +49,19 @@ function Mod() {
     const fetchFormData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("/api/admin/read", {
+            const response1 = await axios.get("/api/lecture/read", {
                 params: {
-                    seq: params.seq
+                    seq: params.lecture_seq
                 }
             });
-            setAdmin(response.data);
+            setLecture(response1.data);
+            const response2 = await axios.get("/api/lectureDoc/read", {
+                params: {
+                    "seq": params.seq
+                }
+            });
+            setLectureDoc(response2.data);
+            setDetail(response2.data.DETAIL);
         } catch (error) {
             console.error('Error fetching data:', error);
         } finally {
@@ -64,8 +76,8 @@ function Mod() {
     }, []);
 
     const handleFormData = (e) => {
-        setAdmin({
-            ...admin,
+        setLectureDoc({
+            ...lectureDoc,
             [
                 e
                     .target
@@ -80,8 +92,8 @@ function Mod() {
         setLoading(true);
         try {
             const formData = new FormData(e.target);
-            const response = await axios.post("/api/admin/mod", formData);
-            navigate("/admin");
+            const response = await axios.post("/api/lectureDoc/mod", formData);
+            navigate(`/lecture/doc/${params.lecture_seq}`);
         } catch (error) {
             const response = error.response;
             if (response && response.data) {
@@ -92,25 +104,23 @@ function Mod() {
         }
     }
 
-    const handlePreview = () => {
-        window.open(`/admin/pass/${admin.SEQ}`, "mozillaWindow", "popup");
-    }
-
     return (
         <div>
-            {/* <div className="board-header">
-                <div className="search-box"></div>
-                <a className="write-button" onClick={handlePreview}>비밀번호 변경</a>
-            </div> */
-            }
+            {/* 폼 영역 */}
             <form onSubmit={handleSubmit}>
-                <input type="hidden" name="seq" value={admin.SEQ} readOnly="readOnly"/>
+                <input
+                    type="hidden"
+                    name="lecture_seq"
+                    value={params.lecture_seq}
+                    readOnly="readOnly"/>
+                <input type="hidden" name="seq" value={params.seq} readOnly="readOnly"/>
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
                         <span>
                             <em>홈</em>
-                            <strong>강사현황</strong>
+                            <em>교육과정현황</em>
+                            <strong>안내문서(<small>{lecture.NAME}</small>)</strong>
                         </span>
                     </caption>
                     <colgroup>
@@ -120,51 +130,20 @@ function Mod() {
                     </colgroup>
                     <tbody>
                         <tr>
-                            <th>이메일</th>
-                            <td>
-                                <input
-                                    type="email"
-                                    className="form-control-plaintext"
-                                    name="email"
-                                    value={admin.EMAIL}
-                                    readOnly="readOnly"/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.email}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>성명</th>
+                            <th>제목</th>
                             <td>
                                 <input
                                     type="text"
                                     className="form-control"
-                                    name="name"
-                                    value={admin.NAME}
+                                    name="title"
+                                    placeholder="제목을 입력해주세요"
+                                    value={lectureDoc.TITLE}
                                     onChange={handleFormData}
                                     required="required"/>
                             </td>
                             <td>
                                 <div className="invalid-feedback">
-                                    {errors.name}
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>연락처</th>
-                            <td>
-                                <input
-                                    type="text"
-                                    className="form-control"
-                                    name="phone"
-                                    value={admin.PHONE}
-                                    onChange={handleFormData}/>
-                            </td>
-                            <td>
-                                <div className="invalid-feedback">
-                                    {errors.phone}
+                                    {errors.title}
                                 </div>
                             </td>
                         </tr>
@@ -172,9 +151,10 @@ function Mod() {
                             <th>구분</th>
                             <td>
                                 <select
-                                    name="division"
+                                    type="text"
                                     className="form-control"
-                                    value={admin.DIVISION}
+                                    name="division"
+                                    value={lectureDoc.DIVISION}
                                     onChange={handleFormData}
                                     required="required">
                                     <option value="">선택</option>
@@ -194,47 +174,42 @@ function Mod() {
                             </td>
                         </tr>
                         <tr>
-                            <th>등록일자</th>
-                            <td colSpan="2">
+                            <th>순번</th>
+                            <td>
                                 <input
                                     type="text"
-                                    className="form-control-plaintext"
-                                    name="reg_dt"
-                                    value={admin.REG_DT}
-                                    readOnly="readOnly"/>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th>사용여부</th>
-                            <td>
-                                <select
-                                    name="use_yn"
-                                    className="form-select"
-                                    value={admin.USE_YN}
+                                    className="form-control"
+                                    name="sort"
+                                    defaultValue="1"
+                                    min="1"
+                                    value={lectureDoc.SORT}
                                     onChange={handleFormData}
-                                    required="required">
-                                    <option value="">선택</option>
-                                    {
-                                        codes
-                                            .use_yn
-                                            .map(
-                                                (item) => (<option key={item.CODE_ID} value={item.CODE_ID}>{item.CODE_NAME}</option>)
-                                            )
-                                    }
-                                </select>
+                                    required="required"/>
                             </td>
                             <td>
                                 <div className="invalid-feedback">
-                                    {errors.use_yn}
+                                    {errors.division}
                                 </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>내용</th>
+                            <td className="edit" colSpan="2">
+                                <input type="hidden" name="detail" value={detail}/>
+                                <Editor htmlStr={detail} setHtmlStr={setDetail}/>
                             </td>
                         </tr>
                     </tbody>
                 </table>
+
                 {/* 버튼 영역 */}
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <button type="submit" className="btn btn-primary">저장</button>
-                    <button type="button" className="btn btn-secondary" onClick={handleHistoryBack}>취소</button>
+                    <button type="submit" className="btn btn-primary">
+                        저장
+                    </button>
+                    <button type="button" className="btn btn-secondary" onClick={handleHistoryBack}>
+                        취소
+                    </button>
                 </div>
             </form>
         </div>

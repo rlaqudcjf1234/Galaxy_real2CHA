@@ -30,9 +30,9 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public int insertAdmin(AdminDto dto) throws Exception {
+	public int insertOne(AdminDto dto) throws Exception {
 		dto.setTable_nm(table_nm);
-		return adminMapper.insertAdmin(dto);
+		return adminMapper.insertOne(dto);
 	}
 
 	@Override
@@ -46,8 +46,8 @@ public class AdminServiceImpl implements AdminService{
 	}
 
 	@Override
-	public int updateAdmin(AdminDto dto) throws Exception {
-		return adminMapper.updateAdmin(dto);
+	public int updateOne(AdminDto dto) throws Exception {
+		return adminMapper.updateOne(dto);
 	}
 
 	@Override

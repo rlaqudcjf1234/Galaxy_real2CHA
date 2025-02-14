@@ -12,24 +12,14 @@ import lombok.RequiredArgsConstructor;
 public class ApplyValidator extends AbstractValidator<ApplyDto> {
 
     @Autowired
-    ApplyMapper applyMapper; // Mapper 주입
-
-    // @Autowired
-    // private ClassMapper classMapper;
+    ApplyMapper applyMapper;
 
     @Override
     protected void doValidate(ApplyDto dto, Errors errors) {
         try {
-            // System.out.println("Validator received class_seq: " + dto.getClass_seq());
-            // System.out.println("Validator received class_seq type: " + (dto.getClass_seq() != null ? dto.getClass_seq().getClass().getName() : "null"));
-            // 주민번호 중복 체크 - 이전 에러가 없고 DB에 이미 존재하는 경우
-            if (errors.getFieldError("jumin") == null && applyMapper.selectByJumin(dto.getJumin()) > 0) {
-                errors.rejectValue("jumin", "주민등록번호 중복 오류", "이미 등록된 주민등록번호입니다.");
-            } else if (errors.getFieldError("phone") == null && applyMapper.selectByPhone(dto.getPhone()) > 0) {
-                errors.rejectValue("phone", "전화번호 중복 오류", "이미 등록된 전화번호입니다.");
-            }
+            System.out.println("Validating DTO: " + dto);
 
-            // 필수값 검증
+            // 필수값 검증을 먼저 수행
             validateRequiredField(dto.getJumin(), "jumin", "주민등록번호", errors);
             validateRequiredField(dto.getName(), "name", "이름", errors);
             validateRequiredField(dto.getReal_zipcode(), "real_zipcode", "실거주 우편번호", errors);
@@ -39,18 +29,36 @@ public class ApplyValidator extends AbstractValidator<ApplyDto> {
             validateRequiredField(dto.getPhone(), "phone", "전화번호", errors);
             validateRequiredField(dto.getPath(), "path", "지원경로", errors);
 
-            // if (dto.getClass_seq() == null) {
-            //     errors.rejectValue("class_seq", "required.class_seq", "클래스를 선택해주세요.");
-            // }
+            // use_yn이 'N'인 경우에만 중복 체크 수행
+            if (!errors.hasFieldErrors("jumin") && applyMapper.selectActiveByJumin(dto.getJumin()) > 0) {
+                System.out.println("Duplicate active jumin found: " + dto.getJumin());
+                errors.rejectValue("jumin", "duplicate.jumin", "이미 등록된 주민등록번호입니다.");
+            }
+            
+            if (!errors.hasFieldErrors("phone") && applyMapper.selectActiveByPhone(dto.getPhone()) > 0) {
+                System.out.println("Duplicate active phone found: " + dto.getPhone());
+                errors.rejectValue("phone", "duplicate.phone", "이미 등록된 전화번호입니다.");
+            }
             
         } catch (Exception e) {
-            errors.rejectValue("jumin", "jumin.error", e.getMessage());
+            System.out.println("Validation error occurred: " + e.getClass().getName());
+            System.out.println("Error message: " + e.getMessage());
+            e.printStackTrace();
+            errors.reject("validation.error", "처리 중 오류가 발생했습니다: " + e.getMessage());
+        }
+
+        if (errors.hasErrors()) {
+            System.out.println("Validation errors found:");
+            errors.getAllErrors().forEach(error -> 
+                System.out.println(error.getCode() + ": " + error.getDefaultMessage())
+            );
         }
     }
 
     private void validateRequiredField(String value, String fieldName, String fieldLabel, Errors errors) {
         if (value == null || value.trim().isEmpty()) {
-            errors.rejectValue(fieldName, "required." + fieldName, fieldLabel + " 필수");
+            System.out.println("Required field missing - " + fieldName + ": " + fieldLabel);
+            errors.rejectValue(fieldName, "required." + fieldName, fieldLabel + " 필수 입력값입니다.");
         }
     }
 }
