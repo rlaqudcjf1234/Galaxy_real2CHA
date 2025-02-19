@@ -14,7 +14,13 @@ public interface CodeService {
 
     List<Map<String, Object>> selectUse2() throws Exception;
 
+    List<Map<String, Object>> selectUse7() throws Exception;
+
+    List<Map<String, Object>> selectUse8() throws Exception;
+
     List<Map<String, Object>> selectUse10() throws Exception;
+
+    List<Map<String, Object>> selectUse13() throws Exception;
 
     List<Map<String, Object>> selectUse14() throws Exception;
 

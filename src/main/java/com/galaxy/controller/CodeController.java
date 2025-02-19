@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-
 import com.galaxy.dto.CodeDto;
 import com.galaxy.dto.ListDto;
 import com.galaxy.dto.SearchDto;
@@ -78,6 +77,13 @@ public class CodeController {
                 list.add(new CodeDto("use_yn", codeService.selectUse1()));
                 list.add(new CodeDto("division", codeService.selectUse2()));
                 break;
+            case "calendar":
+                list.add(new CodeDto("division", codeService.selectUse7()));
+                list.add(new CodeDto("status", codeService.selectUse13()));
+                break;
+            case "room":
+                list.add(new CodeDto("room", codeService.selectUse8()));
+                break;
             case "lecDocument":
                 list.add(new CodeDto("division", codeService.selectUse10()));
                 break;
@@ -86,7 +92,7 @@ public class CodeController {
                 list.add(new CodeDto("category", codeService.selectUse15()));
                 break;
             case "lectureDoc":
-                    list.add(new CodeDto("division", codeService.selectUse10()));
+                list.add(new CodeDto("division", codeService.selectUse10()));
                 break;
             default:
                 break;
