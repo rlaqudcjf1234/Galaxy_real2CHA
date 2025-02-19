@@ -24,8 +24,15 @@ function ApplyAdd() {
         const fetchClasses = async () => {
             try {
                 const response = await axios.get("/api/class/list");
-                const classData = Array.isArray(response.data) ? response.data : [];
+                // items 배열 추출 및 필드명 매핑
+                const classData = response.data.items.map((item) => ({
+                    seq: item.SEQ,
+                    round: item.ROUND,
+                    lecture_name: item.LECTURE_NAME,
+                    start_dt: item.START_DT,
+                }));
                 setClasses(classData);
+                console.log("변환된 클래스 데이터:", classData); // 데이터 확인용
             } catch (error) {
                 console.error("Error fetching classes:", error);
                 setClasses([]);
@@ -35,7 +42,7 @@ function ApplyAdd() {
     }, []);
 
     const [formData, setFormData] = useState({
-        class_seq: 0,
+        seq: "",
         name: "",
         jumin: "",
         real_zipcode: "",
@@ -51,10 +58,38 @@ function ApplyAdd() {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: name === "class_seq" ? parseInt(value) : value,
-        }));
+
+        if (name === "jumin") {
+            // 숫자만 입력 가능하도록
+            const numbersOnly = value.replace(/[^0-9]/g, "");
+            // 최대 13자리로 제한
+            const formatted = numbersOnly.slice(0, 13);
+
+            setFormData((prev) => ({
+                ...prev,
+                [name]: formatted,
+            }));
+        } else if (name === "phone") {
+            // 숫자만 입력 가능하도록
+            const numbersOnly = value.replace(/[^0-9]/g, "");
+            // 최대 11자리로 제한
+            const formatted = numbersOnly.slice(0, 11);
+
+            setFormData((prev) => ({
+                ...prev,
+                [name]: formatted,
+            }));
+        } else if (name === "seq") {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: parseInt(value),
+            }));
+        } else {
+            setFormData((prev) => ({
+                ...prev,
+                [name]: value,
+            }));
+        }
     };
 
     // 실거주지 주소 검색
@@ -96,7 +131,8 @@ function ApplyAdd() {
         try {
             const submitData = {
                 ...formData,
-                class_seq: Number(formData.class_seq),
+                class_seq: Number(formData.seq), // seq값을 class_seq로 변환
+                seq: undefined, // 기존 seq 필드는 제거
             };
             const response = await axios.post("/api/apply/add", submitData);
             if (response.status === 200) {
@@ -123,20 +159,27 @@ function ApplyAdd() {
                 <table className="board-table">
                     <tbody>
                         <tr id="apply_title">
-                            <th>반(미정)</th>
+                            <th>반</th>
                             <td>
                                 <select
-                                    name="class_seq"
-                                    value={formData.class_seq}
-                                    defaultValue={0}
+                                    name="seq"
+                                    value={formData.seq}
                                     onChange={handleInputChange}
                                     className="form-control"
                                     required
                                 >
                                     <option value="">클래스를 선택하세요</option>
-                                    <option value={1}>1기 - A반 (2024-01-01 ~ 2024-06-30)</option>
-                                    <option value={2}>1기 - B반 (2024-01-01 ~ 2024-06-30)</option>
-                                    <option value={3}>2기 - A반 (2024-07-01 ~ 2024-12-31)</option>
+                                    {classes && classes.length > 0 ? (
+                                        classes.map((classItem) => (
+                                            <option key={classItem.seq} value={classItem.seq}>
+                                                {classItem.round}기 - {classItem.lecture_name}
+                                            </option>
+                                        ))
+                                    ) : (
+                                        <option value="" disabled>
+                                            클래스 정보를 불러오는 중...
+                                        </option>
+                                    )}
                                 </select>
                             </td>
                         </tr>
@@ -163,7 +206,8 @@ function ApplyAdd() {
                                     value={formData.jumin}
                                     onChange={handleInputChange}
                                     className="form-control"
-                                    placeholder="주민등록번호를 입력해주세요"
+                                    placeholder=" '-' 외외 주민등록번호 13자리를 입력해주세요"
+                                    maxLength={13}
                                     required
                                 />
                             </td>
@@ -286,7 +330,8 @@ function ApplyAdd() {
                                     value={formData.phone}
                                     onChange={handleInputChange}
                                     className="form-control"
-                                    placeholder="전화번호를 입력해주세요"
+                                    placeholder=" '-' 외 전화번호 11자리를 입력해주세요"
+                                    maxLength={11}
                                     required
                                 />
                             </td>

@@ -84,11 +84,29 @@
 
     <select id="selectApplyRead" parameterType="String" resultType="map">
     SELECT 
-        ID, CLASS_SEQ as seq, NAME, JUMIN, PHONE, EMAIL, 
-        REAL_ZIPCODE, REAL_ADDRESS1, REAL_ADDRESS2, ZIPCODE, ADDRESS1, ADDRESS2, 
-        PATH, TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, USE_YN
-    FROM APPLY
-    WHERE ID = #{id}
+        A.ID, 
+        A.CLASS_SEQ as seq, 
+        A.NAME, 
+        A.JUMIN, 
+        A.PHONE, 
+        A.EMAIL, 
+        A.REAL_ZIPCODE, 
+        A.REAL_ADDRESS1, 
+        A.REAL_ADDRESS2, 
+        A.ZIPCODE, 
+        A.ADDRESS1, 
+        A.ADDRESS2, 
+        A.PATH, 
+        TO_CHAR(A.REG_DT, 'YYYY-MM-DD') AS REG_DT, 
+        A.USE_YN,
+        C.ROUND,
+        L.NAME AS LECTURE_NAME,
+        TO_CHAR(C.START_DT, 'YYYY-MM-DD') AS START_DT,
+        TO_CHAR(C.END_DT, 'YYYY-MM-DD') AS END_DT
+    FROM APPLY A
+    INNER JOIN CLASS C ON A.CLASS_SEQ = C.SEQ
+    INNER JOIN LECTURE L ON C.LECTURE_SEQ = L.SEQ
+    WHERE A.ID = #{id}
     </select>
 
     <select id="selectApplyById" parameterType="Long" resultType="ApplyDto">

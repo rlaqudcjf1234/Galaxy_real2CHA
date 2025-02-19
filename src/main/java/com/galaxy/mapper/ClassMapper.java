@@ -15,9 +15,13 @@ public interface ClassMapper {
     
     List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
 
- 
+    int updateClass(Map<String, Object> params) throws Exception;
+
+    Map<String, Object> classRead(int seq) throws Exception;
+
     int insertClass(ClassDto classDto) throws Exception;
 
-        // 클래스 상세 정보 조회
-        Map<String, Object> selectClassDetail(String seq);
+    int confirmClass(int seq);
+
+    int cancelClass(int seq);
 }
