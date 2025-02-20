@@ -19,5 +19,6 @@ public interface AdcListMapper {
     void insertPost(Map<String, Object> params) throws Exception;
 
     Map<String, Object> selectPost(Long seq);
-    
+ 
+    int deletePost(Long seq); // 추가된 삭제 메소드
 }

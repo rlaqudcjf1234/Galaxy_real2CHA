@@ -36,32 +36,38 @@
     </select>
 
     <insert id="insertPost" parameterType="AdcPostDto">
-    INSERT ALL 
-        INTO SEQ_MANAGEMENT(
-            SEQ, TABLE_NM, REG_DT
-        ) VALUES (
-            SEQ.NEXTVAL, 'ADMIN_COMMUNITY', SYSDATE
-        )
-        INTO ADMIN_COMMUNITY (
-            SEQ, ADMIN_SEQ, TITLE, DIVISION, DETAIL, REG_DT
-        ) VALUES (
-            SEQ.CURRVAL, #{adminSeq}, #{title}, #{division}, #{detail}, SYSDATE
-        )
-    SELECT * FROM DUAL
-</insert>
+        INSERT ALL 
+            INTO SEQ_MANAGEMENT(
+                SEQ, TABLE_NM, REG_DT
+            ) VALUES (
+                SEQ.NEXTVAL, 'ADMIN_COMMUNITY', SYSDATE
+            )
+            INTO ADMIN_COMMUNITY (
+                SEQ, ADMIN_SEQ, TITLE, DIVISION, DETAIL, REG_DT
+            ) VALUES (
+                SEQ.CURRVAL, #{adminSeq}, #{title}, #{division}, #{detail}, SYSDATE
+            )
+        SELECT * FROM DUAL
+    </insert>
 
     <select id="selectPost" parameterType="Long" resultType="map">
-    SELECT 
-        AC.SEQ as "seq",
-        AC.ADMIN_SEQ as "adminSeq",
-        AC.TITLE as "title",
-        AC.DIVISION as "division",
-        AC.DETAIL as "detail",
-        TO_CHAR(AC.REG_DT, 'YYYY-MM-DD') AS "regDt"
-    FROM 
-        ADMIN_COMMUNITY AC
-    WHERE 
-        AC.SEQ = #{seq}
-</select>   
+        SELECT 
+            AC.SEQ as "seq",
+            AC.ADMIN_SEQ as "adminSeq",
+            AC.TITLE as "title",
+            AC.DIVISION as "division",
+            AC.DETAIL as "detail",
+            TO_CHAR(AC.REG_DT, 'YYYY-MM-DD') AS "regDt"
+        FROM 
+            ADMIN_COMMUNITY AC
+        WHERE 
+            AC.SEQ = #{seq}
+    </select>
+    <delete id="deletePost" parameterType="Long">
+        BEGIN
+            DELETE FROM ADMIN_COMMUNITY WHERE SEQ = #{seq};
+            DELETE FROM SEQ_MANAGEMENT WHERE SEQ = #{seq} AND TABLE_NM = 'ADMIN_COMMUNITY';
+        END;
+    </delete>
     
 </mapper>
