@@ -27,7 +27,7 @@ const ApplyAdmin = lazy(() => import("./pages/apply/ApplyAdmin"));
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
 const ClassRead = lazy(() => import("./pages/class/Read"));
-const ClassUpdate = lazy(() => import("./pages/class/Update"));
+//const ClassUpdate = lazy(() => import("./pages/class/Update"));
 
 const LectureList = lazy(() => import("./pages/lecture/List"));
 const LectureAdd = lazy(() => import("./pages/lecture/Add"));
@@ -39,8 +39,14 @@ const LectureDocAdd = lazy(() => import("./pages/lectureDoc/Add"));
 const LectureDocRead = lazy(() => import("./pages/lectureDoc/Read"));
 const LectureDocMod = lazy(() => import("./pages/lectureDoc/Mod"));
 
+
 // const CodeList = lazy(()=> import('./pages/codegroup/List'))
 // const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
+
+const Calendar = lazy(() => import("./pages/calendar/Calendar"));
+const CalendarRead = lazy(() => import("./pages/calendar/Read"));
+
+
 
 function App() {
     return (
@@ -63,7 +69,7 @@ function App() {
                             <Route index="index" element={<ClassList />} />
                             <Route path="add" element={<ClassAdd />} />
                             <Route path="read/:seq" element={<ClassRead />} />
-                            <Route path="update/:seq" element={<ClassUpdate />} />
+                            {/*<Route path="update/:seq" element={<ClassUpdate />} /> */}
                         </Route>
                         <Route path="lecture" element={<Container />}>
                             <Route index="index" element={<LectureList />} />
@@ -103,6 +109,10 @@ function App() {
                         <Route path="code" element={<Container />}>
                             <Route /*index*/ element="" />
                         </Route>
+                        <Route path="calendar" element={<Container />}>
+                            <Route index="index" element={<Calendar />} />
+                            <Route path="read/:seq" element={<CalendarRead />} />
+                        </Route>
                     </Route>
                     <Route path="/admin/pass/:seq" element={<AdminPass />} />
 
@@ -110,6 +120,10 @@ function App() {
                         <Route index="index" element={<UserLogin />} />
                         {/* <Route path="modify" element={<UserModify/>}/> */}
                     </Route>
+
+
+
+
                 </Routes>
             </Suspense>
         </Router>
