@@ -17,7 +17,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Map<String, Object> selectOne(UserDto dto) throws Exception {
-        // TODO Auto-generated method stub
         return userMapper.selectOne(dto);
     }
 

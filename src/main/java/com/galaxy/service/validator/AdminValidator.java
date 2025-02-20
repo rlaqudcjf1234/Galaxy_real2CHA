@@ -47,7 +47,7 @@ public class AdminValidator extends AbstractValidator<AdminDto> {
                     errors.rejectValue("division", "구분 공백", "이 항목은 필수입니다.");
                 }
             } else if (uri.indexOf("/mod") > -1) {
-                if (dto.getSeq() == null || dto.getSeq() == 0) {
+                if (dto.getSeq() == null || dto.getSeq().isEmpty()) {
                     errors.rejectValue("seq", "시퀀스 공백", "공백일 수 없습니다.");
                 }
 
@@ -63,7 +63,7 @@ public class AdminValidator extends AbstractValidator<AdminDto> {
                     errors.rejectValue("use_yn", "구분 공백", "이 항목은 필수입니다.");
                 }
             } else if (uri.indexOf("/pass") > -1) {
-                if (dto.getSeq() == null || dto.getSeq() == 0) {
+                if (dto.getSeq() == null || dto.getSeq().isEmpty()) {
                     errors.rejectValue("seq", "시퀀스 공백", "공백일 수 없습니다.");
                 }
 

@@ -32,10 +32,11 @@ public class UserValidator extends AbstractValidator<UserDto> {
                     }
                 }
             } else {
-                errors.rejectValue("connect", "접근 오류", "잘못된 접근입니다.");
+                errors.rejectValue("email", "접근 오류", "잘못된 접근입니다.");
             }
         } catch (Exception e) {
-            errors.rejectValue("connect", "접근 오류", "잘못된 접근입니다.");
+            e.printStackTrace();
+            errors.rejectValue("email", "접근 오류", "잘못된 접근입니다.");
         }
     }
 

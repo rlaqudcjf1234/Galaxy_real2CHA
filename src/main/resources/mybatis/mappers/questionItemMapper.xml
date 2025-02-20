@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.QuestionItemMapper">
+
+	<select id="selectList" parameterType="String" resultType="map">
+		SELECT QUESTION_SEQ, SORT, TITLE, DIVISION, GET_CODE_NAME(17, DIVISION) AS DIVISION_NAME, ITEM
+		FROM QUESTION_ITEM
+		WHERE QUESTION_SEQ = #{questionSeq}
+		ORDER BY SORT
+	</select>
+
+	<delete id="deleteList" parameterType="String">
+		DELETE FROM QUESTION_ITEM
+		WHERE QUESTION_SEQ = #{questionSeq}
+	</delete>
+
+	<insert id="insertOne" parameterType="questionItemDto">
+		INSERT INTO QUESTION_ITEM (
+			QUESTION_SEQ, SORT, TITLE, DIVISION, ITEM
+		) VALUES (
+			#{questionSeq}, #{sort}, #{title}, #{division}, #{item}
+		)
+	</insert>
+
+</mapper>

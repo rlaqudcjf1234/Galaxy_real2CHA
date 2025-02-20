@@ -1,8 +1,6 @@
 package com.galaxy.dto;
 
 import java.sql.Date;
-import java.util.List;
-import java.util.Map;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

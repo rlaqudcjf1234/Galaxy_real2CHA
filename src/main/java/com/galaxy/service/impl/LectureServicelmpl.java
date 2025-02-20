@@ -57,7 +57,6 @@ public class LectureServicelmpl implements LectureService {
 
     @Override
     public Long deleteLecture(Long seq) throws Exception {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'deleteLecture'");
     }
  
