@@ -25,17 +25,10 @@ const ApplyAdd = lazy(() => import ("./pages/apply/ApplyAdd"));
 const ApplyRead = lazy(() => import ("./pages/apply/ApplyRead"));
 const ApplyAdmin = lazy(() => import ("./pages/apply/ApplyAdmin"));
 
-<<<<<<< HEAD
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
 const ClassRead = lazy(() => import("./pages/class/Read"));
 //const ClassUpdate = lazy(() => import("./pages/class/Update"));
-=======
-const ClassList = lazy(() => import ("./pages/class/List"));
-const ClassAdd = lazy(() => import ("./pages/class/Add"));
-const ClassRead = lazy(() => import ("./pages/class/Read"));
-// const ClassUpdate = lazy(() => import("./pages/class/Update"));
->>>>>>> 65b3fb9fd74e8afe03a46fc76a05210ac1f817e5
 
 const LectureList = lazy(() => import ("./pages/lecture/List"));
 const LectureAdd = lazy(() => import ("./pages/lecture/Add"));
