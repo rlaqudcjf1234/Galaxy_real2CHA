@@ -3,7 +3,7 @@
 <mapper namespace="com.galaxy.mapper.UserMapper">
 
     <select id="selectUse" parameterType="userDto" resultType="int">
-        SELECT GET_USER_LOGIN(#{email}, #{passwords}) FROM DUAL
+        SELECT GET_USER_LOGIN(#{email}, #{password}) FROM DUAL
     </select>
 
     <select id="selectOne" parameterType="userDto" resultType="map">

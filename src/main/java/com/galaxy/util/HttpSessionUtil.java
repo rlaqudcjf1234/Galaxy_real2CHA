@@ -37,7 +37,6 @@ public class HttpSessionUtil {
             seq = (String)user.get("SEQ");
 
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
 
@@ -56,7 +55,6 @@ public class HttpSessionUtil {
             email = (String)user.get("EMAIL");
 
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
         }
 

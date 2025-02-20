@@ -78,12 +78,7 @@ function Mod() {
     const handleFormData = (e) => {
         setLectureDoc({
             ...lectureDoc,
-            [
-                e
-                    .target
-                    .name
-                    .toUpperCase()
-            ]: e.target.value
+            [e.target.name.toUpperCase()]: e.target.value
         });
     }
 
@@ -108,11 +103,7 @@ function Mod() {
         <div>
             {/* 폼 영역 */}
             <form onSubmit={handleSubmit}>
-                <input
-                    type="hidden"
-                    name="lecture_seq"
-                    value={params.lecture_seq}
-                    readOnly="readOnly"/>
+                <input type="hidden" name="lecture_seq" value={params.lecture_seq} readOnly="readOnly"/>
                 <input type="hidden" name="seq" value={params.seq} readOnly="readOnly"/>
                 <table className="table">
                     {/* 헤더 영역 */}

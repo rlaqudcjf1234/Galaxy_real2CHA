@@ -140,8 +140,8 @@ function Header() {
                             {
                                 [
                                     {
-                                        label: "설문 참여내역",
-                                        path: "Survey_YN"
+                                        label: "설문작성",
+                                        path: "question"
                                     }, {
                                         label: "교원평가",
                                         path: "Admin_Survey"

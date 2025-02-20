@@ -47,7 +47,6 @@ public class FileServiceImpl implements FileService {
             // savePath로 파일 저장
             file.transferTo(new File(savePath));
         } catch (Exception e) {
-            // TODO: handle exception
             e.printStackTrace();
             return null;
         }
