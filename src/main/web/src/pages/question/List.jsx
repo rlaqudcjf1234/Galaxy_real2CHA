@@ -64,6 +64,21 @@ const List = () => {
         fetchData();
     }, [params]);
 
+    // 팝업 창을 여는 핸들러 추가
+    const handleClick = (seq) => {
+        // 팝업창 크기와 위치 설정
+        const width = 730;
+        const height = 530;
+        const left = 15;
+        const top = 15;
+        // 팝업창 열기
+        window.open(
+            `/question/share/${seq}`,  // URL 경로
+            '학과문서',  // 팝업창 이름
+            `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
+        );
+    };
+
     return (
         <div>
             <table className="table">
@@ -88,6 +103,7 @@ const List = () => {
                         <th>제목</th>
                         <th>작성자</th>
                         <th>등록일자</th>
+                        <th>설문배포</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -101,6 +117,14 @@ const List = () => {
                                     </td>
                                     <td>{item.ADMIN_NAME}</td>
                                     <td>{item.REG_DT}</td>
+                                    <td>
+                                        <button className="btn btn-info" onClick={() => handleClick(item.SEQ)}>
+                                            배포하기
+                                        </button>&nbsp;&nbsp;
+                                        <button className="btn btn-success" onClick={() => handleClick(item.SEQ)}>
+                                            결과확인
+                                        </button>
+                                    </td>
                                 </tr>
                             )))
                             : (

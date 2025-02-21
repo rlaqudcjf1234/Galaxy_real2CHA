@@ -81,4 +81,9 @@ public class ClassServiceImpl implements ClassService {
         }
     }
 
+    @Override
+    public List<Map<String, Object>> selectUseList() throws Exception {
+        return classMapper.selectUseList();
+    }
+
 }

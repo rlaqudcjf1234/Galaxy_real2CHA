@@ -91,4 +91,10 @@ public class ClassController {
                     .body("강의 수정에 실패했습니다.");
         }
     }
+
+    @GetMapping("/use")
+    public List<Map<String, Object>> use() throws Exception {
+        List<Map<String, Object>> list = classService.selectUseList();
+        return list;
+    }
 }

@@ -21,7 +21,9 @@ public interface ClassMapper {
 
     int insertClass(ClassDto classDto) throws Exception;
 
-    int confirmClass(int seq);
+    int confirmClass(int seq) throws Exception;
 
-    int cancelClass(int seq);
+    int cancelClass(int seq) throws Exception;
+
+    List<Map<String, Object>> selectUseList() throws Exception;
 }

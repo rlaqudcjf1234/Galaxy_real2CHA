@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.QuestionShareMapper">
+
+    <select id="selectCount" parameterType="searchDto" resultType="int">
+        SELECT COUNT(*) FROM QUESTION_SHARE
+    </select>
+
+	<select id="selectList" parameterType="searchDto" resultType="map">
+		SELECT QUESTION_SEQ, CLASS_SEQ, GET_CLASS_NAME(CLASS_SEQ) AS CLASS_NAME, TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, 
+			ROWNUM AS RNUM
+		FROM (
+			SELECT QUESTION_SEQ, CLASS_SEQ, REG_DT
+			FROM QUESTION_SHARE
+			WHERE QUESTION_SEQ = #{question_seq}
+			ORDER BY REG_DT DESC
+		) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+	
+	<insert id="insertOne" parameterType="questionShareDto">
+		MERGE INTO QUESTION_SHARE A
+		USING DUAL ON (
+			A.QUESTION_SEQ = #{question_seq} 
+			AND A.CLASS_SEQ = #{class_seq}
+		)
+		WHEN NOT MATCHED THEN
+			INSERT (A.QUESTION_SEQ, A.CLASS_SEQ, REG_DT)
+			VALUES (#{question_seq}, #{class_seq}, SYSDATE)
+	</insert>
+
+	<delete id="deleteOne" parameterType="questionShareDto">
+		DELETE FROM QUESTION_SHARE WHERE QUESTION_SEQ = #{question_seq} AND CLASS_SEQ = #{class_seq}
+	</delete>
+
+</mapper>

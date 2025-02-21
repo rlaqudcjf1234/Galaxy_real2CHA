@@ -14,6 +14,7 @@ import com.galaxy.dto.ListDto;
 import com.galaxy.dto.QuestionDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.service.QuestionService;
+import com.galaxy.service.QuestionShareService;
 
 import jakarta.validation.Valid;
 
@@ -23,6 +24,9 @@ public class QuestionController {
 
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    QuestionShareService questionShareService;
 
     @GetMapping("/list")
     public ListDto list(SearchDto dto)throws Exception {
@@ -52,6 +56,4 @@ public class QuestionController {
 
         questionService.updateOne(dto);
     }
-    
-
 }

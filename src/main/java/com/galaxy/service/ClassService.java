@@ -24,5 +24,7 @@ public interface ClassService {
 
     void updateClass(Map<String, Object> params) throws Exception;
 
+    List<Map<String, Object>> selectUseList() throws Exception;
+
     
 }

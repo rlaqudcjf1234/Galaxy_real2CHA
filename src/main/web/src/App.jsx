@@ -47,6 +47,7 @@ const QuestionList = lazy(() => import ("./pages/question/List"));
 const QuestionAdd = lazy(() => import ("./pages/question/Add"));
 const QuestionRead = lazy(() => import ("./pages/question/Read"));
 const QuestionMod = lazy(() => import ("./pages/question/Mod"));
+const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
 
 const Calendar = lazy(() => import("./pages/calendar/Calendar"));
 const CalendarRead = lazy(() => import("./pages/calendar/Read"));
@@ -139,6 +140,7 @@ function App() {
                             <Route path="add" element={<QuestionAdd/>}/>
                             <Route path="read/:seq" element={<QuestionRead/>}/>
                             <Route path="mod/:seq" element={<QuestionMod/>}/>
+                            <Route path="share/:question_seq" element={<QuestionShare/>}/>
                         </Route>
                     </Route>
                 </Routes>

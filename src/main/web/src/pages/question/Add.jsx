@@ -298,7 +298,7 @@ const Add = () => {
 
                 {/* 버튼 영역 */}
                 <div className="d-flex justify-content-center gap-2 mt-4">
-                    <button type="submit" className="btn btn-primary">수정</button>
+                    <button type="submit" className="btn btn-primary">등록</button>
                     <button type="button" className="btn btn-secondary" onClick={handleHistoryBack}>취소</button>
                 </div>
             </form>

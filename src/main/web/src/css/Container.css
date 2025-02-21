@@ -60,6 +60,11 @@
     border-top: 3px double #000000;
 }
 
+.table > tbody td .btn {
+    --bs-btn-padding-x: 0.15rem;
+    --bs-btn-padding-y: 0.075rem;
+}
+
 select[name="select"] {
     min-width: 130px;
 }
