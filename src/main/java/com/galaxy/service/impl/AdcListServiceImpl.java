@@ -106,4 +106,10 @@ public class AdcListServiceImpl implements AdcListService {
 
         return item;
     }
+
+    @Override
+    public boolean deletePost(Long seq) throws Exception {
+        int deletedCount = adcListMapper.deletePost(seq);
+        return deletedCount > 0; // 삭제된 행이 있으면 true, 없으면 false 반환
+    }
 }
