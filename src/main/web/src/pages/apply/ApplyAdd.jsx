@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { authenticatedRequest as axios } from "../../plugins/axios";
+import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "../../css/Community.css";
 
 function ApplyAdd() {
     const navigate = useNavigate();
+    const accessToken = useSelector((state) => state.accessToken.val);
     const [classes, setClasses] = useState([]);
 
     // Daum 우편번호 스크립트 로드
@@ -21,10 +23,15 @@ function ApplyAdd() {
     }, []);
 
     useEffect(() => {
+        // 토큰 체크 추가
+        if (!accessToken) {
+            navigate("/login");
+            return;
+        }
+
         const fetchClasses = async () => {
             try {
                 const response = await axios.get("/api/class/list");
-                // items 배열 추출 및 필드명 매핑
                 const classData = response.data.items.map((item) => ({
                     seq: item.SEQ,
                     round: item.ROUND,
@@ -32,14 +39,17 @@ function ApplyAdd() {
                     start_dt: item.START_DT,
                 }));
                 setClasses(classData);
-                console.log("변환된 클래스 데이터:", classData); // 데이터 확인용
             } catch (error) {
                 console.error("Error fetching classes:", error);
+                if (error.response?.status === 401) {
+                    navigate("/login");
+                    return;
+                }
                 setClasses([]);
             }
         };
         fetchClasses();
-    }, []);
+    }, [accessToken, navigate]);
 
     const [formData, setFormData] = useState({
         seq: "",
@@ -128,11 +138,17 @@ function ApplyAdd() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!accessToken) {
+            navigate("/login");
+            return;
+        }
+
         try {
             const submitData = {
                 ...formData,
-                class_seq: Number(formData.seq), // seq값을 class_seq로 변환
-                seq: undefined, // 기존 seq 필드는 제거
+                class_seq: Number(formData.seq),
+                seq: undefined,
             };
             const response = await axios.post("/api/apply/add", submitData);
             if (response.status === 200) {
@@ -141,6 +157,10 @@ function ApplyAdd() {
             }
         } catch (error) {
             console.error("상세 에러:", error.response?.data);
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
             alert("등록 실패: " + (error.response?.data?.message || "서버 오류가 발생했습니다."));
         }
     };

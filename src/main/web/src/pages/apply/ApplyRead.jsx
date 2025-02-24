@@ -1,25 +1,30 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
-import ApplyDelete from "./ApplyDelete";
-import ApplyApprove from "./ApplyApprove";
+import { authenticatedRequest as axios } from "../../plugins/axios";
+import { useSelector } from "react-redux";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 function ApplyRead() {
     const [apply, setApply] = useState(null);
     const [classInfo, setClassInfo] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
     const navigate = useNavigate();
     const { id } = useParams();
 
+    // Redux store에서 액세스 토큰 가져오기
+    const accessToken = useSelector((state) => state.accessToken.val);
+
     const fetchData = async () => {
+        if (!accessToken) {
+            navigate("/login");
+            return;
+        }
+
         try {
-            // Apply 정보 가져오기 (클래스 정보도 함께 포함되어 있음)
             const applyResponse = await axios.get(`/api/apply/read/${id}`);
             console.log("Apply 응답 데이터:", applyResponse.data);
-            console.log("LECTURE_SEQ:", applyResponse.data.LECTURE_SEQ);
 
-            // 응답 데이터에서 직접 클래스 정보 추출
             const classData = {
                 seq: applyResponse.data.seq,
                 round: applyResponse.data.ROUND,
@@ -30,11 +35,16 @@ function ApplyRead() {
 
             setApply(applyResponse.data);
             setClassInfo(classData);
-            setLoading(false);
         } catch (error) {
             console.error("Error fetching data:", error);
-            alert("정보를 불러오는데 실패했습니다.");
-            navigate("/apply");
+            setError(error.response?.data?.message || "정보를 불러오는데 실패했습니다.");
+
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -47,6 +57,10 @@ function ApplyRead() {
             }
         } catch (error) {
             console.error("Error:", error);
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
             alert("삭제 중 오류가 발생했습니다.");
         }
     };
@@ -59,9 +73,13 @@ function ApplyRead() {
             } else {
                 alert("승인이 완료되었습니다.");
             }
-            fetchData(); // fetchApply를 fetchData로 변경
+            fetchData();
         } catch (error) {
             console.error("승인 처리 중 오류:", error);
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
             const errorMessage = error.response?.data?.message || "승인 처리 중 오류가 발생했습니다.";
             alert(errorMessage);
         }
@@ -71,9 +89,10 @@ function ApplyRead() {
         if (id) {
             fetchData();
         }
-    }, [id]);
+    }, [id, accessToken]);
 
     if (loading) return <div>로딩중...</div>;
+    if (error) return <div className="alert alert-danger">{error}</div>;
     if (!apply) return <div>등록 정보를 찾을 수 없습니다.</div>;
 
     return (
@@ -123,13 +142,13 @@ function ApplyRead() {
                     <tr>
                         <th scope="row">실거주지</th>
                         <td>
-                            {apply.REAL_ZIPCODE} | {apply.REAL_ADDRESS1}, {apply.REAL_ADDRESS2}
+                            {apply.REAL_ZIPCODE} {apply.REAL_ADDRESS1} {apply.REAL_ADDRESS2}
                         </td>
                     </tr>
                     <tr>
                         <th scope="row">등본상 주소</th>
                         <td>
-                            {apply.ZIPCODE} | {apply.ADDRESS1}, {apply.ADDRESS2}
+                            {apply.ZIPCODE} {apply.ADDRESS1} {apply.ADDRESS2}
                         </td>
                     </tr>
                     <tr>

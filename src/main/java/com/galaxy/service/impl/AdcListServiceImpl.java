@@ -47,6 +47,7 @@ public class AdcListServiceImpl implements AdcListService {
                     // null 체크를 포함한 안전한 값 설정
                     item.setSeq(map.get("SEQ") != null ? ((Number) map.get("SEQ")).longValue() : null);
                     item.setAdminSeq(map.get("ADMIN_SEQ") != null ? ((Number) map.get("ADMIN_SEQ")).longValue() : null);
+                    item.setName((String) map.get("NAME"));
                     item.setTitle((String) map.get("TITLE"));
                     item.setDivision((String) map.get("DIVISION"));
                     item.setDetail((String) map.get("DETAIL"));
@@ -73,6 +74,7 @@ public class AdcListServiceImpl implements AdcListService {
         Map<String, Object> params = new HashMap<>();
         params.put("adminSeq", postDto.getAdminSeq());
         params.put("title", postDto.getTitle());
+        params.put("name", postDto.getName());
         params.put("division", postDto.getDivision());
         params.put("detail", postDto.getDetail());
         params.put("regDt", formattedDate);
@@ -100,6 +102,7 @@ public class AdcListServiceImpl implements AdcListService {
         item.setSeq(map.get("seq") != null ? ((Number) map.get("seq")).longValue() : null);
         item.setAdminSeq(map.get("adminSeq") != null ? ((Number) map.get("adminSeq")).longValue() : null);
         item.setTitle((String) map.get("title"));
+        item.setName((String) map.get("name"));
         item.setDivision((String) map.get("division"));
         item.setDetail((String) map.get("detail"));
         item.setRegDt((String) map.get("regDt"));

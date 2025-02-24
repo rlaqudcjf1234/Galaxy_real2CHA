@@ -184,13 +184,13 @@
         #{phone,jdbcType=VARCHAR},
         #{path,jdbcType=VARCHAR},
         C.ROOM || C.ROUND || SM.SEQ,  -- ID 형식 단순화
-        SUBSTR(#{jumin,jdbcType=VARCHAR}, 7),
+        #{password,jdbcType=VARCHAR},  <!-- 암호화된 비밀번호 사용 -->
         SYSDATE
     FROM 
         (SELECT SEQ 
-         FROM SEQ_MANAGEMENT 
-         ORDER BY SEQ DESC 
-         FETCH FIRST 1 ROW ONLY) SM,
+        FROM SEQ_MANAGEMENT 
+        ORDER BY SEQ DESC 
+        FETCH FIRST 1 ROW ONLY) SM,
         CLASS C
     WHERE 
         C.SEQ = #{class_seq,jdbcType=INTEGER}
