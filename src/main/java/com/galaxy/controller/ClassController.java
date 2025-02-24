@@ -49,7 +49,7 @@ public class ClassController {
 
 
     @GetMapping("/read/{seq}")
-    public ResponseEntity<?> getClassRead(@PathVariable("seq") Long seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> getClassRead(@PathVariable("seq") String seq) { // "seq" 이름을 명시적으로 지정
         try {
             Map<String, Object> classRead = classService.getClassRead(seq);
             if (classRead == null) {
@@ -63,7 +63,7 @@ public class ClassController {
     }
 
     @PutMapping("/confirm/{seq}")
-    public ResponseEntity<?> confirmClass(@PathVariable("seq") Long seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> confirmClass(@PathVariable("seq") String seq) { // "seq" 이름을 명시적으로 지정
         try {
             classService.confirmClass(seq);
             return ResponseEntity.ok().build();
@@ -74,7 +74,7 @@ public class ClassController {
     }
 
     @PutMapping("/cancel/{seq}")
-    public ResponseEntity<?> cancelClass(@PathVariable("seq") Long seq) {
+    public ResponseEntity<?> cancelClass(@PathVariable("seq") String seq) {
         try {
             classService.cancelClass(seq);
             return ResponseEntity.ok().build();
@@ -100,5 +100,19 @@ public class ClassController {
     public List<Map<String, Object>> use() throws Exception {
         List<Map<String, Object>> list = classService.selectUseList();
         return list;
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<?> readClass(@RequestParam("classSeq") int classSeq) {
+        try {
+            Map<String, Object> classInfo = classService.getClassInfo(classSeq);
+            if (classInfo == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(classInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("수강정보 조회 중 오류 발생");
+        }
     }
 }

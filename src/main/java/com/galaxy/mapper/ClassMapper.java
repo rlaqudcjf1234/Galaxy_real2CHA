@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.galaxy.dto.ClassDto;
 import com.galaxy.dto.SearchDto;
@@ -17,17 +18,17 @@ public interface ClassMapper {
 
     int updateClass(Map<String, Object> params) throws Exception;
 
-    Map<String, Object> classRead(Map<String, Object> params);
+    Map<String, Object> classRead(Map<String, Object> params) throws Exception;
 
     int insertClass(ClassDto classDto) throws Exception;
 
-    int confirmClass(Long  seq);
+    int confirmClass(String  seq) throws Exception;
 
-    int cancelClass(Long seq);
+    int cancelClass(String seq) throws Exception;
 
-    void callSetTimetable(Long seq);
+    void callSetTimetable(String seq) throws Exception;
 
-    List<Map<String, Object>> selectUseList();
+    List<Map<String, Object>> selectUseList() throws Exception;
 
-
+    Map<String, Object> selectClassInfo(@Param("classSeq") int classSeq) throws Exception;
 }

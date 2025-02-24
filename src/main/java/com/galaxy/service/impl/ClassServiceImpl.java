@@ -35,11 +35,8 @@ public class ClassServiceImpl implements ClassService {
                 if (codeNameObj != null &&
                         (codeNameObj.equals("진행예정") || codeNameObj.equals("진행중"))) {
 
-                    Object seqObj = classInfo.get("SEQ");
-                    if (seqObj != null) {
-                        Long seq = Long.valueOf(seqObj.toString());
+                            String seq = (String) classInfo.get("SEQ");
                         setTimetable(seq);
-                    }
                 }
             }
 
@@ -63,13 +60,14 @@ public class ClassServiceImpl implements ClassService {
 
         // 2. insert 성공 후 생성된 seq로 시간표 설정
         if (result > 0) {
-            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용        }
+            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용        
+        }
 
         return result;
     }
 
     @Override
-    public Map<String, Object> getClassRead(Long seq) throws Exception {
+    public Map<String, Object> getClassRead(String seq) throws Exception {
         try {
             Map<String, Object> params = new HashMap<>();
             params.put("seq", seq); // map에 seq 값 담기
@@ -88,7 +86,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     @Transactional
-    public void confirmClass(Long seq) throws Exception { // int를 Long으로 변경
+    public void confirmClass(String seq) throws Exception { // int를 Long으로 변경
         try {
             System.out.println("Confirming class with seq: " + seq);
             int result = classMapper.confirmClass(seq);
@@ -109,7 +107,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     @Transactional
-    public void cancelClass(Long seq) throws Exception { // int를 Long으로 변경
+    public void cancelClass(String seq) throws Exception { // int를 Long으로 변경
         try {
             classMapper.cancelClass(seq);
 
@@ -129,20 +127,7 @@ public class ClassServiceImpl implements ClassService {
 
             // params에서 seq 값을 가져와서 Long으로 변환
             if (params.containsKey("seq")) {
-                Object seqObj = params.get("seq");
-                Long seq;
-
-                // seq 값의 타입에 따라 적절히 변환
-                if (seqObj instanceof Integer) {
-                    seq = ((Integer) seqObj).longValue();
-                } else if (seqObj instanceof Long) {
-                    seq = (Long) seqObj;
-                } else if (seqObj instanceof String) {
-                    seq = Long.parseLong((String) seqObj);
-                } else {
-                    throw new Exception("유효하지 않은 seq 값입니다.");
-                }
-
+                String seq = (String) params.get("seq");
                 // 시간표 설정
                 setTimetable(seq);
             }
@@ -153,7 +138,7 @@ public class ClassServiceImpl implements ClassService {
 
     @Override
     @Transactional
-    public void setTimetable(Long seq) throws Exception {
+    public void setTimetable(String seq) throws Exception {
         try {
             System.out.println("Setting timetable for class seq: " + seq);
             classMapper.callSetTimetable(seq);
@@ -165,6 +150,11 @@ public class ClassServiceImpl implements ClassService {
 
     public List<Map<String, Object>> selectUseList() throws Exception {
         return classMapper.selectUseList();
+    }
+
+    @Override
+    public Map<String, Object> getClassInfo(int classSeq) throws Exception {
+        return classMapper.selectClassInfo(classSeq);
     }
 
 }
