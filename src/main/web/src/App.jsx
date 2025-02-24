@@ -27,7 +27,6 @@ const AdcRead = lazy(() => import("./pages/adminCommunity/AdcRead"));
 const ApplyList = lazy(() => import("./pages/apply/ApplyList"));
 const ApplyAdd = lazy(() => import("./pages/apply/ApplyAdd"));
 const ApplyRead = lazy(() => import("./pages/apply/ApplyRead"));
-const ApplyAdmin = lazy(() => import("./pages/apply/ApplyAdmin"));
 
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
@@ -47,11 +46,11 @@ const LectureDocMod = lazy(() => import("./pages/lectureDoc/Mod"));
 // const CodeList = lazy(()=> import('./pages/codegroup/List'))
 // const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
 
-const QuestionList = lazy(() => import ("./pages/question/List"));
-const QuestionAdd = lazy(() => import ("./pages/question/Add"));
-const QuestionRead = lazy(() => import ("./pages/question/Read"));
-const QuestionMod = lazy(() => import ("./pages/question/Mod"));
-const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
+const QuestionList = lazy(() => import("./pages/question/List"));
+const QuestionAdd = lazy(() => import("./pages/question/Add"));
+const QuestionRead = lazy(() => import("./pages/question/Read"));
+const QuestionMod = lazy(() => import("./pages/question/Mod"));
+const QuestionShare = lazy(() => import("./pages/questionShare/List"));
 
 // const Calendar = lazy(() => import("./pages/calendar/Calendar"));
 // const CalendarRead = lazy(() => import("./pages/calendar/Read"));
@@ -62,7 +61,7 @@ function App() {
             <Suspense fallback={<div> Loading ...</div>}>
                 <Routes>
                     {/* 로그인 이전 */}
-                    <Route path="/login" element={<Login />}/> 
+                    <Route path="/login" element={<Login />} />
 
                     {/* 로그인 이후 */}
                     <Route path="/" element={<Layout />}>
@@ -104,7 +103,6 @@ function App() {
                             <Route index="index" element={<ApplyList />} />
                             <Route path="add" element={<ApplyAdd />} />
                             <Route path="read/:id" element={<ApplyRead />} />
-                            <Route path="admin" element={<ApplyAdmin />} />
                         </Route>
 
                         <Route path="adminCommunity" element={<Container />}>
@@ -135,11 +133,11 @@ function App() {
                         </Route> */}
 
                         <Route path="question" element={<Container />}>
-                            <Route index="index" element={<QuestionList/>}/>
-                            <Route path="add" element={<QuestionAdd/>}/>
-                            <Route path="read/:seq" element={<QuestionRead/>}/>
-                            <Route path="mod/:seq" element={<QuestionMod/>}/>
-                            <Route path="share/:question_seq" element={<QuestionShare/>}/>
+                            <Route index="index" element={<QuestionList />} />
+                            <Route path="add" element={<QuestionAdd />} />
+                            <Route path="read/:seq" element={<QuestionRead />} />
+                            <Route path="mod/:seq" element={<QuestionMod />} />
+                            <Route path="share/:question_seq" element={<QuestionShare />} />
                         </Route>
                     </Route>
                 </Routes>

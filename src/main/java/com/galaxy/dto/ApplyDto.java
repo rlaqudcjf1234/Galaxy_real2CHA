@@ -59,4 +59,6 @@ public class ApplyDto extends SeqDto {
     private Long id;
 
     private String use_yn; // 승인여부
+
+    private String password;
 }

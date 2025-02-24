@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -22,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ApplyServiceImpl implements ApplyService {
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     private final ApplyMapper applyMapper;
     private final ApplyValidator applyValidator;
 
@@ -110,10 +114,16 @@ public class ApplyServiceImpl implements ApplyService {
                 throw new Exception("신청 정보를 찾을 수 없습니다.");
             }
 
-            // 3. STUDENT 테이블에 데이터 삽입
+            // 3. 학생 비밀번호 암호화 처리
+            // 예시: 주민등록번호 뒷자리(7번째 자리부터)를 기본 비밀번호로 사용
+            String rawPassword = applyDto.getJumin().substring(6);
+            String encodedPassword = passwordEncoder.encode(rawPassword);
+            applyDto.setPassword(encodedPassword);
+
+            // 4. STUDENT 테이블에 데이터 삽입 (암호화된 비밀번호 사용)
             applyMapper.insertStudent(applyDto);
 
-            // 4. APPLY 상태 업데이트
+            // 5. APPLY 상태 업데이트
             Map<String, Object> params = new HashMap<>();
             params.put("id", id);
             params.put("useYn", "Y");
