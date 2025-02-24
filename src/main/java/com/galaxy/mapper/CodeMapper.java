@@ -22,5 +22,6 @@ public interface CodeMapper {
     Long updateCode(CodeDto dto) throws Exception;
 
     Map<String, Object> readCode(String group_id) throws Exception;
-    
+
+    List<Map<String, Object>> selectRoomCode(CodeDto dto) throws Exception;    
 }

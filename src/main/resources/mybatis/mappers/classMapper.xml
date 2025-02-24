@@ -27,51 +27,53 @@
 
     
 
-   <select id="selectList" resultType="map">
-    SELECT 
-        SEQ,
-        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
-        ROUND,
-        GET_ADMIN_NAME(ADMIN_SEQ) AS ADMIN_NAME, 
-        ROOM,
-        TO_CHAR(START_DT,'YYYY-MM-DD') AS START_DT, 
-        TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
-        START_TM,
-        END_TM,
-        PEOPLE,
-        ROOM,
-        TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT,
-        CASE 
-            WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN NULL 
-            ELSE TO_CHAR(CONFIRM_DT, 'YYYY-MM-DD') 
-        END AS CONFIRM_DT,
-        ROWNUM AS RNUM,
-        (
-            SELECT CD.CODE_NAME
-            FROM CODE CD 
-            WHERE CD.GROUP_ID = '16'
-            AND CD.CODE_NAME = 
-                CASE 
-                    WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN '강의취소'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[<]]> START_DT THEN '진행예정'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[>=]]> START_DT AND SYSDATE <![CDATA[<=]]> END_DT THEN '진행중'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[>]]> END_DT THEN '종료'
-                    WHEN SYSDATE <![CDATA[<]]> START_DT THEN '진행예정'
-                    WHEN SYSDATE <![CDATA[>=]]> START_DT AND SYSDATE <![CDATA[<=]]> END_DT THEN '진행중'
-                    WHEN SYSDATE <![CDATA[>]]> END_DT THEN '종료'
+   <select id="selectList" resultType="map">     
+   SELECT 
+       SEQ,
+       GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
+       ROUND,
+       GET_ADMIN_NAME(ADMIN_SEQ) AS ADMIN_NAME,
+       ROOM,
+       TO_CHAR(START_DT,'YYYY-MM-DD') AS START_DT,
+       TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
+       START_TM,
+       END_TM,
+       PEOPLE,
+       ROOM,
+       TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT,
+       CASE
+           WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN NULL
+           ELSE TO_CHAR(CONFIRM_DT, 'YYYY-MM-DD')
+       END AS CONFIRM_DT,
+       ROWNUM AS RNUM,
+       (
+           SELECT CD.CODE_NAME
+           FROM CODE CD 
+           WHERE CD.GROUP_ID = '16'
+           AND CD.CODE_NAME = 
+               CASE
+                WHEN A.USE_YN = 0 THEN '강의취소'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'  
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'  
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'
                 END
-        ) AS CODE_NAME
-    FROM (
-        SELECT 
-            SEQ, LECTURE_SEQ, ROUND, ADMIN_SEQ, ROOM, 
-            START_DT, END_DT, START_TM, END_TM, 
-            PEOPLE, REG_DT, CONFIRM_DT
-        FROM CLASS
-        <include refid="sqlSearch" />
-        ORDER BY SEQ DESC
-    )A 
-    OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS 
-    FETCH NEXT #{pageSize} ROWS ONLY
+       ) AS CODE_NAME
+   FROM (
+       SELECT 
+           SEQ, LECTURE_SEQ, ROUND, ADMIN_SEQ, ROOM,
+           START_DT, END_DT, START_TM, END_TM,
+           PEOPLE, REG_DT, CONFIRM_DT, USE_YN
+       FROM CLASS
+       <include refid="sqlSearch" />
+       ORDER BY SEQ DESC
+   )A
+   OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS
+   FETCH NEXT #{pageSize} ROWS ONLY
 </select>
 
 <update id="updateClass" parameterType="map">
@@ -91,55 +93,57 @@
 
    
 
-<update id="confirmClass" parameterType="int">
+<update id="confirmClass" parameterType="java.lang.Long">
     UPDATE CLASS 
     SET CONFIRM_DT = SYSDATE
     WHERE SEQ = #{value}
-    AND CONFIRM_DT IS NULL  /* NULL인 경우에만 업데이트 */
+    AND CONFIRM_DT IS NULL
 </update>
 
-<update id="cancelClass" parameterType="int">
+<update id="cancelClass" parameterType="java.lang.Long">
     UPDATE CLASS 
-    SET CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD')
+    SET USE_YN = 0
     WHERE SEQ = #{value}
 </update>
 
 <select id="classRead" parameterType="map" resultType="map">
-    SELECT  
-        SEQ,
-        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
-        LECTURE_SEQ,
-        ROUND,
-        GET_ADMIN_NAME(ADMIN_SEQ) AS ADMIN_NAME,
-        ADMIN_SEQ,
-        ROOM,
-        TO_CHAR(START_DT,'YYYY-MM-DD') AS START_DT,
-        TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
-        START_TM,
-        END_TM,
-        PEOPLE,
-        TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT,
-        CASE 
-            WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN NULL 
-            ELSE TO_CHAR(CONFIRM_DT, 'YYYY-MM-DD') 
-        END AS CONFIRM_DT,
-        (
-            SELECT CD.CODE_NAME 
-            FROM CODE CD 
-            WHERE CD.GROUP_ID = '16' 
-            AND CD.CODE_NAME = 
-                CASE 
-                    WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN '강의취소'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[<]]> START_DT THEN '진행예정'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[>=]]> START_DT AND SYSDATE <![CDATA[<=]]> END_DT THEN '진행중'
-                    WHEN CONFIRM_DT IS NOT NULL AND SYSDATE <![CDATA[>]]> END_DT THEN '종료'
-                    WHEN SYSDATE <![CDATA[<]]> START_DT THEN '진행예정'
-                    WHEN SYSDATE <![CDATA[>=]]> START_DT AND SYSDATE <![CDATA[<=]]> END_DT THEN '진행중'
-                    WHEN SYSDATE <![CDATA[>]]> END_DT THEN '종료'
-                END
-        ) AS CODE_NAME
-    FROM CLASS
-    WHERE SEQ = #{seq}
+   SELECT 
+       SEQ,
+       GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
+       LECTURE_SEQ,
+       ROUND,
+       GET_ADMIN_NAME(ADMIN_SEQ) AS ADMIN_NAME,
+       ADMIN_SEQ,
+       ROOM,
+       TO_CHAR(START_DT,'YYYY-MM-DD') AS START_DT,
+       TO_CHAR(END_DT, 'YYYY-MM-DD') AS END_DT,
+       START_TM,
+       END_TM,
+       PEOPLE,
+       TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT,
+       CASE
+           WHEN CONFIRM_DT = TO_DATE('1900-01-01', 'YYYY-MM-DD') THEN NULL
+           ELSE TO_CHAR(CONFIRM_DT, 'YYYY-MM-DD')
+       END AS CONFIRM_DT,
+       (
+           SELECT CD.CODE_NAME 
+           FROM CODE CD
+           WHERE CD.GROUP_ID = '16'
+           AND CD.CODE_NAME = 
+               CASE
+                   WHEN C.USE_YN = 0 THEN '강의취소'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
+               END
+       ) AS CODE_NAME
+   FROM CLASS C
+   WHERE SEQ = #{seq}
 </select>
 
    <select id="getAdminList" resultType="adminDto">
@@ -150,23 +154,30 @@
    
 
     <insert id="insertClass" parameterType="classDto">
-		INSERT ALL 
-			INTO SEQ_MANAGEMENT(
-				SEQ, TABLE_NM, REG_DT
-			) VALUES (
-				SEQ.NEXTVAL, #{table_nm}, SYSDATE
-			)
-			INTO CLASS ( 
-				SEQ, LECTURE_SEQ, ADMIN_SEQ, ROUND, ROOM, 
-				START_DT, END_DT,
-				START_TM, END_TM, PEOPLE, REG_DT, USE_YN
-			) VALUES ( 
-				SEQ.NEXTVAL, #{lecture}, #{admin}, #{round}, #{room}, 
-				#{start_dt}, #{end_dt}, #{start_tm},
-				#{end_tm}, #{people}, SYSDATE, '0'
-			)
-		SELECT * FROM DUAL
+    <selectKey keyProperty="seq" resultType="Long" order="BEFORE">
+        SELECT SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+    INSERT ALL 
+        INTO SEQ_MANAGEMENT(
+            SEQ, TABLE_NM, REG_DT
+        ) VALUES (
+            #{seq}, #{table_nm}, SYSDATE
+        )
+        INTO CLASS (
+            SEQ, LECTURE_SEQ, ADMIN_SEQ, ROUND, ROOM,
+            START_DT, END_DT, START_TM, END_TM, PEOPLE, 
+            REG_DT, USE_YN
+        ) VALUES (
+            #{seq}, #{lecture}, #{admin}, #{round}, #{room},
+            #{start_dt}, #{end_dt}, #{start_tm}, #{end_tm}, #{people},
+            SYSDATE, '1'
+        )
+    SELECT * FROM DUAL
     </insert>
+
+    <update id="callSetTimetable"  parameterType="Long" statementType="CALLABLE">
+        { CALL SET_TIMETABLE(#{seq}) }
+    </update>
 
 
 	

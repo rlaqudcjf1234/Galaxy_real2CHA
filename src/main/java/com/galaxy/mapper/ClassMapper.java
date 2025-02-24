@@ -17,11 +17,15 @@ public interface ClassMapper {
 
     int updateClass(Map<String, Object> params) throws Exception;
 
-    Map<String, Object> classRead(int seq) throws Exception;
+    Map<String, Object> classRead(Map<String, Object> params);
 
     int insertClass(ClassDto classDto) throws Exception;
 
-    int confirmClass(int seq);
+    int confirmClass(Long  seq);
 
-    int cancelClass(int seq);
+    int cancelClass(Long seq);
+
+    void callSetTimetable(Long seq);
+
+
 }

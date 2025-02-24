@@ -82,4 +82,14 @@
         WHERE GROUP_ID = #{group_id}        
     </update>
 
+    <select id="selectRoomCode" parameterType="CodeDto" resultType="map">
+		SELECT GROUP_ID,
+       CODE_ID,
+       CODE_NAME
+        FROM CODE
+        WHERE GROUP_ID = 8
+        AND USE_YN = 1              
+        ORDER BY CODE_SORT, CODE_ID   
+	</select>
+
 </mapper>

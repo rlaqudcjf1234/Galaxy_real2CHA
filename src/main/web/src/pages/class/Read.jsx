@@ -129,6 +129,17 @@ const Read = () => {
                             <td>{items.CONFIRM_DT === null ? '확정대기' : items.CONFIRM_DT}</td>
                         </tr>
                         <tr>
+                            <th>안내사항</th>
+                            <td colSpan="4">
+                                <p style={{ fontSize: '0.9em', margin: '3px 0', lineHeight: '1.2', textAlign: 'left' }}>
+                                    * 강의 확정이 되지 않으면 강의 시작일에 자동으로 강의 개설이 취소됩니다.
+                                </p>
+                                <p style={{ fontSize: '0.9em', margin: '3px 0', lineHeight: '1.2', textAlign: 'left' }}>
+                                    * 강의 확정이 되어야 수강생 모집이 시작됩니다.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
                             <td colSpan="4" className="text-center">
                                 <div className="d-flex justify-content-center gap-2">
                                     <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
@@ -137,6 +148,8 @@ const Read = () => {
                                 </div>
                             </td>
                         </tr>
+
+                        
                     </tbody>
                 ) : (
                     <tbody>

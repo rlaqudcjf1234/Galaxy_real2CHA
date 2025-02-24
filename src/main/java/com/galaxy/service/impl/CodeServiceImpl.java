@@ -86,4 +86,9 @@ public class CodeServiceImpl implements CodeService {
         return codeMapper.readCode(group_id);
     }
 
+    @Override
+    public List<Map<String, Object>> selectRoomCode(CodeDto dto) throws Exception {
+        return codeMapper.selectRoomCode(dto);
+    }
+
 }

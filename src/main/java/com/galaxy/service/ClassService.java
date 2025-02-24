@@ -16,13 +16,15 @@ public interface ClassService {
 
     int insertClass(ClassDto dto) throws Exception;
 
-    Map<String, Object> getClassRead(int seq) throws Exception;
+    Map<String, Object> getClassRead(Long seq) throws Exception;
     
-    void confirmClass(int seq) throws Exception;
+    void confirmClass(Long seq) throws Exception;
 
-    void cancelClass(int seq) throws Exception;
+    void cancelClass(Long seq) throws Exception;
 
     void updateClass(Map<String, Object> params) throws Exception;
+
+    void setTimetable(Long seq) throws Exception;
 
     
 }

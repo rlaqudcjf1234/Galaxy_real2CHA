@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.ClassDto;
+import com.galaxy.dto.CodeDto;
 import com.galaxy.dto.ListDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.service.ClassService;
+import com.galaxy.service.CodeService;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +32,7 @@ public class ClassController {
 
     @Autowired
     ClassService classService;
+
 
     @GetMapping("/list")
     public ListDto list(SearchDto dto) throws Exception {
@@ -44,8 +47,9 @@ public class ClassController {
         classService.insertClass(dto);
     }
 
+
     @GetMapping("/read/{seq}")
-    public ResponseEntity<?> getClassRead(@PathVariable("seq") int seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> getClassRead(@PathVariable("seq") Long seq) { // "seq" 이름을 명시적으로 지정
         try {
             Map<String, Object> classRead = classService.getClassRead(seq);
             if (classRead == null) {
@@ -59,7 +63,7 @@ public class ClassController {
     }
 
     @PutMapping("/confirm/{seq}")
-    public ResponseEntity<?> confirmClass(@PathVariable("seq") int seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> confirmClass(@PathVariable("seq") Long seq) { // "seq" 이름을 명시적으로 지정
         try {
             classService.confirmClass(seq);
             return ResponseEntity.ok().build();
@@ -70,7 +74,7 @@ public class ClassController {
     }
 
     @PutMapping("/cancel/{seq}")
-    public ResponseEntity<?> cancelClass(@PathVariable("seq") int seq) {
+    public ResponseEntity<?> cancelClass(@PathVariable("seq") Long seq) {
         try {
             classService.cancelClass(seq);
             return ResponseEntity.ok().build();
