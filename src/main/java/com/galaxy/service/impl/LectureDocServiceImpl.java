@@ -6,9 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.LectureDocDto;
-import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.LectureDocMapper;
 import com.galaxy.service.LectureDocService;
 
@@ -43,7 +41,6 @@ public class LectureDocServiceImpl implements LectureDocService {
 
     @Override
     public void updateOne(LectureDocDto dto) throws Exception {
-        // TODO Auto-generated method stub
         lectureDocMapper.updateOne(dto);
     }
 }

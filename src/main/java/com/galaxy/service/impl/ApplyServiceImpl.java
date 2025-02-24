@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
@@ -77,7 +76,7 @@ public class ApplyServiceImpl implements ApplyService {
             throw new IllegalArgumentException("이름은 필수 입력값입니다.");
         }
         if (email == null || email.trim().isEmpty()) {
-            throw new IllegalArgumentException("이메일은은 필수 입력값입니다.");
+            throw new IllegalArgumentException("이메일은 필수 입력값입니다.");
         }
         if (jumin == null || jumin.trim().isEmpty()) {
             throw new IllegalArgumentException("주민번호는 필수 입력값입니다.");

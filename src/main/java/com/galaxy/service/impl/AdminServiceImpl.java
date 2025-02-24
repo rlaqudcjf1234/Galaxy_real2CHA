@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.galaxy.dto.AdminDto;
@@ -11,10 +12,15 @@ import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.AdminMapper;
 import com.galaxy.service.AdminService;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService{
 
 	protected final String table_nm = "admin";
+
+	private final PasswordEncoder passwordEncoder;
 
     @Autowired
     AdminMapper adminMapper;
@@ -32,6 +38,7 @@ public class AdminServiceImpl implements AdminService{
 	@Override
 	public int insertOne(AdminDto dto) throws Exception {
 		dto.setTable_nm(table_nm);
+		dto.setPassword(passwordEncoder.encode(dto.getPassword()));
 		return adminMapper.insertOne(dto);
 	}
 

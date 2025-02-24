@@ -1,8 +1,13 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
+import { persistor } from "../main";
 import '../css/Header.css';
 
 function Header() {
+
+    const handleClick = async () => {
+        await persistor.purge();
+    }
 
     return (
         <header
@@ -140,8 +145,8 @@ function Header() {
                             {
                                 [
                                     {
-                                        label: "설문 참여내역",
-                                        path: "Survey_YN"
+                                        label: "설문작성",
+                                        path: "question"
                                     }, {
                                         label: "교원평가",
                                         path: "Admin_Survey"
@@ -187,8 +192,7 @@ function Header() {
             </nav>
 
             <div className="d-flex flex-wrap align-items-center justify-content-center col-md-3 text-end">
-                <button type="button" className="btn btn-outline-primary me-2">Login</button>
-                <button type="button" className="btn btn-primary">Sign-up</button>
+                <button type="button" className="btn btn-outline-primary me-2" onClick={handleClick}>Logout</button>
             </div>
         </header>
     );

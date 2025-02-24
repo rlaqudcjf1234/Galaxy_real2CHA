@@ -22,33 +22,33 @@ public class ClassServiceImpl implements ClassService {
     ClassMapper classMapper;
 
     @Override
-public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
-    try {
-        // 페이징된 목록 조회
-        List<Map<String, Object>> list = classMapper.selectList(dto);
-        
-        // 각 강의에 대해 시간표 설정
-        for (Map<String, Object> classInfo : list) {
-            String codeNameObj = (String) classInfo.get("CODE_NAME");
-            
-            // 진행예정이거나 진행중인 강의만 시간표 설정
-            if (codeNameObj != null && 
-                (codeNameObj.equals("진행예정") || codeNameObj.equals("진행중"))) {
-                
-                Object seqObj = classInfo.get("SEQ");
-                if (seqObj != null) {
-                    Long seq = Long.valueOf(seqObj.toString());
-                    setTimetable(seq);
+    public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
+        try {
+            // 페이징된 목록 조회
+            List<Map<String, Object>> list = classMapper.selectList(dto);
+
+            // 각 강의에 대해 시간표 설정
+            for (Map<String, Object> classInfo : list) {
+                String codeNameObj = (String) classInfo.get("CODE_NAME");
+
+                // 진행예정이거나 진행중인 강의만 시간표 설정
+                if (codeNameObj != null &&
+                        (codeNameObj.equals("진행예정") || codeNameObj.equals("진행중"))) {
+
+                    Object seqObj = classInfo.get("SEQ");
+                    if (seqObj != null) {
+                        Long seq = Long.valueOf(seqObj.toString());
+                        setTimetable(seq);
+                    }
                 }
             }
+
+            return list;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("강의 목록 조회 중 오류가 발생했습니다.");
         }
-        
-        return list;
-    } catch (Exception e) {
-        e.printStackTrace();
-        throw new Exception("강의 목록 조회 중 오류가 발생했습니다.");
     }
-}
 
     @Override
     public int selectCount(SearchDto dto) throws Exception {
@@ -63,8 +63,7 @@ public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
 
         // 2. insert 성공 후 생성된 seq로 시간표 설정
         if (result > 0) {
-            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용
-        }
+            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용        }
 
         return result;
     }
@@ -156,12 +155,16 @@ public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
     @Transactional
     public void setTimetable(Long seq) throws Exception {
         try {
-            System.out.println("Setting timetable for class seq: " + seq); // 로그 추가
+            System.out.println("Setting timetable for class seq: " + seq);
             classMapper.callSetTimetable(seq);
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("시간표 설정 중 오류가 발생했습니다.");
         }
+    } // setTimetable 메소드 닫기
+
+    public List<Map<String, Object>> selectUseList() throws Exception {
+        return classMapper.selectUseList();
     }
 
 }

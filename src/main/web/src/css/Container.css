@@ -2,6 +2,16 @@
     max-width: 1024px;
 }
 
+.text-align-left {
+    text-align: left;
+    padding-left: 3px;
+}
+
+.text-align-left > * {
+    
+    padding-left: 3px;
+}
+
 .table > caption {
     border-bottom: 2px solid #0066cc !important;
     caption-side: top;
@@ -44,6 +54,15 @@
     background-color: #f7f7f7;
     text-align: center;
     vertical-align: middle;
+}
+
+.table > tbody.border-top-double {
+    border-top: 3px double #000000;
+}
+
+.table > tbody td .btn {
+    --bs-btn-padding-x: 0.15rem;
+    --bs-btn-padding-y: 0.075rem;
 }
 
 select[name="select"] {

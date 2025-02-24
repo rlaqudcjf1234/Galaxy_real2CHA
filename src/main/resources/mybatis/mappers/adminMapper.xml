@@ -53,7 +53,7 @@
 			INTO ADMIN (
 				SEQ, EMAIL, PASSWORD, NAME, PHONE, DIVISION, REG_DT, USE_YN
 			) VALUES (
-				SEQ.NEXTVAL, #{email}, #{password}, #{name}, #{phone}, #{division}, SYSDATE, '0'
+				SEQ.NEXTVAL, #{email}, #{password}, #{name}, #{phone}, #{division}, SYSDATE, '1'
 			)
 		SELECT * FROM DUAL
 	</insert>
@@ -68,7 +68,7 @@
 	<select id="selectUseList" resultType="map">
 		SELECT SEQ, NAME
 		FROM ADMIN 
-    	WHERE DIVISION = 'admin' AND USE_YN = 1
+    	WHERE DIVISION = 'admin' AND USE_YN = '1'
 	</select>
 
 	<update id="updateOne" parameterType="adminDto">

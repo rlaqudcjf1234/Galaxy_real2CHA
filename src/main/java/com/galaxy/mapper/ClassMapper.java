@@ -27,5 +27,7 @@ public interface ClassMapper {
 
     void callSetTimetable(Long seq);
 
+    List<Map<String, Object>> selectUseList();
+
 
 }

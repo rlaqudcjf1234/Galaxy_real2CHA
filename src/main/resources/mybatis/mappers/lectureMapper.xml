@@ -72,7 +72,7 @@
             #{division},
             #{category},
             #{name}, 
-            '${@com.galaxy.util.HttpSessionUtil@getLoginSeq()}', 
+            '${@com.galaxy.util.HttpLoginUtil@getSeq()}', 
             SYSDATE ) 
         SELECT * FROM DUAL
     </insert>

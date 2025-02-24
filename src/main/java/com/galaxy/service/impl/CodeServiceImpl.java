@@ -62,6 +62,12 @@ public class CodeServiceImpl implements CodeService {
     }
 
     @Override
+    public List<Map<String, Object>> selectUse17() throws Exception {
+        return codeMapper.selectUseCode(17);
+    }
+
+
+    @Override
     public List<Map<String, Object>> selectGroupList(SearchDto dto) throws Exception{
         return codeMapper.selectGroupList(dto);
     }

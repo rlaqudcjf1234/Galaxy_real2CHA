@@ -1,11 +1,18 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Outlet} from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import {Outlet, Navigate} from 'react-router-dom';
+import {tokenSelector} from "../redux/store"
 import Header from './header';
 import Footer from './footer';
 import Mode from './mode';
 import React from 'react';
 
-function Layout() {
+const Layout = () => {
+    const {val} = tokenSelector(state => state.accessToken);
+    if(val == ""){
+        return <Navigate to="/login" />
+    }
+
     return (
         <div className="d-flex flex-column h-100">
             {/* <Mode/>  */}
