@@ -43,7 +43,7 @@
 			INTO QUESTION (
 				SEQ, TITLE, DETAIL, ADMIN_SEQ, REG_DT
 			) VALUES (
-				#{seq}, #{title}, #{detail}, '${@com.galaxy.util.HttpSessionUtil@getLoginSeq()}', SYSDATE
+				#{seq}, #{title}, #{detail}, '${@com.galaxy.util.HttpLoginUtil@getSeq()}', SYSDATE
 			)
 		SELECT * FROM DUAL
 	</insert>

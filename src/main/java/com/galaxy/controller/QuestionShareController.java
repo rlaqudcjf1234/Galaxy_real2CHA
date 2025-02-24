@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.galaxy.dto.ListDto;
 import com.galaxy.dto.QuestionShareDto;
-import com.galaxy.dto.SearchDto;
 import com.galaxy.service.QuestionShareService;
 
 import jakarta.validation.Valid;

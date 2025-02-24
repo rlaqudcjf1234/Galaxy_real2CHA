@@ -3,9 +3,13 @@ import {useState, useEffect} from "react";
 import {useNavigate} from 'react-router-dom';
 import {useCookies} from 'react-cookie';
 
-import axios from 'axios';
+import {tokenDispatch} from "../redux/store"
+import {setAccessToken} from "../redux/tokenSlice"
+
+import {request as axios} from '../plugins/axios';
 
 function Login() {
+    const dispatch = tokenDispatch();
     const navigate = useNavigate();
 
     const [user, setUser] = useState({email: "", password: "", remember: false});
@@ -25,8 +29,7 @@ function Login() {
         e.preventDefault();
         setLoading(true);
         try {
-            const formData = new FormData(e.target);
-            const response = await axios.post("/api/user/login", formData);
+            const response = await axios.post("/api/user/login", user, {withCredentials:true});
 
             /** 자동 확인 */
             if (user.remember) {
@@ -37,17 +40,8 @@ function Login() {
             } else {
                 removeCookie("autoUser");
             }
-
-            const jwt = {
-                access_token: response
-                    .headers
-                    .get('accesstoken'),
-                refresh_token: response
-                    .headers
-                    .get('refreshtoken')
-            }
-
-            useDispatch
+            
+            dispatch(setAccessToken(response.headers.authorization));
 
             navigate("/");
         } catch (error) {

@@ -3,7 +3,7 @@ import "./App.css";
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
-// import Login from "./pages/Login";
+import Login from "./pages/Login";
 
 import Layout from "./components/Layout";
 import Home from "./pages/Home";
@@ -53,8 +53,8 @@ const QuestionRead = lazy(() => import ("./pages/question/Read"));
 const QuestionMod = lazy(() => import ("./pages/question/Mod"));
 const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
 
-const Calendar = lazy(() => import("./pages/calendar/Calendar"));
-const CalendarRead = lazy(() => import("./pages/calendar/Read"));
+// const Calendar = lazy(() => import("./pages/calendar/Calendar"));
+// const CalendarRead = lazy(() => import("./pages/calendar/Read"));
 
 function App() {
     return (
@@ -62,7 +62,7 @@ function App() {
             <Suspense fallback={<div> Loading ...</div>}>
                 <Routes>
                     {/* 로그인 이전 */}
-                    {/* <Route path="/login" element={<Login />}/>  */}
+                    <Route path="/login" element={<Login />}/> 
 
                     {/* 로그인 이후 */}
                     <Route path="/" element={<Layout />}>
@@ -129,10 +129,10 @@ function App() {
                             <Route /*index*/ element="" />
                         </Route>
 
-                        <Route path="calendar" element={<Container />}>
+                        {/* <Route path="calendar" element={<Container />}>
                             <Route index="index" element={<Calendar />} />
                             <Route path="read/:seq" element={<CalendarRead />} />
-                        </Route>
+                        </Route> */}
 
                         <Route path="question" element={<Container />}>
                             <Route index="index" element={<QuestionList/>}/>
