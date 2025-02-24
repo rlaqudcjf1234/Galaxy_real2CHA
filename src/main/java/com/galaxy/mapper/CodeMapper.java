@@ -14,7 +14,7 @@ public interface CodeMapper {
     List<Map<String, Object>> selectUseCode(int code_id) throws Exception;
 
     List<Map<String, Object>> selectGroupList(SearchDto dto) throws Exception;
-    
+
     int selectCount(SearchDto dto) throws Exception;
 
     int insertCode(CodeDto dto) throws Exception;
@@ -23,5 +23,5 @@ public interface CodeMapper {
 
     Map<String, Object> readCode(String group_id) throws Exception;
 
-    List<Map<String, Object>> selectRoomCode(CodeDto dto) throws Exception;    
+    List<Map<String, Object>> selectRoomCode(CodeDto dto) throws Exception;
 }

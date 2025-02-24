@@ -23,15 +23,17 @@
         SELECT A.*, ROWNUM AS RNUM
         FROM (
             SELECT 
-                SEQ,
-                ADMIN_SEQ,
-                TITLE,
-                DIVISION,
-                DETAIL,
-                TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT
-            FROM ADMIN_COMMUNITY
+                AC.SEQ,
+                AC.ADMIN_SEQ,
+                AD.NAME,
+                AC.TITLE,
+                AC.DIVISION,
+                AC.DETAIL,
+                TO_CHAR(AC.REG_DT, 'YYYY-MM-DD') AS REG_DT
+            FROM ADMIN_COMMUNITY AC
+            LEFT JOIN ADMIN AD ON AC.ADMIN_SEQ = AD.SEQ
             <include refid="sqlSearch" />
-            ORDER BY SEQ DESC
+            ORDER BY AC.SEQ DESC
         )A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
     </select>
 
@@ -43,7 +45,7 @@
                 SEQ.NEXTVAL, 'ADMIN_COMMUNITY', SYSDATE
             )
             INTO ADMIN_COMMUNITY (
-                SEQ, ADMIN_SEQ, TITLE, DIVISION, DETAIL, REG_DT
+                SEQ, ADMIN_SEQ, TITLE,  DIVISION, DETAIL, REG_DT
             ) VALUES (
                 SEQ.CURRVAL, #{adminSeq}, #{title}, #{division}, #{detail}, SYSDATE
             )
@@ -55,11 +57,13 @@
             AC.SEQ as "seq",
             AC.ADMIN_SEQ as "adminSeq",
             AC.TITLE as "title",
+            AD.NAME as "name",
             AC.DIVISION as "division",
             AC.DETAIL as "detail",
             TO_CHAR(AC.REG_DT, 'YYYY-MM-DD') AS "regDt"
         FROM 
             ADMIN_COMMUNITY AC
+        LEFT JOIN ADMIN AD ON AC.ADMIN_SEQ = AD.SEQ
         WHERE 
             AC.SEQ = #{seq}
     </select>

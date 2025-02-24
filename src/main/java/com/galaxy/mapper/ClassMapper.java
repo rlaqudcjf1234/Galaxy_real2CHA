@@ -13,7 +13,7 @@ import com.galaxy.dto.SearchDto;
 public interface ClassMapper {
 
     int selectCount(SearchDto dto) throws Exception;
-    
+
     List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
 
     int updateClass(Map<String, Object> params) throws Exception;
@@ -22,7 +22,7 @@ public interface ClassMapper {
 
     int insertClass(ClassDto classDto) throws Exception;
 
-    int confirmClass(String  seq) throws Exception;
+    int confirmClass(String seq) throws Exception;
 
     int cancelClass(String seq) throws Exception;
 

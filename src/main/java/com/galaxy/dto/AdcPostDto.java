@@ -6,7 +6,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class AdcPostDto {
-    private Long adminSeq;     // 관리자 및 강사 순번
+    private Long adminSeq; // 관리자 및 강사 순번
+    private String name;
     private String title;      // 제목
     private String division;   // 구분
     private String detail;     // 상세

@@ -150,9 +150,6 @@
         SELECT name FROM admin WHERE division = 'admin' or use_yn ='1';
    </select>
 
-   
-   
-
     <insert id="insertClass" parameterType="classDto">
     <selectKey keyProperty="seq" resultType="Long" order="BEFORE">
         SELECT SEQ.NEXTVAL FROM DUAL
@@ -174,21 +171,30 @@
         )
     SELECT * FROM DUAL
     </insert>
-
-<<<<<<< HEAD
+    
     <update id="callSetTimetable"  parameterType="Long" statementType="CALLABLE">
         { CALL SET_TIMETABLE(#{seq}) }
     </update>
 
-
-=======
     <select id="selectUseList" resultType="map">
         SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
         FROM CLASS
         WHERE USE_YN = 1
         AND END_DT <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
     </select>
->>>>>>> 7a63e031710eed474913d8c7246167cae813176c
-	
 
+    <select id="selectClassInfo" parameterType="int" resultType="map">
+        SELECT c.ROUND, 
+            c.ROOM, 
+            c.START_DT, 
+            c.END_DT, 
+            c.PEOPLE, 
+            l.NAME AS LECTURE_NAME, 
+            a.NAME AS ADMIN_NAME 
+        FROM CLASS c 
+        LEFT JOIN LECTURE l ON c.LECTURE_SEQ = l.SEQ 
+        LEFT JOIN ADMIN a ON c.ADMIN_SEQ = a.SEQ 
+        WHERE c.SEQ = #{classSeq}
+    </select>
+	
 </mapper>

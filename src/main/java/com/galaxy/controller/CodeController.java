@@ -98,6 +98,9 @@ public class CodeController {
             case "question":
                 list.add(new CodeDto("division", codeService.selectUse17()));
                 break;
+            case "companyLevel":
+                list.add(new CodeDto("companyLevel", codeService.selectUseCode(5)));
+                break;
             default:
                 break;
 

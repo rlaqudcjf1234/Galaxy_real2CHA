@@ -13,5 +13,5 @@ public interface AdcListService {
 
     AdcListDto.AdcItem selectPost(Long seq) throws Exception;
     
-    boolean deletePost(Long seq) throws Exception; // 추가된 삭제 메소드
+    boolean deletePost(Long seq) throws Exception;
 }

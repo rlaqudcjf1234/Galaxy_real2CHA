@@ -1,5 +1,6 @@
 package com.galaxy.controller;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,7 @@ import com.galaxy.dto.AdcListDto;
 import com.galaxy.dto.AdcPostDto;
 import com.galaxy.dto.AdcSearchDto;
 import com.galaxy.service.AdcListService;
+import com.galaxy.util.HttpLoginUtil;
 
 import lombok.RequiredArgsConstructor;
 
@@ -41,26 +43,68 @@ public class AdcListController {
         }
     }
 
+    @GetMapping("/user-info")
+    public ResponseEntity<?> getUserInfo() {
+        HttpLoginUtil loginUtil = new HttpLoginUtil();
+        try {
+            String seq = HttpLoginUtil.getSeq();
+            String email = loginUtil.getEmail();
+            String name = loginUtil.getName();
+
+            if (seq == null) {
+                return ResponseEntity.status(401).body("Invalid token or user not found");
+            }
+
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("seq", seq);
+            userInfo.put("email", email);
+            userInfo.put("name", name);
+
+            return ResponseEntity.ok(userInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Failed to fetch user info: " + e.getMessage());
+        }
+    }
+
     @GetMapping("/read/{seq}")
     public ResponseEntity<?> getPost(@PathVariable Long seq) {
         try {
-            // 입력 파라미터 로깅
+            System.out.println("=== API Request Start ===");
             System.out.println("Received seq: " + seq);
-            System.out.println("Seq type: " + seq.getClass().getName());
-
+            
             AdcListDto.AdcItem post = adcListService.selectPost(seq);
-
-            if (post == null) {
+            
+            // 상세 로깅 추가
+            if (post != null) {
+                System.out.println("=== Retrieved Post Details ===");
+                System.out.println(String.format("seq: %d", post.getSeq()));
+                System.out.println(String.format("adminSeq: %d", post.getAdminSeq()));
+                System.out.println(String.format("name: '%s'", post.getName()));  // name 값 확인
+                System.out.println(String.format("title: '%s'", post.getTitle()));
+                System.out.println(String.format("division: '%s'", post.getDivision()));
+                System.out.println(String.format("detail: '%s'", post.getDetail()));
+                System.out.println(String.format("regDt: '%s'", post.getRegDt()));
+                System.out.println("=== Post Object ===");
+                System.out.println(post.toString());
+            } else {
                 System.out.println("No post found for seq: " + seq);
                 return ResponseEntity.notFound().build();
             }
-
-            return ResponseEntity.ok(post);
+    
+            // 응답 데이터 로깅
+            System.out.println("=== Response Data ===");
+            ResponseEntity<?> response = ResponseEntity.ok(post);
+            System.out.println(response.getBody());
+            System.out.println("=== API Request End ===");
+    
+            return response;
         } catch (Exception e) {
-            // 예외 상세 로깅
-            System.err.println("Error processing request:");
+            System.err.println("=== Error Occurred ===");
+            System.err.println("Error type: " + e.getClass().getName());
+            System.err.println("Error message: " + e.getMessage());
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("게시글 조회 중 오류 발생: " + e.getMessage());
+            return ResponseEntity.badRequest()
+                    .body("게시글 조회 중 오류 발생: " + e.getMessage());
         }
     }
 

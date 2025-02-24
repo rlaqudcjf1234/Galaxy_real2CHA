@@ -21,7 +21,7 @@ public interface ApplyMapper {
 
     // 기존 주민번호로 조회하는 메서드는 유지
     int selectByJumin(String jumin);
-    
+
     // 기존 전화번호로 조회하는 메서드는 유지
     int selectByPhone(String phone);
 
@@ -29,10 +29,9 @@ public interface ApplyMapper {
 
     int deleteApply(Long id);
 
-    ApplyDto selectApplyByStudentInfo(@Param("name") String name,
-                                      @Param("email") String email,
-                                      @Param("jumin") String jumin);
-                                      
+    ApplyDto selectApplyByStudentInfo(@Param("name") String name, @Param("email") String email,
+            @Param("jumin") String jumin);
+
     AdminDto selectAdminByEmailAndPassword(AdminDto adminDto);
 
     void updateStatus(Map<String, Object> params) throws Exception;
@@ -43,10 +42,10 @@ public interface ApplyMapper {
 
     // SEQ_MANAGEMENT에 새 레코드 추가
     void insertSeqManagement();
-    
+
     // STUDENT 테이블에 데이터 삽입
     void insertStudent(ApplyDto applyDto);
-    
+
     // APPLY 상태 업데이트
     void updateApplyStatus(Map<String, Object> params);
 }
