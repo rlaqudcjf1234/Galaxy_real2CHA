@@ -86,4 +86,9 @@ public class ClassServiceImpl implements ClassService {
         return classMapper.selectUseList();
     }
 
+    @Override
+    public Map<String, Object> getClassInfo(int classSeq) throws Exception {
+        return classMapper.selectClassInfo(classSeq);
+    }
+
 }

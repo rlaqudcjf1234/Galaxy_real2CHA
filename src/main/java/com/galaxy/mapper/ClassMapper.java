@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import com.galaxy.dto.ClassDto;
 import com.galaxy.dto.SearchDto;
@@ -26,4 +27,6 @@ public interface ClassMapper {
     int cancelClass(int seq) throws Exception;
 
     List<Map<String, Object>> selectUseList() throws Exception;
+
+    Map<String, Object> selectClassInfo(@Param("classSeq") int classSeq) throws Exception;
 }

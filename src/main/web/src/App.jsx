@@ -32,7 +32,7 @@ const ApplyAdmin = lazy(() => import("./pages/apply/ApplyAdmin"));
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
 const ClassRead = lazy(() => import("./pages/class/Read"));
-//const ClassUpdate = lazy(() => import("./pages/class/Update"));
+// const ClassUpdate = lazy(() => import("./pages/class/Update"));
 
 const LectureList = lazy(() => import("./pages/lecture/List"));
 const LectureAdd = lazy(() => import("./pages/lecture/Add"));
@@ -55,6 +55,13 @@ const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
 
 // const Calendar = lazy(() => import("./pages/calendar/Calendar"));
 // const CalendarRead = lazy(() => import("./pages/calendar/Read"));
+
+// 추가된 코드
+const UserLogin = lazy(() => import("./pages/user/Login"));
+const ClassUpdate = lazy(() => import("./pages/class/Update"));
+
+const AftercareList = lazy(() => import("./pages/aftercare/List"));
+const AftercareRead = lazy(() => import("./pages/aftercare/Read"));
 
 function App() {
     return (
@@ -84,7 +91,7 @@ function App() {
                             <Route index="index" element={<ClassList />} />
                             <Route path="add" element={<ClassAdd />} />
                             <Route path="read/:seq" element={<ClassRead />} />
-                            {/*<Route path="update/:seq" element={<ClassUpdate />} /> */}
+                            <Route path="update/:seq" element={<ClassUpdate />} />
                         </Route>
 
                         <Route path="lecture" element={<Container />}>
@@ -129,11 +136,6 @@ function App() {
                             <Route /*index*/ element="" />
                         </Route>
 
-                        {/* <Route path="calendar" element={<Container />}>
-                            <Route index="index" element={<Calendar />} />
-                            <Route path="read/:seq" element={<CalendarRead />} />
-                        </Route> */}
-
                         <Route path="question" element={<Container />}>
                             <Route index="index" element={<QuestionList/>}/>
                             <Route path="add" element={<QuestionAdd/>}/>
@@ -141,6 +143,19 @@ function App() {
                             <Route path="mod/:seq" element={<QuestionMod/>}/>
                             <Route path="share/:question_seq" element={<QuestionShare/>}/>
                         </Route>
+
+                        {/* Aftercare 추가 */}
+                        <Route path="aftercare" element={<Container />}>
+                            <Route index="index" element={<AftercareList />} />
+                            <Route path="read/:seq" element={<AftercareRead />} />
+                        </Route>
+                    </Route>
+
+                    <Route path="/admin/pass/:seq" element={<AdminPass />} />
+
+                    <Route path="user" element={<Container />}>
+                        <Route index="index" element={<UserLogin />} />
+                        {/* <Route path="modify" element={<UserModify/>}/> */}
                     </Route>
                 </Routes>
             </Suspense>

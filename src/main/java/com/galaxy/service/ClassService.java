@@ -26,5 +26,5 @@ public interface ClassService {
 
     List<Map<String, Object>> selectUseList() throws Exception;
 
-    
+    Map<String, Object> getClassInfo(int classSeq) throws Exception;
 }

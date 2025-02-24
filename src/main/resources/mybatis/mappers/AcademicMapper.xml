@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.galaxy.mapper.AcademicMapper">
+    <!-- 학력 조회 -->
+    <select id="selectAcademic" parameterType="int" resultType="com.galaxy.dto.AcademicDto">
+        SELECT 
+            STUDENT_SEQ           AS studentSeq,
+            FINAL_SCHOOL_NAME     AS finalSchoolName,
+            FINAL_SCHOOL_LEVEL    AS finalSchoolLevel,
+            FINAL_SCHOOL_SPECIALITY AS finalSchoolSpeciality,
+            FINAL_SCHOOL_LESSON   AS finalSchoolLesson,
+            GRADUATE_YN           AS graduateYn
+        FROM ACADEMIC
+        WHERE STUDENT_SEQ = #{studentSeq}
+    </select>
+</mapper>

@@ -97,4 +97,18 @@ public class ClassController {
         List<Map<String, Object>> list = classService.selectUseList();
         return list;
     }
+
+    @GetMapping("/read")
+    public ResponseEntity<?> readClass(@RequestParam("classSeq") int classSeq) {
+        try {
+            Map<String, Object> classInfo = classService.getClassInfo(classSeq);
+            if (classInfo == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(classInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("수강정보 조회 중 오류 발생");
+        }
+    }
 }

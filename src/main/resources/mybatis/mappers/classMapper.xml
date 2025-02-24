@@ -146,9 +146,6 @@
         SELECT name FROM admin WHERE division = 'admin' or use_yn ='1';
    </select>
 
-   
-   
-
     <insert id="insertClass" parameterType="classDto">
 		INSERT ALL 
 			INTO SEQ_MANAGEMENT(
@@ -174,6 +171,19 @@
         WHERE USE_YN = 1
         AND END_DT <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
     </select>
-	
 
+    <select id="selectClassInfo" parameterType="int" resultType="map">
+        SELECT c.ROUND, 
+            c.ROOM, 
+            c.START_DT, 
+            c.END_DT, 
+            c.PEOPLE, 
+            l.NAME AS LECTURE_NAME, 
+            a.NAME AS ADMIN_NAME 
+        FROM CLASS c 
+        LEFT JOIN LECTURE l ON c.LECTURE_SEQ = l.SEQ 
+        LEFT JOIN ADMIN a ON c.ADMIN_SEQ = a.SEQ 
+        WHERE c.SEQ = #{classSeq}
+    </select>
+	
 </mapper>
