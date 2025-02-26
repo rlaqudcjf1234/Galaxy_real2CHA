@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.SurveyMapper">
+	<sql id="sqlSearch">
+		<if test='text != null and text != ""'>
+			<choose>
+				<when test='select == "1"'>
+					AND B.QUESTION_SEQ IN (SELECT SEQ FROM QUESTION WHERE NAME TITLE '%'||TRIM(#{text})||'%')
+				</when>
+				<when test='select == "2"'>
+					AND B.CLASS_SEQ IN (SELECT SEQ FROM CLASS WHERE NAME LIKE '%'||TRIM(#{text})||'%')
+				</when>
+				<when test='select == "3"'>
+					AND A.STUDENT_SEQ IN (SELECT SEQ FROM STUDENT WHERE NAME LIKE '%'||TRIM(#{text})||'%')
+				</when>
+			</choose>
+		</if>
+	</sql>
+
+	<select id="selectCount" parameterType="searchDto" resultType="int">
+        SELECT COUNT(*) 
+		FROM SURVEY A, STUDENT B
+		WHERE A.STUDENT_SEQ = B.SEQ
+		<include refid="sqlSearch" />
+	</select>
+
+	<select id="selectList" parameterType="searchDto" resultType="map">
+		SELECT QUESTION_SEQ, GET_QUESTION_NAME(QUESTION_SEQ) AS QUESTION_NAME, 
+			STUDENT_SEQ, GET_STUDENT_NAME(STUDENT_SEQ) AS STUDENT_NAME, 
+			CLASS_SEQ, GET_CLASS_NAME(CLASS_SEQ) AS CLASS_NAME, 
+			TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, ROWNUM AS RNUM
+		FROM (
+			SELECT A.QUESTION_SEQ, A.STUDENT_SEQ, A.REG_DT, B.CLASS_SEQ
+			FROM SURVEY A, STUDENT B
+			WHERE A.STUDENT_SEQ = B.SEQ
+		<include refid="sqlSearch" />
+			ORDER BY REG_DT DESC
+		) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
+	</select>
+
+	<select id="selectOne" parameterType="surveyDto" resultType="map">
+		SELECT A.QUESTION_SEQ, A.STUDENT_SEQ,
+			GET_STUDENT_NAME(A.STUDENT_SEQ) AS STUDENT_NAME,
+			TO_CHAR(A.REG_DT, 'YYYY-MM-DD') AS REG_DT, 
+			B.TITLE, B.DETAIL,
+			GET_ADMIN_NAME(B.ADMIN_SEQ) AS ADMIN_NAME
+		FROM SURVEY A, QUESTION B
+		WHERE A.QUESTION_SEQ = B.SEQ
+		AND A.QUESTION_SEQ = #{question_seq}
+		AND A.STUDENT_SEQ = #{student_seq}
+	</select>
+</mapper>

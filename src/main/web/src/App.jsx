@@ -52,6 +52,9 @@ const QuestionRead = lazy(() => import("./pages/question/Read"));
 const QuestionMod = lazy(() => import("./pages/question/Mod"));
 const QuestionShare = lazy(() => import("./pages/questionShare/List"));
 
+const SurveyList = lazy(() => import("./pages/survey/List"));
+const SurveyRead = lazy(() => import("./pages/survey/Read"));
+
 // const Calendar = lazy(() => import("./pages/calendar/Calendar"));
 // const CalendarRead = lazy(() => import("./pages/calendar/Read"));
 
@@ -140,6 +143,11 @@ function App() {
                             <Route path="read/:seq" element={<QuestionRead />} />
                             <Route path="mod/:seq" element={<QuestionMod />} />
                             <Route path="share/:question_seq" element={<QuestionShare />} />
+                        </Route>
+
+                        <Route path="survey" element={<Container />}>
+                            <Route index="index" element={<SurveyList />} />
+                            <Route path="read/:question_seq/:student_seq" element={<SurveyRead />} />
                         </Route>
 
                         {/* Aftercare 추가 */}

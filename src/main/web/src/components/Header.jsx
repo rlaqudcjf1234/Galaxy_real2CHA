@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { persistor } from "../main";
 import '../css/Header.css';
 
@@ -148,11 +148,8 @@ function Header() {
                                         label: "설문작성",
                                         path: "question"
                                     }, {
-                                        label: "교원평가",
-                                        path: "Admin_Survey"
-                                    }, {
-                                        label: "설문 결과",
-                                        path: "Survey_Results"
+                                        label: "설문결과",
+                                        path: "survey"
                                     }
                                 ].map(
                                     (item, index) => (<Link key={index} to={`/${item.path}`}>{item.label}</Link>)

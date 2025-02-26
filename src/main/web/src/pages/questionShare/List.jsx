@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {Link, useParams} from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 import Pagination from "../../components/Pagination";
 
@@ -29,7 +29,7 @@ const List = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("/api/questionShare/list", {params: params});
+            const response = await axios.get("/api/questionShare/list", { params: params });
             setItems(response.data.items); // 목록 데이터
             setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
@@ -95,10 +95,10 @@ const List = () => {
                     </span>
                 </caption>
                 <colgroup>
-                    <col/>
-                    <col/>
-                    <col/>
-                    <col/>
+                    <col />
+                    <col />
+                    <col />
+                    <col />
                 </colgroup>
                 <thead>
                     <tr>
@@ -136,7 +136,7 @@ const List = () => {
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
-                onPageChange={handlePageChange}/>
+                onPageChange={handlePageChange} />
             <form onSubmit={handleSubmit}>
                 <input type="hidden" name="question_seq" value={params.question_seq} />
                 <div className="d-flex gap-2 justify-content-center py-1">

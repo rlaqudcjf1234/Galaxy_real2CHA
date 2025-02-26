@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class QuestionItemDto {
 
-    private String questionSeq;
+    private String question_seq;
 
     private Long sort;
 

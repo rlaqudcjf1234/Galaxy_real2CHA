@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 import Editor from '../../components/Editor';
 
@@ -12,7 +12,7 @@ function Mod() {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({ division: [] });
     const [lecture, setLecture] = useState({});
     const [lectureDoc, setLectureDoc] = useState({});
     const [errors, setErrors] = useState({});
@@ -103,8 +103,8 @@ function Mod() {
         <div>
             {/* 폼 영역 */}
             <form onSubmit={handleSubmit}>
-                <input type="hidden" name="lecture_seq" value={params.lecture_seq} readOnly="readOnly"/>
-                <input type="hidden" name="seq" value={params.seq} readOnly="readOnly"/>
+                <input type="hidden" name="lecture_seq" value={params.lecture_seq} readOnly="readOnly" />
+                <input type="hidden" name="seq" value={params.seq} readOnly="readOnly" />
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
@@ -115,9 +115,9 @@ function Mod() {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -130,7 +130,7 @@ function Mod() {
                                     placeholder="제목을 입력해주세요"
                                     value={lectureDoc.TITLE}
                                     onChange={handleFormData}
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -175,7 +175,7 @@ function Mod() {
                                     min="1"
                                     value={lectureDoc.SORT}
                                     onChange={handleFormData}
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -186,8 +186,8 @@ function Mod() {
                         <tr>
                             <th>내용</th>
                             <td className="edit" colSpan="2">
-                                <input type="hidden" name="detail" value={detail}/>
-                                <Editor htmlStr={detail} setHtmlStr={setDetail}/>
+                                <input type="hidden" name="detail" value={detail} />
+                                <Editor htmlStr={detail} setHtmlStr={setDetail} />
                             </td>
                         </tr>
                     </tbody>

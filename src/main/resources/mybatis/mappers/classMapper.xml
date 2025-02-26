@@ -2,32 +2,32 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.ClassMapper">
 
-	<sql id="sqlSearch">
-    <where>
-        <if test='text != null and text != ""'>
-            <choose>
-                <when test='select == "1"'>
+    <sql id="sqlSearch">
+        <where>
+            <if test='text != null and text != ""'>
+                <choose>
+                    <when test='select == "1"'>
                     AND GET_LECTURE_NAME(LECTURE_SEQ) LIKE '%'||TRIM(#{text})||'%'
-                </when>
-                <when test='select == "2"'>
+                    </when>
+                    <when test='select == "2"'>
                     AND GET_ADMIN_NAME(ADMIN_SEQ) LIKE '%'||TRIM(#{text})||'%'
-                </when>
-                <when test='select == "3"'>
+                    </when>
+                    <when test='select == "3"'>
                     AND ROOM LIKE '%'||TRIM(#{text})||'%'
-                </when>
-            </choose>
-        </if>
-    </where>
-</sql>
+                    </when>
+                </choose>
+            </if>
+        </where>
+    </sql>
 
     <select id="selectCount" parameterType="searchDto" resultType="int">
         SELECT COUNT(*) FROM CLASS
-      <include refid="sqlSearch" />
+        <include refid="sqlSearch" />
     </select>
 
-    
 
-   <select id="selectList" resultType="map">     
+
+    <select id="selectList" resultType="map">     
    SELECT 
        SEQ,
        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
@@ -53,14 +53,14 @@
            AND CD.CODE_NAME = 
                CASE
                 WHEN A.USE_YN = 0 THEN '강의취소'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'  
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'  
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> START_DT THEN '진행예정'  
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> END_DT THEN '종료'  
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> END_DT THEN '종료'
                 END
        ) AS CODE_NAME
    FROM (
@@ -69,14 +69,14 @@
            START_DT, END_DT, START_TM, END_TM,
            PEOPLE, REG_DT, CONFIRM_DT, USE_YN
        FROM CLASS
-       <include refid="sqlSearch" />
+        <include refid="sqlSearch" />
        ORDER BY SEQ DESC
    )A
    OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS
    FETCH NEXT #{pageSize} ROWS ONLY
-</select>
+    </select>
 
-<update id="updateClass" parameterType="map">
+    <update id="updateClass" parameterType="map">
     UPDATE CLASS 
     SET 
         LECTURE_SEQ = #{LECTURE_SEQ},
@@ -89,24 +89,24 @@
         END_TM = #{END_TM},
         PEOPLE = #{PEOPLE}
     WHERE SEQ = #{SEQ}
-</update>
+    </update>
 
-   
 
-<update id="confirmClass" parameterType="java.lang.Long">
+
+    <update id="confirmClass" parameterType="java.lang.Long">
     UPDATE CLASS 
     SET CONFIRM_DT = SYSDATE
     WHERE SEQ = #{value}
     AND CONFIRM_DT IS NULL
-</update>
+    </update>
 
-<update id="cancelClass" parameterType="java.lang.Long">
+    <update id="cancelClass" parameterType="java.lang.Long">
     UPDATE CLASS 
     SET USE_YN = 0
     WHERE SEQ = #{value}
-</update>
+    </update>
 
-<select id="classRead" parameterType="map" resultType="map">
+    <select id="classRead" parameterType="map" resultType="map">
    SELECT 
        SEQ,
        GET_LECTURE_NAME(LECTURE_SEQ) AS LECTURE_NAME,
@@ -132,28 +132,28 @@
            AND CD.CODE_NAME = 
                CASE
                    WHEN C.USE_YN = 0 THEN '강의취소'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> C.END_DT THEN '종료'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> C.END_DT THEN '종료'
                END
        ) AS CODE_NAME
    FROM CLASS C
    WHERE SEQ = #{seq}
-</select>
+    </select>
 
-   <select id="getAdminList" resultType="adminDto">
+    <select id="getAdminList" resultType="adminDto">
         SELECT name FROM admin WHERE division = 'admin' or use_yn ='1';
-   </select>
+    </select>
 
     <insert id="insertClass" parameterType="classDto">
-    <selectKey keyProperty="seq" resultType="Long" order="BEFORE">
+        <selectKey keyProperty="seq" resultType="Long" order="BEFORE">
         SELECT SEQ.NEXTVAL FROM DUAL
-    </selectKey>
+        </selectKey>
     INSERT ALL 
         INTO SEQ_MANAGEMENT(
             SEQ, TABLE_NM, REG_DT
@@ -171,8 +171,8 @@
         )
     SELECT * FROM DUAL
     </insert>
-    
-    <update id="callSetTimetable"  parameterType="Long" statementType="CALLABLE">
+
+    <update id="callSetTimetable" parameterType="Long" statementType="CALLABLE">
         { CALL SET_TIMETABLE(#{seq}) }
     </update>
 
@@ -180,7 +180,7 @@
         SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
         FROM CLASS
         WHERE USE_YN = 1
-        AND END_DT <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        AND END_DT         <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
     </select>
 
     <select id="selectClassInfo" parameterType="int" resultType="map">
@@ -196,5 +196,5 @@
         LEFT JOIN ADMIN a ON c.ADMIN_SEQ = a.SEQ 
         WHERE c.SEQ = #{classSeq}
     </select>
-	
+
 </mapper>

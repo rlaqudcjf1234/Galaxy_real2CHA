@@ -10,10 +10,10 @@ import com.galaxy.dto.QuestionItemDto;
 @Mapper
 public interface QuestionItemMapper {
 
-    void insertOne(QuestionItemDto dto)throws Exception;
+    void insertOne(QuestionItemDto dto) throws Exception;
 
-    List<Map<String, Object>> selectList(String seq)throws Exception;
+    List<Map<String, Object>> selectList(String question_seq) throws Exception;
 
-    void deleteList(String seq)throws Exception;
+    void deleteList(String question_seq) throws Exception;
 
 }

@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { authenticatedRequest as axios } from '../../plugins/axios';
 import Dompurify from 'dompurify';
 
 const Read = () => {
@@ -64,8 +64,8 @@ const Read = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col/>
+                        <col width="20%" />
+                        <col />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -75,7 +75,7 @@ const Read = () => {
                                     type="text"
                                     className="form-control-plaintext"
                                     value={lectureDoc.TITLE}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                         <tr>
@@ -85,7 +85,7 @@ const Read = () => {
                                     type="text"
                                     className="form-control-plaintext"
                                     value={lectureDoc.DIVISION_NAME}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                         <tr>
@@ -95,7 +95,7 @@ const Read = () => {
                                     type="text"
                                     className="form-control-plaintext"
                                     value={lectureDoc.SORT}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                         <tr>

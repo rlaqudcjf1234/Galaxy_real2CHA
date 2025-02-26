@@ -19,19 +19,25 @@ public class QuestionServiceImpl implements QuestionService {
 
     protected final String table_nm = "qustion";
 
-    @Autowired private QuestionMapper questionMapper;
+    @Autowired
+    private QuestionMapper questionMapper;
 
-    @Autowired private QuestionItemMapper questionItemMapper;
+    @Autowired
+    private QuestionItemMapper questionItemMapper;
 
-    @Override public int selectCount(SearchDto dto)throws Exception {
+    @Override
+    public int selectCount(SearchDto dto) throws Exception {
         return questionMapper.selectCount(dto);
     }
 
-    @Override public List<Map<String, Object>> selectList(SearchDto dto)throws Exception {
+    @Override
+    public List<Map<String, Object>> selectList(SearchDto dto) throws Exception {
         return questionMapper.selectList(dto);
     }
 
-    @Override @Transactional public void insertOne(QuestionDto dto)throws Exception {
+    @Override
+    @Transactional
+    public void insertOne(QuestionDto dto) throws Exception {
         dto.setTable_nm(table_nm);
         int i = questionMapper.insertOne(dto);
 
@@ -39,7 +45,7 @@ public class QuestionServiceImpl implements QuestionService {
             String seq = dto.getSeq();
             questionItemMapper.deleteList(seq);
             for (QuestionItemDto qsItems : dto.getQsItems()) {
-                qsItems.setQuestionSeq(seq);
+                qsItems.setQuestion_seq(seq);
 
                 String[] items = qsItems.getItems();
                 if (items != null && items.length > 0) {
@@ -52,7 +58,8 @@ public class QuestionServiceImpl implements QuestionService {
         }
     }
 
-    @Override public Map<String, Object> selectOne(String seq)throws Exception {
+    @Override
+    public Map<String, Object> selectOne(String seq) throws Exception {
         Map<String, Object> map = questionMapper.selectOne(seq);
         List<Map<String, Object>> list = questionItemMapper.selectList(seq);
 
@@ -60,7 +67,7 @@ public class QuestionServiceImpl implements QuestionService {
             int[] iCounts = new int[list.size()];
             for (int i = 0; i < list.size(); i++) {
                 Map<String, Object> qsItems = list.get(i);
-                String item = (String)qsItems.get("ITEM");
+                String item = (String) qsItems.get("ITEM");
                 if (item != null && !item.isEmpty()) {
                     String[] items = item.split("\\|");
 
@@ -79,7 +86,9 @@ public class QuestionServiceImpl implements QuestionService {
         return map;
     }
 
-    @Override @Transactional public void updateOne(QuestionDto dto)throws Exception {
+    @Override
+    @Transactional
+    public void updateOne(QuestionDto dto) throws Exception {
         int i = questionMapper.updateOne(dto);
 
         if (i > 0) {
@@ -87,7 +96,7 @@ public class QuestionServiceImpl implements QuestionService {
 
             questionItemMapper.deleteList(seq);
             for (QuestionItemDto qsItems : dto.getQsItems()) {
-                qsItems.setQuestionSeq(seq);
+                qsItems.setQuestion_seq(seq);
 
                 String[] items = qsItems.getItems();
                 if (items != null && items.length > 0) {
