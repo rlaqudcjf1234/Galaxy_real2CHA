@@ -44,8 +44,10 @@ const LectureDocAdd = lazy(() => import("./pages/lectureDoc/Add"));
 const LectureDocRead = lazy(() => import("./pages/lectureDoc/Read"));
 const LectureDocMod = lazy(() => import("./pages/lectureDoc/Mod"));
 
-// const CodeList = lazy(()=> import('./pages/codegroup/List'))
-// const CodeAdd = lazy(()=> import('./pages/codegroup/add'))
+const CodeList = lazy(()=> import('./pages/codegroup/List'));
+const CodeAdd= lazy(()=>import('./pages/codegroup/Add'));
+const CodeRead= lazy(()=>import('./pages/codegroup/Read'));
+const CodeMod= lazy(()=>import('./pages/codegroup/Mod'));
 
 const QuestionList = lazy(() => import ("./pages/question/List"));
 const QuestionAdd = lazy(() => import ("./pages/question/Add"));
@@ -53,8 +55,8 @@ const QuestionRead = lazy(() => import ("./pages/question/Read"));
 const QuestionMod = lazy(() => import ("./pages/question/Mod"));
 const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
 
-// const Calendar = lazy(() => import("./pages/calendar/Calendar"));
-// const CalendarRead = lazy(() => import("./pages/calendar/Read"));
+const Calendar = lazy(() => import("./pages/calendar/Calendar"));
+const CalendarRead = lazy(() => import("./pages/calendar/Read"));
 
 function App() {
     return (
@@ -122,17 +124,19 @@ function App() {
                         </Route>
 
                         <Route path="group" element={<Container />}>
-                            {/* <Route index="index" element={<CodeList />} />
-                            <Route path="add" element={<CodeAdd />} /> */}
+                            <Route index="index" element={<CodeList />} />
+                            <Route path="add" element={<CodeAdd />} />
+                            <Route path="read/:group_id" element={<CodeRead />} />
+                            <Route path="mod/:group_id" element={<CodeMod />} />
                         </Route>
                         <Route path="code" element={<Container />}>
                             <Route /*index*/ element="" />
                         </Route>
 
-                        {/* <Route path="calendar" element={<Container />}>
+                        <Route path="calendar" element={<Container />}>
                             <Route index="index" element={<Calendar />} />
-                            <Route path="read/:seq" element={<CalendarRead />} />
-                        </Route> */}
+                            <Route path="read/:classseq" element={<CalendarRead />} />
+                        </Route>
 
                         <Route path="question" element={<Container />}>
                             <Route index="index" element={<QuestionList/>}/>
