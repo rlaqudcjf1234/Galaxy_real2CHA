@@ -85,7 +85,7 @@ const List = () => {
                 <thead>
                     <tr>
                         <th>번호</th>
-                        <th>설문</th>
+                        <th>제목</th>
                         <th>강의</th>
                         <th>학생</th>
                         <th>등록일자</th>
@@ -125,7 +125,7 @@ const List = () => {
                         onChange={handleSearchChange}
                         className="form-control"
                         required="required">
-                        <option value="1">설문</option>
+                        <option value="1">제목</option>
                         <option value="2">강의</option>
                         <option value="3">작성자</option>
                     </select>
