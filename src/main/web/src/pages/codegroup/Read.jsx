@@ -1,6 +1,6 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import {authenticatedRequest as axios} from"../../plugins/axios";
 
 const Read = () => {
     const navigate = useNavigate();

@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import {authenticatedRequest as axios} from"../../plugins/axios";
 import Pagination from "../../components/Pagination";
 
 const List = () => {
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     
@@ -15,23 +14,7 @@ const List = () => {
     const [params, setParams] = useState({ select: "1", text: "", pageIndex: 1 });
     const [loading, setLoading] = useState(false);
 
-    // 비밀번호 확인 함수
-    const handlePasswordSubmit = (e) => {
-        e.preventDefault();        
-
-        // 실제 구현시에는 환경변수나 서버에서 관리
-        const correctPassword = "1234"; 
-        
-        if (password === correctPassword) {
-            setIsAuthenticated(true);
-            setError("");
-            // 인증 성공 후 데이터 로드
-            fetchData();
-        } else {
-            setError("비밀번호가 올바르지 않습니다.");
-        }
-    };
-
+    
     // 기존 데이터 fetch 함수
     const fetchData = async () => {
         setLoading(true);
@@ -77,38 +60,10 @@ const List = () => {
     };
 
     useEffect(() => {
-        if (isAuthenticated) {
-            fetchData();
-        }
-    }, [params, isAuthenticated]);
+        fetchData();
+    }, [params]);
 
-    // 비밀번호 입력 화면
-    if (!isAuthenticated) {
-        return (
-            <div className="d-flex justify-content-center align-items-center" style={{ minHeight: "400px" }}>
-                <div className="card p-4">
-                    <h3 className="text-center mb-4">보안 인증</h3>
-                    <form onSubmit={handlePasswordSubmit}>
-                        <div className="mb-3">
-                            <label htmlFor="password" className="form-label">비밀번호를 입력하세요</label>
-                            <input
-                                type="password"
-                                className="form-control"
-                                id="password"
-                                value={password}
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
-                        {error && <div className="alert alert-danger">{error}</div>}
-                        <button type="submit" className="btn btn-primary w-100">확인</button>
-                    </form>
-                </div>
-            </div>
-        );
-    }
-
-    // 인증 후 리스트 화면
+   // 인증 후 리스트 화면
     return (
         <div>
             <table className="table">

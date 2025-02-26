@@ -1,0 +1,140 @@
+/* calendarRead.css */
+
+.calendar-read-container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: white;
+    min-height: 100vh;
+}
+
+.calendar-read-header {
+    padding: 20px;
+    border-bottom: 2px solid #e5e7eb;
+    margin-bottom: 24px;
+}
+
+.calendar-read-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 8px;
+}
+
+.calendar-read-content {
+    padding: 0 20px;
+}
+
+.calendar-read-field {
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 16px;
+    align-items: start;
+}
+
+.calendar-read-label {
+    font-weight: 500;
+    color: #4b5563;
+    padding-top: 4px;
+}
+
+.calendar-read-value {
+    color: #111827;
+    line-height: 1.5;
+}
+
+.calendar-read-memo {
+    background-color: #f9fafb;
+    padding: 16px;
+    border-radius: 8px;
+    margin-top: 8px;
+    white-space: pre-wrap;
+}
+
+.calendar-read-footer {
+    margin-top: 32px;
+    padding: 20px;
+    border-top: 1px solid #e5e7eb;
+    text-align: center;
+}
+
+.calendar-read-button {
+    padding: 8px 24px;
+    background-color: #6b7280;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.calendar-read-button:hover {
+    background-color: #4b5563;
+}
+
+.calendar-read-status {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+.status-normal {  /* 출석, 출석인정 */
+    background-color: #d1fae5;
+    color: #065f46;
+}
+
+.status-absent {  /* 결석, 병결 */
+    background-color: #fee2e2;
+    color: #991b1b;
+}
+
+.status-late {    /* 지각 */
+    background-color: #fef3c7;
+    color: #92400e;
+}
+.status-outing {  /* 외출 */
+    background-color: #dbeafe;
+    color: #1e40af;
+}
+
+.status-vacation { /* 휴가 */
+    background-color: #f3e8ff;
+    color: #6b21a8;
+}
+
+/* 로딩 상태를 위한 스타일 */
+.calendar-read-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 200px;
+    color: #6b7280;
+}
+
+/* 반응형 디자인 */
+@media (max-width: 640px) {
+    .calendar-read-field {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+
+    .calendar-read-label {
+        padding-top: 0;
+    }
+
+    .calendar-read-container {
+        padding: 16px;
+    }
+
+    .calendar-read-header {
+        padding: 16px;
+    }
+
+    .calendar-read-content {
+        padding: 0 16px;
+    }
+}

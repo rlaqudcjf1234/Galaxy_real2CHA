@@ -1,7 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import {authenticatedRequest as axios} from"../../plugins/axios";
 
 function Mod() {
     const navigate = useNavigate();

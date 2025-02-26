@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import axios from "axios";
+import {authenticatedRequest as axios} from"../../plugins/axios";
 import Pagination from "../../components/Pagination";
 
 

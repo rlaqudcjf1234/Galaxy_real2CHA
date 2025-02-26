@@ -11,4 +11,8 @@ public class SearchDto extends PageDto {
 	
 	private String text = "";
 
+	private Integer year;    // 추가
+	
+    private Integer month;   // 추가
+
 }
