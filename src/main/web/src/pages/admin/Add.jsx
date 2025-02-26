@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react";
-import {useNavigate} from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
+
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 const Add = () => {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ const Add = () => {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({ division: [] });
     const [errors, setErrors] = useState({}); // 오류 내용
 
     const [loading, setLoading] = useState(false); // 로딩 상태
@@ -72,9 +73,9 @@ const Add = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -85,7 +86,7 @@ const Add = () => {
                                     className="form-control"
                                     name="email"
                                     placeholder="name@example.com"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -100,7 +101,7 @@ const Add = () => {
                                     type="password"
                                     className="form-control"
                                     name="password"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -115,7 +116,7 @@ const Add = () => {
                                     type="password"
                                     className="form-control"
                                     name="password2"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -126,7 +127,7 @@ const Add = () => {
                         <tr>
                             <th>성명</th>
                             <td>
-                                <input type="text" className="form-control" name="name" required="required"/>
+                                <input type="text" className="form-control" name="name" required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -137,7 +138,7 @@ const Add = () => {
                         <tr>
                             <th>연락처</th>
                             <td>
-                                <input type="text" className="form-control" name="phone"/>
+                                <input type="text" className="form-control" name="phone" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">

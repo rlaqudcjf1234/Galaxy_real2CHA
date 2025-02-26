@@ -79,8 +79,8 @@ const List = () => {
                     <col width="100px" />
                     <col />
                     <col width="200px" />
-                    <col width="200px" />
                     <col width="100px" />
+                    <col width="150px" />
                 </colgroup>
                 <thead>
                     <tr>

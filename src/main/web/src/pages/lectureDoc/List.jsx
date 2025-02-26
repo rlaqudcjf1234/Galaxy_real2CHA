@@ -101,9 +101,9 @@ function LectureDocument() {
                 </caption>
                 <colgroup>
                     <col width="100px" />
-                    <col width="300px" />
-                    <col />
                     <col width="200px" />
+                    <col />
+                    <col width="150px" />
                 </colgroup>
                 <thead>
                     <tr>
