@@ -118,8 +118,8 @@ const Add = () => {
                                                                     name={`qsResults[${index}].results`}
                                                                     id={`qsResults[${index}].items[${subIndex}]`}
                                                                     value={subIndex}
-                                                                    defaultChecked={qsItem.RESULT == subIndex}
-                                                                    disabled />
+                                                                    checked={qsItem.RESULT == subIndex}
+                                                                    onChange={() => { return false; }} />
                                                                 <label className="form-check-label" htmlFor={`qsResults[${index}].items[${subIndex}]`}>{item}</label>
                                                             </li>
                                                         ))
@@ -141,7 +141,8 @@ const Add = () => {
                                                                     name={`qsResults[${index}].results`}
                                                                     id={`qsResults[${index}].items[${subIndex}]`}
                                                                     value={subIndex}
-                                                                    defaultChecked={qsItem.RESULT?.indexOf(subIndex) > -1} disabled />
+                                                                    checked={qsItem.RESULT?.indexOf(subIndex) > -1}
+                                                                    onChange={() => { return false; }} />
                                                                 <label className="form-check-label" htmlFor={`qsResults[${index}].items[${subIndex}]`}>{item}</label>
                                                             </li>
                                                         ))
