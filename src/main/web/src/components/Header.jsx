@@ -95,7 +95,7 @@ function Header() {
                                         path: "Qualification_Info"
                                     }, {
                                         label: "시간표 조회",
-                                        path: "Timetable"
+                                        path: "CALENDAR"
                                     }
                                 ].map(
                                     (item, index) => (<Link key={index} to={`/${item.path}`}>{item.label}</Link>)
