@@ -18,9 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.ClassDto;
+import com.galaxy.dto.CodeDto;
 import com.galaxy.dto.ListDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.service.ClassService;
+import com.galaxy.service.CodeService;
 
 import jakarta.validation.Valid;
 
@@ -30,6 +32,7 @@ public class ClassController {
 
     @Autowired
     ClassService classService;
+
 
     @GetMapping("/list")
     public ListDto list(SearchDto dto) throws Exception {
@@ -44,8 +47,9 @@ public class ClassController {
         classService.insertClass(dto);
     }
 
+
     @GetMapping("/read/{seq}")
-    public ResponseEntity<?> getClassRead(@PathVariable("seq") int seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> getClassRead(@PathVariable("seq") String seq) { // "seq" 이름을 명시적으로 지정
         try {
             Map<String, Object> classRead = classService.getClassRead(seq);
             if (classRead == null) {
@@ -59,7 +63,7 @@ public class ClassController {
     }
 
     @PutMapping("/confirm/{seq}")
-    public ResponseEntity<?> confirmClass(@PathVariable("seq") int seq) { // "seq" 이름을 명시적으로 지정
+    public ResponseEntity<?> confirmClass(@PathVariable("seq") String seq) { // "seq" 이름을 명시적으로 지정
         try {
             classService.confirmClass(seq);
             return ResponseEntity.ok().build();
@@ -70,7 +74,7 @@ public class ClassController {
     }
 
     @PutMapping("/cancel/{seq}")
-    public ResponseEntity<?> cancelClass(@PathVariable("seq") int seq) {
+    public ResponseEntity<?> cancelClass(@PathVariable("seq") String seq) {
         try {
             classService.cancelClass(seq);
             return ResponseEntity.ok().build();
@@ -96,5 +100,19 @@ public class ClassController {
     public List<Map<String, Object>> use() throws Exception {
         List<Map<String, Object>> list = classService.selectUseList();
         return list;
+    }
+
+    @GetMapping("/read")
+    public ResponseEntity<?> readClass(@RequestParam("classSeq") int classSeq) {
+        try {
+            Map<String, Object> classInfo = classService.getClassInfo(classSeq);
+            if (classInfo == null) {
+                return ResponseEntity.notFound().build();
+            }
+            return ResponseEntity.ok(classInfo);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("수강정보 조회 중 오류 발생");
+        }
     }
 }

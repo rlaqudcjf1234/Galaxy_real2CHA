@@ -27,12 +27,11 @@ const AdcRead = lazy(() => import("./pages/adminCommunity/AdcRead"));
 const ApplyList = lazy(() => import("./pages/apply/ApplyList"));
 const ApplyAdd = lazy(() => import("./pages/apply/ApplyAdd"));
 const ApplyRead = lazy(() => import("./pages/apply/ApplyRead"));
-const ApplyAdmin = lazy(() => import("./pages/apply/ApplyAdmin"));
 
 const ClassList = lazy(() => import("./pages/class/List"));
 const ClassAdd = lazy(() => import("./pages/class/Add"));
 const ClassRead = lazy(() => import("./pages/class/Read"));
-//const ClassUpdate = lazy(() => import("./pages/class/Update"));
+// const ClassUpdate = lazy(() => import("./pages/class/Update"));
 
 const LectureList = lazy(() => import("./pages/lecture/List"));
 const LectureAdd = lazy(() => import("./pages/lecture/Add"));
@@ -49,14 +48,24 @@ const CodeAdd= lazy(()=>import('./pages/codegroup/Add'));
 const CodeRead= lazy(()=>import('./pages/codegroup/Read'));
 const CodeMod= lazy(()=>import('./pages/codegroup/Mod'));
 
-const QuestionList = lazy(() => import ("./pages/question/List"));
-const QuestionAdd = lazy(() => import ("./pages/question/Add"));
-const QuestionRead = lazy(() => import ("./pages/question/Read"));
-const QuestionMod = lazy(() => import ("./pages/question/Mod"));
-const QuestionShare = lazy(() => import ("./pages/questionShare/List"));
+const QuestionList = lazy(() => import("./pages/question/List"));
+const QuestionAdd = lazy(() => import("./pages/question/Add"));
+const QuestionRead = lazy(() => import("./pages/question/Read"));
+const QuestionMod = lazy(() => import("./pages/question/Mod"));
+const QuestionShare = lazy(() => import("./pages/questionShare/List"));
+
+const SurveyList = lazy(() => import("./pages/survey/List"));
+const SurveyRead = lazy(() => import("./pages/survey/Read"));
 
 const Calendar = lazy(() => import("./pages/calendar/Calendar"));
 const CalendarRead = lazy(() => import("./pages/calendar/Read"));
+
+// 추가된 코드
+const UserLogin = lazy(() => import("./pages/user/Login"));
+const ClassUpdate = lazy(() => import("./pages/class/Update"));
+
+const AftercareList = lazy(() => import("./pages/aftercare/List"));
+const AftercareRead = lazy(() => import("./pages/aftercare/Read"));
 
 function App() {
     return (
@@ -64,7 +73,7 @@ function App() {
             <Suspense fallback={<div> Loading ...</div>}>
                 <Routes>
                     {/* 로그인 이전 */}
-                    <Route path="/login" element={<Login />}/> 
+                    <Route path="/login" element={<Login />} />
 
                     {/* 로그인 이후 */}
                     <Route path="/" element={<Layout />}>
@@ -86,7 +95,7 @@ function App() {
                             <Route index="index" element={<ClassList />} />
                             <Route path="add" element={<ClassAdd />} />
                             <Route path="read/:seq" element={<ClassRead />} />
-                            {/*<Route path="update/:seq" element={<ClassUpdate />} /> */}
+                            <Route path="update/:seq" element={<ClassUpdate />} />
                         </Route>
 
                         <Route path="lecture" element={<Container />}>
@@ -106,7 +115,6 @@ function App() {
                             <Route index="index" element={<ApplyList />} />
                             <Route path="add" element={<ApplyAdd />} />
                             <Route path="read/:id" element={<ApplyRead />} />
-                            <Route path="admin" element={<ApplyAdmin />} />
                         </Route>
 
                         <Route path="adminCommunity" element={<Container />}>
@@ -139,12 +147,30 @@ function App() {
                         </Route>
 
                         <Route path="question" element={<Container />}>
-                            <Route index="index" element={<QuestionList/>}/>
-                            <Route path="add" element={<QuestionAdd/>}/>
-                            <Route path="read/:seq" element={<QuestionRead/>}/>
-                            <Route path="mod/:seq" element={<QuestionMod/>}/>
-                            <Route path="share/:question_seq" element={<QuestionShare/>}/>
+                            <Route index="index" element={<QuestionList />} />
+                            <Route path="add" element={<QuestionAdd />} />
+                            <Route path="read/:seq" element={<QuestionRead />} />
+                            <Route path="mod/:seq" element={<QuestionMod />} />
+                            <Route path="share/:question_seq" element={<QuestionShare />} />
                         </Route>
+
+                        <Route path="survey" element={<Container />}>
+                            <Route index="index" element={<SurveyList />} />
+                            <Route path="read/:question_seq/:student_seq" element={<SurveyRead />} />
+                        </Route>
+
+                        {/* Aftercare 추가 */}
+                        <Route path="aftercare" element={<Container />}>
+                            <Route index="index" element={<AftercareList />} />
+                            <Route path="read/:seq" element={<AftercareRead />} />
+                        </Route>
+                    </Route>
+
+                    <Route path="/admin/pass/:seq" element={<AdminPass />} />
+
+                    <Route path="user" element={<Container />}>
+                        <Route index="index" element={<UserLogin />} />
+                        {/* <Route path="modify" element={<UserModify/>}/> */}
                     </Route>
                 </Routes>
             </Suspense>

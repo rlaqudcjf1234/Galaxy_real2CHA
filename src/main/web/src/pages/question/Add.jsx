@@ -1,7 +1,6 @@
-import {useEffect, useState} from 'react';
-import {useNavigate} from 'react-router-dom';
-
-import {authenticatedRequest as axios} from '../../plugins/axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 const Add = () => {
     const navigate = useNavigate();
@@ -11,7 +10,7 @@ const Add = () => {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({ division: [] });
     const [qsCount, setQsCount] = useState(1);
     const [qsItems, setQsItems] = useState([
         {
@@ -67,7 +66,7 @@ const Add = () => {
             copy.length = qsCount;
             for (var i = qsItems.length; i < qsCount; i++) {
                 copy[i] = {
-                    sort: i+1,
+                    sort: i + 1,
                     title: "",
                     division: "",
                     items: [""]
@@ -150,10 +149,10 @@ const Add = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col width="30%"/>
-                        <col width="20%"/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col width="30%" />
+                        <col width="20%" />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -166,7 +165,7 @@ const Add = () => {
                                         : ''}`}
                                     name="title"
                                     required="required"
-                                    placeholder="제목을 입력해주세요."/> {
+                                    placeholder="제목을 입력해주세요." /> {
                                     errors.title && (
                                         <div className="invalid-feedback d-block">
                                             {errors.title}
@@ -182,7 +181,7 @@ const Add = () => {
                                     name="detail"
                                     className="form-control"
                                     rows="2"
-                                    placeholder="내용을 입력해주세요"/>
+                                    placeholder="내용을 입력해주세요" />
                             </td>
                         </tr>
                         <tr>
@@ -196,7 +195,7 @@ const Add = () => {
                                     onChange={handleQsCount}
                                     min="1"
                                     max="50"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                         </tr>
                     </tbody>
@@ -206,7 +205,7 @@ const Add = () => {
                                 <tr>
                                     <th>순번</th>
                                     <td>
-                                        <input type="hidden" name={`qsItems[${index}].sort`} value={qsItem.sort}/> {qsItem.sort}
+                                        <input type="hidden" name={`qsItems[${index}].sort`} value={qsItem.sort} /> {qsItem.sort}
                                     </td>
                                     <th>구분</th>
                                     <td>
@@ -229,9 +228,9 @@ const Add = () => {
                                 </tr>
                                 {
                                     qsItem.division == "" && <tr>
-                                            <th>질의</th>
-                                            <td colSpan="3"></td>
-                                        </tr>
+                                        <th>질의</th>
+                                        <td colSpan="3"></td>
+                                    </tr>
                                 }
                                 {
                                     qsItem.division != "" && (
@@ -244,7 +243,7 @@ const Add = () => {
                                                     rows="2"
                                                     maxLength="150"
                                                     required="required"
-                                                    placeholder="질의를 입력해주세요."/>
+                                                    placeholder="질의를 입력해주세요." />
                                             </td>
                                         </tr>
                                     )
@@ -262,7 +261,7 @@ const Add = () => {
                                                     onChange={(e) => handleQsOCount(e, index)}
                                                     min="1"
                                                     max="50"
-                                                    required="required"/>
+                                                    required="required" />
                                             </td>
                                         </tr>
                                     )
@@ -283,7 +282,7 @@ const Add = () => {
                                                                         className="form-control"
                                                                         name={`qsItems[${index}].items[${subIndex}]`}
                                                                         required="required"
-                                                                        placeholder="항목"/>
+                                                                        placeholder="항목" />
                                                                 </li>
                                                             ))
                                                     }

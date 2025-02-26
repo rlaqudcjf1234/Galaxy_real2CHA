@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 const Add = () => {
     const navigate = useNavigate();
@@ -56,10 +56,10 @@ const Add = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col width="30%"/>
-                        <col width="20%"/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col width="30%" />
+                        <col width="20%" />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -69,7 +69,7 @@ const Add = () => {
                                     type="text"
                                     className="form-control-plaintext"
                                     value={question.TITLE || ""}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                         <tr>
@@ -79,7 +79,7 @@ const Add = () => {
                                     className="form-control-plaintext"
                                     rows="2"
                                     value={question.DETAIL}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                     </tbody>
@@ -96,7 +96,7 @@ const Add = () => {
                                         <input
                                             className="form-control-plaintext"
                                             value={qsItem.DIVISION_NAME}
-                                            readOnly="readOnly"/>
+                                            readOnly="readOnly" />
                                     </td>
                                 </tr>
                                 {
@@ -108,7 +108,7 @@ const Add = () => {
                                                     className="form-control-plaintext"
                                                     rows="2"
                                                     value={qsItem.TITLE}
-                                                    readOnly="readOnly"/>
+                                                    readOnly="readOnly" />
                                             </td>
                                         </tr>
                                     )
@@ -128,7 +128,7 @@ const Add = () => {
                                                                     name={`qsItems[${index}].items`}
                                                                     id={`qsItems[${index}].items[${subIndex}]`}
                                                                     value={subIndex}
-                                                                    readOnly="readOnly"/>
+                                                                    readOnly="readOnly" />
                                                                 <label className="form-check-label" htmlFor={`qsItems[${index}].items[${subIndex}]`}>{item}</label>
                                                             </li>
                                                         ))
@@ -148,7 +148,7 @@ const Add = () => {
                                                         qsItem.ITEMS?.map((item, subIndex) => (
                                                             <li className="text-align-left" key={subIndex}>
                                                                 <input type="checkbox" className="form-check-input" value={subIndex}
-                                                                    id={`qsItems[${index}].items[${subIndex}]`} readOnly="readOnly"/>
+                                                                    id={`qsItems[${index}].items[${subIndex}]`} readOnly="readOnly" />
                                                                 <label className="form-check-label" htmlFor={`qsItems[${index}].items[${subIndex}]`}>{item}</label>
                                                             </li>
                                                         ))

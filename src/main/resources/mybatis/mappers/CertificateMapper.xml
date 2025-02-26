@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.galaxy.mapper.CertificateMapper">
+
+    <select id="selectCertificates" parameterType="int" resultType="com.galaxy.dto.CertificateDto">
+        SELECT 
+            STUDENT_SEQ AS studentSeq,
+            SORT AS sort,
+            CERT_NAME AS certName,
+            CERT_NO AS certNo,
+            TO_CHAR(PASS_DT, 'YYYY-MM-DD') AS passDt,
+            ISSUER AS issuer
+        FROM CERTIFICATE
+        WHERE STUDENT_SEQ = #{studentSeq}
+        ORDER BY SORT
+    </select>
+
+</mapper>

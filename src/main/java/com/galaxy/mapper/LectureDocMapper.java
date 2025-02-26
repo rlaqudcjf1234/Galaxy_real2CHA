@@ -11,14 +11,14 @@ import com.galaxy.dto.SearchDto;
 @Mapper
 public interface LectureDocMapper {
 
-    int selectCount(SearchDto dto)throws Exception;
+    int selectCount(SearchDto dto) throws Exception;
 
-    List<Map<String, Object>> selectList(SearchDto dto)throws Exception;
+    List<Map<String, Object>> selectList(SearchDto dto) throws Exception;
 
-    int insertOne(LectureDocDto dto)throws Exception;
+    int insertOne(LectureDocDto dto) throws Exception;
 
-    Map<String, Object> selectOne(String seq)throws Exception;
+    Map<String, Object> selectOne(String seq) throws Exception;
 
-    void updateOne(LectureDocDto dto)throws Exception;
+    void updateOne(LectureDocDto dto) throws Exception;
 
 }

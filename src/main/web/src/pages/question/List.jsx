@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import {authenticatedRequest as axios} from '../../plugins/axios';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 import Pagination from "../../components/Pagination";
 
@@ -8,7 +8,7 @@ const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
 
-    const [search, setSearch] = useState({select: "1", text: ""});
+    const [search, setSearch] = useState({ select: "1", text: "" });
     const [params, setParams] = useState({});
     const [loading, setLoading] = useState(false); // 로딩 상태
 
@@ -16,7 +16,7 @@ const List = () => {
     const fetchData = async () => {
         setLoading(true);
         try {
-            const response = await axios.get("/api/question/list", {params: params});
+            const response = await axios.get("/api/question/list", { params: params });
             setItems(response.data.items); // 목록 데이터
             setTotalCount(response.data.totalCount); // 전체 아이템 수
         } catch (error) {
@@ -92,10 +92,11 @@ const List = () => {
                     <Link to="add" className="btn btn-primary">등록</Link>
                 </caption>
                 <colgroup>
-                    <col/>
-                    <col/>
-                    <col/>
-                    <col/>
+                    <col width="100px" />
+                    <col />
+                    <col width="100px" />
+                    <col width="150px" />
+                    <col width="200px" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -108,7 +109,7 @@ const List = () => {
                 </thead>
                 <tbody>
                     {
-                        items.length > 0
+                        Array.isArray(items) && items.length > 0
                             ? (items.map((item) => (
                                 <tr key={item.SEQ}>
                                     <td>{item.RNUM}</td>
@@ -129,7 +130,7 @@ const List = () => {
                             )))
                             : (
                                 <tr>
-                                    <td colSpan="4" className="text-center">
+                                    <td colSpan="5" className="text-center">
                                         데이터가 없습니다.
                                     </td>
                                 </tr>
@@ -140,7 +141,7 @@ const List = () => {
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
-                onPageChange={handlePageChange}/>
+                onPageChange={handlePageChange} />
 
             <div className="d-flex gap-2 justify-content-center py-1">
                 <div>
@@ -162,7 +163,7 @@ const List = () => {
                         onChange={handleSearchChange}
                         onKeyDown={handleKeyPress}
                         className="form-control"
-                        placeholder="검색어를 입력하세요"/>
+                        placeholder="검색어를 입력하세요" />
                 </div>
                 <button onClick={handleSearch} className="btn btn-primary">검색</button>
             </div>

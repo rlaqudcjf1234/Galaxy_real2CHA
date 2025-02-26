@@ -1,0 +1,232 @@
+/* 전체 컨테이너 */
+.info-container {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* 제목 스타일 */
+h2 {
+    margin-bottom: 20px;
+    color: #343a40;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* 박스 레이아웃 (2열 정렬) */
+.info-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+/* 정보 박스 스타일 */
+.info-box {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.info-box strong {
+    display: block;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+.info-box span {
+    color: #555;
+}
+
+/* 로딩 및 오류 메시지 */
+.loading-text,
+.error-text {
+    font-size: 18px;
+    color: red;
+}
+
+/* 수정 버튼 기본 스타일 */
+.button-update {
+    background-color: #0d6efd;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* 마우스 오버 시 */
+.button-update:hover {
+    background-color: #0b5ed7;
+}
+
+/* 수정 완료 버튼 스타일 */
+.button-update-complete {
+    background-color: #0d6efd;
+    color: #fff;
+    padding: 8px 16px;
+    margin-right: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-update-complete:hover {
+    background-color: #0b5ed7;
+}
+
+/* 취소 버튼 스타일 */
+.button-cancel, .button-aftercare {
+    background-color: #6c757d;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button-cancel:hover, .button-aftercare:hover {
+    background-color: #5c636a;
+}
+
+/* ------------------ 모달 쪽 ------------------*/
+/* 모달 오버레이: 화면 중앙에 배치 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* 어두운 배경 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+  }
+  
+  /* 모달 콘텐츠: 가운데 정렬 및 적절한 크기 */
+  .modal-content {
+    background-color: #fff;
+    border-radius: 8px;
+    width: 90%;
+    max-width: 700px;
+    max-height: 80vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 모달 헤더: 닫기 버튼을 고정 */
+  .modal-header {
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-bottom: 1px solid #ccc;
+    z-index: 1100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  /* 모달 헤더 제목 가운데 정렬 */
+  .modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  /* 모달 닫기 버튼: 헤더 내부 오른쪽에 고정 */
+  .modal-close {
+    background-color: transparent;
+    border: none;
+    font-size: 2rem;
+    color: red;
+    cursor: pointer;
+  }
+  
+  /* 모달 바디: 헤더 아래 스크롤 가능 영역 */
+  .modal-body {
+    padding: 20px;
+    overflow-y: auto;
+    flex: 1;
+  }
+  
+  /* 국가 목록을 그리드 레이아웃으로 표시 (행 간격 20px, 열 간격 10px) */
+  .modal-body ul {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 20px 10px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  
+  /* 각 국가 항목을 박스 형태로 표시하고 중앙 정렬 */
+  .modal-body ul li {
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    word-wrap: break-word;
+  }
+  
+  /* 국가 항목 호버 시 배경색 변화 */
+  .modal-body ul li:hover {
+    background-color: #f0f0f0;
+  }
+  
+/* 회사 국적 선택 텍스트 */
+.country-select {
+    display: inline-block;        
+    color: #007bff;               
+    cursor: pointer;             
+    transition: color 0.2s ease;  
+    text-decoration: none;       
+  }
+  
+  /* 호버 시 */
+  .country-select:hover {
+    color: #0056b3;               
+    text-decoration: underline;  
+  }
+  
+  
+  
+  /* CERTIFICATE */
+.info-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .info-table th,
+  .info-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+    color: #555;
+  }
+  
+  .info-table th {
+    background-color: #f8f9fa;
+    font-weight: bold;
+    color: #333;
+  }
+  

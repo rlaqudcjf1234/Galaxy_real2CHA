@@ -1,23 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.galaxy.mapper.QuestionMapper">
-	
+
 	<sql id="sqlSearch">
 		<where>
 			<if test='text != null and text != ""'>
 				<choose>
 					<when test='select == "1"'>
-						AND TITLE LIKE '%'||TRIM(#{text})||'%'
+					AND TITLE LIKE '%'||TRIM(#{text})||'%'
+					</when>
+					<when test='select == "2"'>
+					AND ADMIN_SEQ IN (SELECT SEQ FROM ADMIN WHERE NAME LIKE '%'||TRIM(#{text})||'%')
 					</when>
 				</choose>
 			</if>
 		</where>
 	</sql>
 
-    <select id="selectCount" parameterType="searchDto" resultType="int">
+	<select id="selectCount" parameterType="searchDto" resultType="int">
         SELECT COUNT(*) FROM QUESTION
-        <include refid="sqlSearch" />
-    </select>
+		<include refid="sqlSearch" />
+	</select>
 
 	<select id="selectList" parameterType="searchDto" resultType="map">
 		SELECT SEQ, TITLE, DETAIL, ADMIN_SEQ, GET_ADMIN_NAME(ADMIN_SEQ) AS ADMIN_NAME, TO_CHAR(REG_DT, 'YYYY-MM-DD') AS REG_DT, 
@@ -25,11 +28,11 @@
 		FROM (
 			SELECT SEQ, TITLE, DETAIL, ADMIN_SEQ, REG_DT
 			FROM QUESTION
-			<include refid="sqlSearch" />
+		<include refid="sqlSearch" />
 			ORDER BY SEQ DESC
 		) A OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS FETCH NEXT #{pageSize} ROWS ONLY
 	</select>
-	
+
 	<insert id="insertOne" parameterType="questionDto">
 		<selectKey resultType="String" keyProperty="seq" order="BEFORE">
 			SELECT SEQ.NEXTVAL FROM DUAL

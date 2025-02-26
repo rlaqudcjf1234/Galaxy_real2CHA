@@ -1,79 +1,99 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
-import axios from "axios";
+import { Link, useNavigate } from "react-router-dom";
+import { authenticatedRequest as axios } from "../../plugins/axios";
+import { useSelector } from "react-redux";
 import Pagination from "../../components/Pagination";
-import '../../css/Community.css';
+import "../../css/Community.css";
 
 function AdcList() {
-    // 기본적인 상태 관리
-    const [items, setItems] = useState([]); // 게시글 목록
-    const [totalCount, setTotalCount] = useState(0); // 전체 게시글 수
-    const [currentPage, setCurrentPage] = useState(1); // 현재 페이지
+    const navigate = useNavigate();
+    const accessToken = useSelector((state) => state.accessToken.val);
+
+    const [items, setItems] = useState([]);
+    const [totalCount, setTotalCount] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
     const [params, setParams] = useState({
         pageIndex: 1,
         pageSize: 10,
-        searchKeyword: ''
+        searchKeyword: "",
     });
     const [loading, setLoading] = useState(false);
-    const [searchInput, setSearchInput] = useState('');
+    const [error, setError] = useState(null);
+    const [searchInput, setSearchInput] = useState("");
 
-    // 데이터 가져오기 함수
     const fetchData = async (pageIndex) => {
+        if (!accessToken) {
+            navigate("/login");
+            return;
+        }
+
         setLoading(true);
+        setError(null);
+
         try {
             setParams({
                 ...params,
                 pageIndex: pageIndex,
             });
             const response = await axios.get("/api/adminCommunity/list", { params: params });
-            setItems(response.data.items); // 목록 데이터
-            setTotalCount(response.data.totalCount); // 전체 아이템 수
+            setItems(response.data.items);
+            setTotalCount(response.data.totalCount);
 
-            // 응답 데이터 구조 확인
-            console.log('서버 응답 데이터:', response.data);
-            console.log('items 데이터:', response.data.items);
-
+            console.log("서버 응답 데이터:", response.data);
+            console.log("items 데이터:", response.data.items);
         } catch (error) {
             console.error("Error fetching data:", error);
+
+            if (error.response?.status === 401) {
+                navigate("/login");
+                return;
+            }
+
+            setError(error.response?.data?.message || "데이터를 불러오는데 실패했습니다.");
         } finally {
             setLoading(false);
         }
     };
-    // 페이지 변경 핸들러
+
     const handlePageChange = (page) => {
         setCurrentPage(page);
     };
 
-    // 검색 핸들러
     const handleSearch = () => {
+        setParams((prev) => ({
+            ...prev,
+            pageIndex: 1,
+            searchKeyword: searchInput,
+        }));
         setCurrentPage(1);
-        fetchData(1, searchInput);
+        fetchData(1);
     };
 
-    // 엔터 키 핸들러
     const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
+        if (e.key === "Enter") {
             handleSearch();
         }
     };
 
-    // 페이지 변경시 데이터 가져오기
     useEffect(() => {
+        if (!accessToken) {
+            navigate("/login");
+            return;
+        }
         fetchData(currentPage);
-    }, [currentPage]);
+    }, [currentPage, accessToken]);
 
     if (loading) {
-        return (
-            <div className="text-center p-4">
-                데이터를 불러오는 중입니다...
-            </div>
-        );
+        return <div className="text-center p-4">데이터를 불러오는 중입니다...</div>;
+    }
+
+    if (error) {
+        return <div className="alert alert-danger text-center">{error}</div>;
     }
 
     return (
         <div>
-            {/* 검색 및 버튼 영역 */}
             <div className="d-flex justify-content-between align-items-center mb-3">
                 <div className="d-flex gap-2">
                     <input
@@ -93,13 +113,13 @@ function AdcList() {
                 </Link>
             </div>
 
-            {/* 게시글 테이블 */}
             <table className="table table-hover">
                 <thead>
                     <tr>
                         <th scope="col">번호</th>
-                        <th scope="col">제목</th>
                         <th scope="col">구분</th>
+                        <th scope="col">제목</th>
+                        <th scope="col">작성자</th>
                         <th scope="col">작성일</th>
                     </tr>
                 </thead>
@@ -109,11 +129,10 @@ function AdcList() {
                             <tr key={item.seq}>
                                 <td>{item.seq}</td>
                                 <td>
-                                    <Link to={`/adminCommunity/read/${item.seq}`}>
-                                        {item.title}
-                                    </Link>
+                                    <Link to={`/adminCommunity/read/${item.seq}`}>{item.title}</Link>
                                 </td>
                                 <td>{item.division}</td>
+                                <td>{item.name}</td>
                                 <td>{item.regDt}</td>
                             </tr>
                         ))
@@ -127,13 +146,8 @@ function AdcList() {
                 </tbody>
             </table>
 
-            {/* 페이지네이션 */}
             <div className="d-flex gap-2 justify-content-center py-1">
-                <Pagination
-                    currentPage={currentPage}
-                    totalCount={totalCount}
-                    onPageChange={handlePageChange}
-                />
+                <Pagination currentPage={currentPage} totalCount={totalCount} onPageChange={handlePageChange} />
             </div>
         </div>
     );

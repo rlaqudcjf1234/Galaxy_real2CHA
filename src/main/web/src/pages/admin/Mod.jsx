@@ -1,6 +1,7 @@
-import {useEffect, useState} from "react";
-import {useNavigate, useParams} from "react-router-dom";
-import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 function Mod() {
     const navigate = useNavigate();
@@ -10,7 +11,7 @@ function Mod() {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({use_yn: [], division: []});
+    const [codes, setCodes] = useState({ use_yn: [], division: [] });
     const [admin, setAdmin] = useState({});
     const [errors, setErrors] = useState({});
 
@@ -104,7 +105,7 @@ function Mod() {
             </div> */
             }
             <form onSubmit={handleSubmit}>
-                <input type="hidden" name="seq" value={admin.SEQ} readOnly="readOnly"/>
+                <input type="hidden" name="seq" value={admin.SEQ} readOnly="readOnly" />
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
@@ -114,9 +115,9 @@ function Mod() {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -127,7 +128,7 @@ function Mod() {
                                     className="form-control-plaintext"
                                     name="email"
                                     value={admin.EMAIL}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -144,7 +145,7 @@ function Mod() {
                                     name="name"
                                     value={admin.NAME}
                                     onChange={handleFormData}
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -160,7 +161,7 @@ function Mod() {
                                     className="form-control"
                                     name="phone"
                                     value={admin.PHONE}
-                                    onChange={handleFormData}/>
+                                    onChange={handleFormData} />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -201,7 +202,7 @@ function Mod() {
                                     className="form-control-plaintext"
                                     name="reg_dt"
                                     value={admin.REG_DT}
-                                    readOnly="readOnly"/>
+                                    readOnly="readOnly" />
                             </td>
                         </tr>
                         <tr>

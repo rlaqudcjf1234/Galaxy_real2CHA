@@ -1,6 +1,6 @@
-import {useEffect, useState} from "react"
-import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from "react"
+import { useNavigate, useParams } from 'react-router-dom';
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 import Editor from '../../components/Editor';
 
@@ -12,7 +12,7 @@ const Add = () => {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({ division: [] });
     const [lecture, setLecture] = useState({});
     const [errors, setErrors] = useState({}); // 오류 내용
 
@@ -91,7 +91,7 @@ const Add = () => {
                     type="hidden"
                     name="lecture_seq"
                     value={params.lecture_seq}
-                    readOnly="readOnly"/>
+                    readOnly="readOnly" />
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
@@ -102,9 +102,9 @@ const Add = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -115,7 +115,7 @@ const Add = () => {
                                     className="form-control"
                                     name="title"
                                     placeholder="제목을 입력해주세요"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -156,7 +156,7 @@ const Add = () => {
                                     name="sort"
                                     defaultValue="1"
                                     min="1"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                             <td>
                                 <div className="invalid-feedback">
@@ -167,8 +167,8 @@ const Add = () => {
                         <tr>
                             <th>내용</th>
                             <td className="edit" colSpan="2">
-                                <input type="hidden" name="detail" value={detail}/>
-                                <Editor htmlStr={detail} setHtmlStr={setDetail}/>
+                                <input type="hidden" name="detail" value={detail} />
+                                <Editor htmlStr={detail} setHtmlStr={setDetail} />
                             </td>
                         </tr>
                     </tbody>

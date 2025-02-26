@@ -1,6 +1,6 @@
-import {useEffect, useState} from 'react';
-import {useNavigate, useParams} from 'react-router-dom';
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { authenticatedRequest as axios } from '../../plugins/axios';
 
 const Add = () => {
     const navigate = useNavigate();
@@ -10,7 +10,7 @@ const Add = () => {
         navigate(-1);
     }
 
-    const [codes, setCodes] = useState({division: []});
+    const [codes, setCodes] = useState({ division: [] });
     const [question, setQuestion] = useState({});
     const [qsCount, setQsCount] = useState(1);
     const [qsItems, setQsItems] = useState([
@@ -60,11 +60,11 @@ const Add = () => {
                 }
             });
             setQuestion(response.data);
-            if(response.data.qsItems != null){
+            if (response.data.qsItems != null) {
                 setQsItems(response.data.qsItems);
                 setQsCount(response.data.qsItems.length);
             }
-            if(response.data.iCounts != null){
+            if (response.data.iCounts != null) {
                 setICounts(response.data.iCounts);
             }
         } catch (error) {
@@ -100,7 +100,7 @@ const Add = () => {
             copy.length = qsCount;
             for (var i = qsItems.length; i < qsCount; i++) {
                 copy[i] = {
-                    SORT: i+1,
+                    SORT: i + 1,
                     TITLE: "",
                     DIVISION: "",
                     ITEMS: [""]
@@ -173,7 +173,7 @@ const Add = () => {
         <div>
             {/* 폼 영역 */}
             <form onSubmit={handleSubmit}>
-            <input type="hidden" name="seq" value={params.seq} readOnly="readOnly"/>
+                <input type="hidden" name="seq" value={params.seq} readOnly="readOnly" />
                 <table className="table">
                     {/* 헤더 영역 */}
                     <caption>
@@ -184,10 +184,10 @@ const Add = () => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
-                        <col width="30%"/>
-                        <col width="20%"/>
-                        <col width="30%"/>
+                        <col width="20%" />
+                        <col width="30%" />
+                        <col width="20%" />
+                        <col width="30%" />
                     </colgroup>
                     <tbody>
                         <tr>
@@ -199,7 +199,7 @@ const Add = () => {
                                     name="title"
                                     value={question.TITLE || ""}
                                     onChange={handleQuestion}
-                                    required="required"/> 
+                                    required="required" />
                             </td>
                         </tr>
                         <tr>
@@ -211,7 +211,7 @@ const Add = () => {
                                     rows="2"
                                     value={question.DETAIL}
                                     onChange={handleQuestion}
-                                    placeholder="내용을 입력해주세요"/>
+                                    placeholder="내용을 입력해주세요" />
                             </td>
                         </tr>
                         <tr>
@@ -225,7 +225,7 @@ const Add = () => {
                                     onChange={handleQsCount}
                                     min="1"
                                     max="50"
-                                    required="required"/>
+                                    required="required" />
                             </td>
                         </tr>
                     </tbody>
@@ -235,7 +235,7 @@ const Add = () => {
                                 <tr>
                                     <th>순번</th>
                                     <td>
-                                        <input type="hidden" name={`qsItems[${index}].sort`} value={qsItem.SORT}/> {qsItem.SORT}
+                                        <input type="hidden" name={`qsItems[${index}].sort`} value={qsItem.SORT} /> {qsItem.SORT}
                                     </td>
                                     <th>구분</th>
                                     <td>
@@ -256,9 +256,9 @@ const Add = () => {
                                 </tr>
                                 {
                                     qsItem.DIVISION == "" && <tr>
-                                            <th>질의</th>
-                                            <td colSpan="3"></td>
-                                        </tr>
+                                        <th>질의</th>
+                                        <td colSpan="3"></td>
+                                    </tr>
                                 }
                                 {
                                     qsItem.DIVISION != "" && (
@@ -270,7 +270,7 @@ const Add = () => {
                                                     name={`qsItems[${index}].title`}
                                                     rows="2"
                                                     defaultValue={qsItem.TITLE}
-                                                    required="required"/>
+                                                    required="required" />
                                             </td>
                                         </tr>
                                     )
@@ -288,7 +288,7 @@ const Add = () => {
                                                     onChange={(e) => handleQsOCount(e, index)}
                                                     min="1"
                                                     max="50"
-                                                    required="required"/>
+                                                    required="required" />
                                             </td>
                                         </tr>
                                     )
@@ -308,7 +308,7 @@ const Add = () => {
                                                                     name={`qsItems[${index}].items[${subIndex}]`}
                                                                     defaultValue={item}
                                                                     required="required"
-                                                                    placeholder="항목"/>
+                                                                    placeholder="항목" />
                                                             </li>
                                                         ))
                                                     }

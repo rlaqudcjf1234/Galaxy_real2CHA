@@ -1,6 +1,7 @@
 package com.galaxy.controller;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -97,12 +98,32 @@ public class CodeController {
             case "question":
                 list.add(new CodeDto("division", codeService.selectUse17()));
                 break;
+            case "companyLevel":
+                list.add(new CodeDto("companyLevel", codeService.selectUseCode(5)));
+                break;
             default:
                 break;
 
         }
 
         return list;
+    }
+
+    @GetMapping("/room-codes")  // URL 변경
+    public ResponseEntity<Map<String, Object>> getRoomCodes(
+        @RequestParam("page") String page
+    ) {
+        try {
+            if ("classAdd".equals(page)) {
+                CodeDto dto = new CodeDto();
+                List<Map<String, Object>> roomCodes = codeService.selectRoomCode(dto);
+                return ResponseEntity.ok(Map.of("room", roomCodes));
+            }
+            return ResponseEntity.badRequest().body(null);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(null);
+        }
     }
 
 }

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.galaxy.mapper.AftercareMapper">
+
+    <!-- (신규) 학생SEQ로 해당 반(강의)의 관리자 admin_seq 조회 -->
+    <select id="selectClassAdminSeq" parameterType="int" resultType="int">
+        SELECT c.ADMIN_SEQ
+        FROM STUDENT s
+        JOIN CLASS c ON s.CLASS_SEQ = c.SEQ
+        WHERE s.SEQ = #{studentSeq}
+    </select>
+
+    <!-- 기존: 학생SEQ로 AFTERCARE + STUDENT + CLASS + LECTURE + ADMIN 조인 조회 -->
+    <select id="selectAftercareDto" parameterType="int" resultType="com.galaxy.dto.AftercareDto">
+        SELECT
+            s.NAME AS studentName,
+            s.EMAIL AS email,
+            l.NAME AS lectureName,
+            a2.NAME AS adminName,
+            ac.STUDENT_SEQ AS studentSeq,
+            ac.ADMIN_SEQ AS adminSeq,
+            ac.EMPLOYMENT_HOPE AS employmentHope,
+            ac.COMPANY_LEVEL AS companyLevel,
+            ac.COMPANY_TYPE AS companyType,
+            ac.COMPANY_NATION AS companyNation,
+            ac.COMPANY_LOCATION AS companyLocation,
+            ac.EARLY_EMPLOYMENT AS earlyEmployment,
+            ac.GENERAL_EMPLOYMENT AS generalEmployment
+        FROM STUDENT s
+        LEFT JOIN CLASS c ON s.CLASS_SEQ = c.SEQ
+        LEFT JOIN LECTURE l ON c.LECTURE_SEQ = l.SEQ
+        LEFT JOIN ADMIN a2 ON c.ADMIN_SEQ = a2.SEQ
+        LEFT JOIN AFTERCARE ac ON ac.STUDENT_SEQ = s.SEQ
+        WHERE s.SEQ = #{studentSeq}
+    </select>
+
+    <!-- AFTERCARE 생성 (처음 클릭 시) -->
+    <insert id="insertAftercare" parameterType="map">
+        INSERT INTO AFTERCARE (
+            STUDENT_SEQ, 
+            ADMIN_SEQ
+        )
+        SELECT s.SEQ, c.ADMIN_SEQ
+        FROM STUDENT s
+        JOIN CLASS c ON s.CLASS_SEQ = c.SEQ
+        WHERE s.SEQ = #{studentSeq}
+    </insert>
+
+
+
+    <!-- AFTERCARE 수정 -->
+    <update id="updateAftercare" parameterType="map">
+        UPDATE AFTERCARE
+           SET EMPLOYMENT_HOPE   = #{employmentHope},
+               COMPANY_LEVEL     = #{companyLevel},
+               COMPANY_TYPE      = #{companyType},
+               COMPANY_NATION    = #{companyNation},
+               COMPANY_LOCATION  = #{companyLocation},
+               EARLY_EMPLOYMENT  = #{earlyEmployment},
+               GENERAL_EMPLOYMENT= #{generalEmployment}
+         WHERE STUDENT_SEQ       = #{studentSeq}
+    </update>
+
+</mapper>

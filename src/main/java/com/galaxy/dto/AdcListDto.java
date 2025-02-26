@@ -14,6 +14,7 @@ public class AdcListDto {
     public static class AdcItem {
         private Long seq;          // 게시판 시퀀스
         private Long adminSeq;     // 관리자 및 강사 순번
+        private String name;       // 관리자 명
         private String title;      // 제목
         private String division;   // 구분
         private String detail;     // 상세

@@ -6,11 +6,12 @@ import "bootstrap/dist/css/bootstrap.min.css";
 const Update = () => {
     const { seq } = useParams();
     const navigate = useNavigate();
-    
+
     // 폼 데이터와 추가 상태 관리
     const [formData, setFormData] = useState({});
     const [loading, setLoading] = useState(false);
-    
+    // 강의실 코드 호출
+    const [roomCodes, setRoomCodes] = useState([]);
     // 강사 및 강의 목록 상태 추가
     const [admin, setAdmin] = useState([]); // 강사 목록
     const [lectures, setLectures] = useState([]); // 강의 목록
@@ -30,6 +31,30 @@ const Update = () => {
             setLoading(false);
         }
     };
+
+    // 강의실 코드 가져오기
+    const fetchRoomCodes = async () => {
+        setLoading(true);
+        try {
+            const response = await axios.get("/api/code/room-codes", {
+                params: { page: "classAdd" }  // Add.jsx와 동일한 파라미터 추가
+            });
+
+            // response.data.room으로 접근하도록 수정
+            if (response.data && response.data.room) {
+                setRoomCodes(response.data.room);
+            } else {
+                setRoomCodes([]);
+                console.error("Invalid room codes data format");
+            }
+        } catch (error) {
+            console.error("Error fetching room codes:", error);
+            setRoomCodes([]);
+        } finally {
+            setLoading(false);
+        }
+    };
+
 
     // 강사(Admin) 목록 가져오기
     const fetchAdmin = async () => {
@@ -63,21 +88,22 @@ const Update = () => {
         fetchData();     // 현재 강의 정보 불러오기
         fetchAdmin();    // 강사 목록 불러오기
         fetchLectures(); // 강의 목록 불러오기
+        fetchRoomCodes(); // 강의실 코드 불러오기
     }, [seq]);
 
-   // handleChange 함수 수정
-const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prevData => ({
-        ...prevData,
-        // name이 lecture나 admin일 경우 키 변경
-        [name === 'lecture' ? 'LECTURE_SEQ' : 
-         name === 'admin' ? 'ADMIN_SEQ' : 
-         name]: value
-    }));
-};
+    // handleChange 함수 수정
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prevData => ({
+            ...prevData,
+            // name이 lecture나 admin일 경우 키 변경
+            [name === 'lecture' ? 'LECTURE_SEQ' :
+                name === 'admin' ? 'ADMIN_SEQ' :
+                    name]: value
+        }));
+    };
 
-    
+
 
     // 수정 폼 제출 핸들러
     const handleSubmit = async (e) => {
@@ -111,7 +137,7 @@ const handleChange = (e) => {
                         </span>
                     </caption>
                     <colgroup>
-                        <col width="20%"/>
+                        <col width="20%" />
                         <col />
                     </colgroup>
                     <tbody>
@@ -127,8 +153,8 @@ const handleChange = (e) => {
                                     required="required"
                                 >
                                     <option value="">강의를 선택하세요</option>
-                                    {lectures.length === 0 
-                                        ? <option disabled>강의 로딩 중...</option> 
+                                    {lectures.length === 0
+                                        ? <option disabled>강의 로딩 중...</option>
                                         : lectures.map((item) => (
                                             <option key={item.SEQ} value={item.SEQ}>
                                                 {item.NAME}
@@ -179,14 +205,20 @@ const handleChange = (e) => {
                         <tr>
                             <th>강의실</th>
                             <td>
-                                <input
-                                    type="text"
+                                <select
+                                    className="form-control"
                                     name="ROOM"
                                     value={formData.ROOM || ''}
                                     onChange={handleChange}
-                                    className="form-control"
-                                    placeholder="강의실을 입력해주세요"
-                                />
+                                    required="required"
+                                >
+                                    <option value="">강의실을 선택하세요</option>
+                                    {Array.isArray(roomCodes) && roomCodes.map((item) => (
+                                        <option key={item.CODE_ID} value={item.CODE_ID}>
+                                            {item.CODE_NAME}
+                                        </option>
+                                    ))}
+                                </select>
                             </td>
                         </tr>
 
@@ -219,33 +251,33 @@ const handleChange = (e) => {
                         </tr>
 
                         <tr>
-                        <th>시작시간</th>
-                        <td>
-                            <input
-                                type="time"
-                                name="START_TM"
-                                value={formData.START_TM || ''}
-                                onChange={handleChange}
-                                className="form-control"
-                                step="600"  
-                                
-                            />
-                        </td>
-                    </tr>
+                            <th>시작시간</th>
+                            <td>
+                                <input
+                                    type="time"
+                                    name="START_TM"
+                                    value={formData.START_TM || ''}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    step="600"
+
+                                />
+                            </td>
+                        </tr>
 
                         <tr>
-                        <th>종료시간</th>
-                        <td>
-                            <input
-                                type="time"
-                                name="END_TM"
-                                value={formData.END_TM || ''}
-                                onChange={handleChange}
-                                className="form-control"
-                                step="600"  
-                            />
-                        </td>
-                    </tr>
+                            <th>종료시간</th>
+                            <td>
+                                <input
+                                    type="time"
+                                    name="END_TM"
+                                    value={formData.END_TM || ''}
+                                    onChange={handleChange}
+                                    className="form-control"
+                                    step="600"
+                                />
+                            </td>
+                        </tr>
 
                         {/* 총인원 */}
                         <tr>
