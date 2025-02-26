@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import axios from "axios";
+import { authenticatedRequest as axios } from '../../plugins/axios';
 import "bootstrap/dist/css/bootstrap.min.css";
 
 const Read = () => {
@@ -60,11 +60,11 @@ const Read = () => {
         if (items.CODE_NAME === '강의취소' || items.CODE_NAME === '종료') {
             return null;
         }
-        
+
         if (items.CONFIRM_DT && items.CONFIRM_DT !== '') {
             return <button className="btn btn-danger" onClick={handleCancel}>확정취소</button>;
         }
-        
+
         return <button className="btn btn-success" onClick={handleConfirm}>강의확정</button>;
     };
 
@@ -139,17 +139,6 @@ const Read = () => {
                                 </p>
                             </td>
                         </tr>
-                        <tr>
-                            <td colSpan="4" className="text-center">
-                                <div className="d-flex justify-content-center gap-2">
-                                    <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
-                                    <button className="btn btn-primary" onClick={() => navigate(`/class/update/${seq}`)}>수정</button>
-                                    {renderActionButton()}
-                                </div>
-                            </td>
-                        </tr>
-
-                        
                     </tbody>
                 ) : (
                     <tbody>
@@ -159,6 +148,16 @@ const Read = () => {
                     </tbody>
                 )}
             </table>
+
+            {items && (
+                <div className="d-flex justify-content-center mt-3">
+                    <div className="d-flex gap-2">
+                        <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
+                        <button className="btn btn-primary" onClick={() => navigate(`/class/update/${seq}`)}>수정</button>
+                        {renderActionButton()}
+                    </div>
+                </div>
+            )}
         </div>
     );
 };

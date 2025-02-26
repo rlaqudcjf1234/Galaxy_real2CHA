@@ -27,19 +27,6 @@ public class ClassServiceImpl implements ClassService {
             // 페이징된 목록 조회
             List<Map<String, Object>> list = classMapper.selectList(dto);
 
-            // 각 강의에 대해 시간표 설정
-            for (Map<String, Object> classInfo : list) {
-                String codeNameObj = (String) classInfo.get("CODE_NAME");
-
-                // 진행예정이거나 진행중인 강의만 시간표 설정
-                if (codeNameObj != null &&
-                        (codeNameObj.equals("진행예정") || codeNameObj.equals("진행중"))) {
-
-                            String seq = (String) classInfo.get("SEQ");
-                        setTimetable(seq);
-                }
-            }
-
             return list;
         } catch (Exception e) {
             e.printStackTrace();
@@ -53,6 +40,7 @@ public class ClassServiceImpl implements ClassService {
     }
 
     @Override
+    @Transactional
     public int insertClass(ClassDto dto) throws Exception {
         dto.setTable_nm(table_nm);
         // 1. 먼저 insert 실행
@@ -60,7 +48,7 @@ public class ClassServiceImpl implements ClassService {
 
         // 2. insert 성공 후 생성된 seq로 시간표 설정
         if (result > 0) {
-            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용        
+            setTimetable(dto.getSeq()); // SeqDto에서 상속받은 getSeq() 사용
         }
 
         return result;
@@ -73,10 +61,6 @@ public class ClassServiceImpl implements ClassService {
             params.put("seq", seq); // map에 seq 값 담기
 
             Map<String, Object> result = classMapper.classRead(params);
-
-            if (result != null) {
-                setTimetable(seq);
-            }
 
             return result;
         } catch (Exception e) {
