@@ -2,6 +2,9 @@ import React from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Pagination = ({ currentPage, totalCount, onPageChange }) => {
+    currentPage = currentPage || 1;
+    totalCount = totalCount || 0;
+
     const pageUnit = 10;  // 한 페이지당 보여줄 레코드 수
     const pageSize = 10;  // 한 화면에 보여줄 페이지 수
 
