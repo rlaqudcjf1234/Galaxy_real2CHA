@@ -93,14 +93,14 @@
 
 
 
-    <update id="confirmClass" parameterType="java.lang.Long">
+    <update id="confirmClass" parameterType="String">
     UPDATE CLASS 
     SET CONFIRM_DT = SYSDATE
     WHERE SEQ = #{value}
     AND CONFIRM_DT IS NULL
     </update>
 
-    <update id="cancelClass" parameterType="java.lang.Long">
+    <update id="cancelClass" parameterType="String">
     UPDATE CLASS 
     SET USE_YN = 0
     WHERE SEQ = #{value}
@@ -151,7 +151,7 @@
     </select>
 
     <insert id="insertClass" parameterType="classDto">
-        <selectKey keyProperty="seq" resultType="Long" order="BEFORE">
+        <selectKey keyProperty="seq" resultType="String" order="BEFORE">
         SELECT SEQ.NEXTVAL FROM DUAL
         </selectKey>
     INSERT ALL 
@@ -172,7 +172,7 @@
     SELECT * FROM DUAL
     </insert>
 
-    <update id="callSetTimetable" parameterType="Long" statementType="CALLABLE">
+    <update id="callSetTimetable" parameterType="String" statementType="CALLABLE">
         { CALL SET_TIMETABLE(#{seq}) }
     </update>
 

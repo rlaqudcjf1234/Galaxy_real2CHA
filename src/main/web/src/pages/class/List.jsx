@@ -1,25 +1,24 @@
-import {useEffect, useState} from "react";
-import {Link} from "react-router-dom";
-import axios from "axios";
-
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { authenticatedRequest as axios } from '../../plugins/axios';
 import Pagination from "../../components/Pagination";
 
 
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
     const [totalCount, setTotalCount] = useState(0); // 전체 아이템 수
-    const [search, setSearch] = useState({select: "2", text: ""});
-    const [params, setParams] = useState({select: "2", text: "", pageIndex: 1});
+    const [search, setSearch] = useState({ select: "2", text: "" });
+    const [params, setParams] = useState({ select: "2", text: "", pageIndex: 1 });
     const [loading, setLoading] = useState(false); // 로딩 상태
 
     // 선택 페이지 변경 데이터 요청
     const fetchData = async (pageIndex) => {
         setLoading(true);
-        try { 
-            const response = await axios.get("/api/class/list", {params: params});
+        try {
+            const response = await axios.get("/api/class/list", { params: params });
             setItems(response.data.items); // 목록 데이터
             setTotalCount(response.data.totalCount); // 전체 아이템 수
-         } catch (error) {
+        } catch (error) {
             console.error("Error fetching data:", error);
         } finally {
             setLoading(false);
@@ -88,16 +87,16 @@ const List = () => {
                     <Link to="add" className="btn btn-primary">등록</Link>
                 </caption>
                 <colgroup>
-                    <col width="20%"/>
-                    <col width="5%"/>
-                    <col width="5%"/>
-                    <col width="5%"/>
-                    <col width="5%"/>
-                    <col width="10%"/>
-                    <col width="7%"/>
-                    <col width="10%"/>
-                  
-                   
+                    <col width="20%" />
+                    <col width="5%" />
+                    <col width="5%" />
+                    <col width="5%" />
+                    <col width="5%" />
+                    <col width="10%" />
+                    <col width="7%" />
+                    <col width="10%" />
+
+
                 </colgroup>
                 <thead>
                     <tr>
@@ -143,7 +142,7 @@ const List = () => {
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
-                onPageChange={handlePageChange}/>
+                onPageChange={handlePageChange} />
 
             <div className="d-flex gap-2 justify-content-center py-1">
                 <div>
@@ -166,7 +165,7 @@ const List = () => {
                         onChange={handleSearchChange}
                         onKeyDown={handleKeyPress}
                         className="form-control"
-                        placeholder="검색어를 입력하세요"/>
+                        placeholder="검색어를 입력하세요" />
                 </div>
                 <button onClick={handleSearch} className="btn btn-primary">검색</button>
             </div>

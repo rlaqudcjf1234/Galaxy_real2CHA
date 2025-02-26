@@ -1,8 +1,7 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useState, useEffect } from "react"
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
+import { authenticatedRequest as axios } from '../../plugins/axios';
 const Add = () => {
     const navigate = useNavigate();
 
@@ -256,13 +255,13 @@ const Add = () => {
 
                         {/* 교육인원 */}
                         <tr>
-                            <th>교육인원</th>
+                            <th>모집인원</th>
                             <td>
                                 <input
                                     type="text"
                                     className="form-control"
                                     name="people"
-                                    placeholder="교육인원을 입력하세요"
+                                    placeholder="모집인원을 입력하세요"
                                 />
                                 {errors.people && <div className="text-danger">{errors.people}</div>}
                             </td>
