@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { persistor } from "../main";
 import '../css/Header.css';
+import Logo2 from '../img/Logo_hor1.png';
+import Logo from '../img/Logo_hor2.png';
 
 function Header() {
 
@@ -13,10 +15,19 @@ function Header() {
         <header
             className="d-flex flex-wrap align-items-center justify-content-center p-3 mb-4 border-bottom">
             <div className="d-flex flex-wrap align-items-center justify-content-center col-md-3 mb-2 mb-md-0">
-                <Link
-                    to="/"
-                    className="d-inline-flex link-body-emphasis text-decoration-none">
-                    {"홈페이지 제목(이미지 처리)"}
+                <Link to="/" className="d-inline-flex link-body-emphasis text-decoration-none">
+                    <img
+                        src={Logo}
+                        alt="Desktop Logo"
+                        className="logo-desktop"
+                        style={{ height: '70px' }}
+                    />
+                    <img
+                        src={Logo2}
+                        alt="Mobile Logo"
+                        className="logo-mobile"
+                        style={{ height: '70px' }}
+                    />
                 </Link>
             </div>
 
@@ -108,24 +119,15 @@ function Header() {
 
                 <div className="menu-item">
                     <div className="menu-text">
-                        <Link to="/Stats_Analysis" className="nav-link px-2">사후관리</Link>
+                        <Link to="/aftercare" className="nav-link px-2">사후관리</Link>
                     </div>
                     <div className="sub-menu">
                         <div className="box">
                             {
                                 [
                                     {
-                                        label: "통계 및 분석",
-                                        path: "Stats_Analysis"
-                                    }, {
-                                        label: "사후관리 신청",
-                                        path: "Aftercare_Apply"
-                                    }, {
-                                        label: "진행 현황",
-                                        path: "Aftercare_Progress"
-                                    }, {
-                                        label: "사후관리 결과",
-                                        path: "Aftercare_Results"
+                                        label: "사후 관리",
+                                        path: "aftercare"
                                     }
                                 ].map(
                                     (item, index) => (<Link key={index} to={`/${item.path}`}>{item.label}</Link>)
