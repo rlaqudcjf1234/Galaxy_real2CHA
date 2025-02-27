@@ -6,7 +6,6 @@ import com.galaxy.mapper.StudentMapper;
 import com.galaxy.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 
@@ -14,23 +13,23 @@ import java.util.Map;
 public class StudentServiceImpl implements StudentService {
 
     @Autowired
-    StudentMapper studentMapper;
+    private StudentMapper studentMapper;
 
     @Override
     public ListDto getStudentList(StudentDto dto) throws Exception {
-        // 검색어, 페이지 값 처리
+        // null인 경우 기본값으로 대체
         String text = (dto.getText() != null) ? dto.getText() : "";
+        String select = (dto.getSelect() != null) ? dto.getSelect() : "name";
+        String classSeq = (dto.getClassSeq() != null) ? dto.getClassSeq() : "";
+        String lectureSeq = (dto.getLectureSeq() != null) ? dto.getLectureSeq() : "";
+        String round = (dto.getRound() != null) ? dto.getRound() : "";
         int pageIndex = (dto.getPageIndex() != null) ? dto.getPageIndex() : 1;
         int pageSize = (dto.getPageSize() != null) ? dto.getPageSize() : 10;
         int offset = (pageIndex - 1) * pageSize;
 
-        // 전체 학생 수 조회
-        int totalCount = studentMapper.selectCount(text);
+        int totalCount = studentMapper.selectCount(text, select, classSeq, lectureSeq, round);
+        List<Map<String, Object>> list = studentMapper.selectList(text, select, classSeq, lectureSeq, round, offset, pageSize);
 
-        // 학생 목록 조회 (검색어와 페이징 적용)
-        List<Map<String, Object>> list = studentMapper.selectList(text, offset, pageSize);
-
-        // 결과 반환
         return new ListDto(totalCount, list);
     }
 
