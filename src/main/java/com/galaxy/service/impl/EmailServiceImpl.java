@@ -1,11 +1,12 @@
 package com.galaxy.service.impl;
 
 import java.io.UnsupportedEncodingException;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
-import com.galaxy.dto.ApplyDto;
 import com.galaxy.dto.EmailDto;
 import com.galaxy.service.EmailService;
 import jakarta.mail.MessagingException;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
+    @Autowired
     private JavaMailSender javaMailSender;
 
     @Value("${spring.mail.username}")
