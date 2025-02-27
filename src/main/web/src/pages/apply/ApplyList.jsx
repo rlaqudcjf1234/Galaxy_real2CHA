@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Pagination from "../../components/Pagination";
-import "../../css/Community.css";
 import { authenticatedRequest as axios } from "../../plugins/axios";
 import { useSelector } from "react-redux"; // Redux 상태 확인을 위해 추가
 
@@ -73,12 +72,26 @@ const ApplyList = () => {
 
     return (
         <div>
-            <div className="board-header">
-                <Link to="/apply/add" className="write-button">
-                    등록
-                </Link>
-            </div>
-            <table className="board-table">
+            {/* List.jsx 스타일에 맞춰 테이블 구성 */}
+            <table className="table">
+                <caption>
+                    <span>
+                        <em>홈</em>
+                        <strong>접수현황</strong>
+                    </span>
+                    {/* 등록 버튼 */}
+                    <Link to="/apply/add" className="btn btn-primary" style={{ float: "right" }}>
+                        등록
+                    </Link>
+                </caption>
+                <colgroup>
+                    <col width="10%" />
+                    <col width="15%" />
+                    <col width="20%" />
+                    <col width="15%" />
+                    <col width="15%" />
+                    <col width="10%" />
+                </colgroup>
                 <thead>
                     <tr>
                         <th scope="col">번호</th>
@@ -94,8 +107,10 @@ const ApplyList = () => {
                         items.map((item) => (
                             <tr key={item.ID}>
                                 <td>{item.RNUM}</td>
-                                <td className="title">
-                                    <Link to={`/apply/read/${item.ID}`}>{item.NAME}</Link>
+                                <td>
+                                    <Link to={`/apply/read/${item.ID}`}>
+                                        {item.NAME}
+                                    </Link>
                                 </td>
                                 <td>{item.EMAIL}</td>
                                 <td>{item.PHONE}</td>
@@ -115,7 +130,9 @@ const ApplyList = () => {
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
-                onPageChange={(pageIndex) => setParams((prev) => ({ ...prev, pageIndex }))}
+                onPageChange={(pageIndex) =>
+                    setParams((prev) => ({ ...prev, pageIndex }))
+                }
             />
         </div>
     );

@@ -95,18 +95,15 @@ function ApplyRead() {
     if (error) return <div className="alert alert-danger">{error}</div>;
     if (!apply) return <div>등록 정보를 찾을 수 없습니다.</div>;
 
+    // 버튼 공통 스타일
+    const buttonStyle = { minWidth: "58px", minHeight: "38px"};
+    const buttonStyle1 = { minWidth: "90px", minHeight: "38px"};
+
     return (
         <div>
             <table className="table">
                 <caption>
-                    <span className="d-flex justify-content-between">
-                        <span>
-                            <em>홈</em>
-                            <em>접수현황</em>
-                            <strong>수강생 상세정보</strong>
-                        </span>
-                        <span>승인상태: {apply.USE_YN === "Y" ? "승인완료" : "승인대기"}</span>
-                    </span>
+                    <strong>수강생 상세정보</strong>
                 </caption>
                 <colgroup>
                     <col width="15%" />
@@ -117,25 +114,27 @@ function ApplyRead() {
                 <tbody>
                     <tr>
                         <th scope="row">강의</th>
-                        <td>{classInfo ? `${classInfo.round}회 - ${classInfo.lecture_name}` : "정보 없음"}</td>
-                    </tr>
-                    <tr>
+                        <td>
+                            {classInfo
+                                ? `${classInfo.round}회 - ${classInfo.lecture_name}`
+                                : "정보 없음"}
+                        </td>
                         <th scope="row">교육 기간</th>
-                        <td>{classInfo ? `${classInfo.start_dt} ~ ${classInfo.end_dt}` : "정보 없음"}</td>
+                        <td>
+                            {classInfo
+                                ? `${classInfo.start_dt} ~ ${classInfo.end_dt}`
+                                : "정보 없음"}
+                        </td>
                     </tr>
                     <tr>
                         <th scope="row">학생명</th>
                         <td>{apply.NAME}</td>
-                    </tr>
-                    <tr>
                         <th scope="row">주민등록번호</th>
                         <td>{apply.JUMIN}</td>
                     </tr>
                     <tr>
                         <th scope="row">전화번호</th>
                         <td>{apply.PHONE}</td>
-                    </tr>
-                    <tr>
                         <th scope="row">이메일</th>
                         <td>{apply.EMAIL}</td>
                     </tr>
@@ -144,8 +143,6 @@ function ApplyRead() {
                         <td>
                             {apply.REAL_ZIPCODE} {apply.REAL_ADDRESS1} {apply.REAL_ADDRESS2}
                         </td>
-                    </tr>
-                    <tr>
                         <th scope="row">등본상 주소</th>
                         <td>
                             {apply.ZIPCODE} {apply.ADDRESS1} {apply.ADDRESS2}
@@ -154,26 +151,44 @@ function ApplyRead() {
                     <tr>
                         <th scope="row">지원경로</th>
                         <td>{apply.PATH}</td>
-                    </tr>
-                    <tr>
                         <th scope="row">등록일자</th>
                         <td>{apply.REG_DT}</td>
                     </tr>
-
                     <tr>
-                        <td colSpan="4" className="text-center">
-                            <div className="d-flex justify-content-center gap-2">
-                                <button className="btn btn-secondary" onClick={() => navigate(-1)}>
-                                    목록
-                                </button>
-                                <button className="btn btn-danger" onClick={() => handleDelete(id)}>
-                                    신청 취소
-                                </button>
-                                {apply.USE_YN !== "Y" && (
-                                    <button className="btn btn-primary" onClick={handleApprove}>
-                                        승인
+                        <th scope="row">승인상태</th>
+                        <td>{apply.USE_YN === "Y" ? "승인완료" : "승인대기"}</td>
+                        <th scope="row"></th>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td colSpan="4">
+                            {/* 버튼을 두 번째 스샷처럼 가로로 배치, 간격 확보 */}
+                            <div className="d-flex justify-content-center mt-3">
+                                <div className="d-flex gap-2">
+                                    <button
+                                        className="btn btn-secondary"
+                                        onClick={() => navigate(-1)}
+                                        style={buttonStyle}
+                                    >
+                                        목록
                                     </button>
-                                )}
+                                    <button
+                                        className="btn btn-danger"
+                                        onClick={() => handleDelete(id)}
+                                        style={buttonStyle1}
+                                    >
+                                        신청 취소
+                                    </button>
+                                    {apply.USE_YN !== "Y" && (
+                                        <button
+                                            className="btn btn-primary"
+                                            onClick={handleApprove}
+                                            style={buttonStyle}
+                                        >
+                                            승인
+                                        </button>
+                                    )}
+                                </div>
                             </div>
                         </td>
                     </tr>
