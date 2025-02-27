@@ -53,14 +53,14 @@
            AND CD.CODE_NAME = 
                CASE
                 WHEN A.USE_YN = 0 THEN '강의취소'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> START_DT THEN '진행예정'  
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> END_DT THEN '종료'  
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> END_DT THEN '종료'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<]]> START_DT THEN '진행예정'  
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>]]> END_DT THEN '종료'  
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>=]]> START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>]]> END_DT THEN '종료'
                 END
        ) AS CODE_NAME
    FROM (
@@ -132,14 +132,14 @@
            AND CD.CODE_NAME = 
                CASE
                    WHEN C.USE_YN = 0 THEN '강의취소'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> C.START_DT THEN '진행예정'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> C.START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> C.END_DT THEN '진행중'
-                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> C.END_DT THEN '종료'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<]]> C.START_DT THEN '진행예정'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>=]]> C.START_DT 
-                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[<=]]> C.END_DT THEN '진행중'
-                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))         <![CDATA[>]]> C.END_DT THEN '종료'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>]]> C.END_DT THEN '종료'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<]]> C.START_DT THEN '진행예정'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>=]]> C.START_DT 
+                        AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[<=]]> C.END_DT THEN '진행중'
+                   WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                 <![CDATA[>]]> C.END_DT THEN '종료'
                END
        ) AS CODE_NAME
    FROM CLASS C
@@ -152,24 +152,24 @@
 
     <insert id="insertClass" parameterType="classDto">
         <selectKey keyProperty="seq" resultType="String" order="BEFORE">
-        SELECT SEQ.NEXTVAL FROM DUAL
+            SELECT SEQ.NEXTVAL FROM DUAL
         </selectKey>
-    INSERT ALL 
-        INTO SEQ_MANAGEMENT(
-            SEQ, TABLE_NM, REG_DT
-        ) VALUES (
-            #{seq}, #{table_nm}, SYSDATE
-        )
-        INTO CLASS (
-            SEQ, LECTURE_SEQ, ADMIN_SEQ, ROUND, ROOM,
-            START_DT, END_DT, START_TM, END_TM, PEOPLE, 
-            REG_DT, USE_YN
-        ) VALUES (
-            #{seq}, #{lecture}, #{admin}, #{round}, #{room},
-            #{start_dt}, #{end_dt}, #{start_tm}, #{end_tm}, #{people},
-            SYSDATE, '1'
-        )
-    SELECT * FROM DUAL
+        INSERT ALL 
+            INTO SEQ_MANAGEMENT(
+                SEQ, TABLE_NM, REG_DT
+            ) VALUES (
+                #{seq}, #{table_nm}, SYSDATE
+            )
+            INTO CLASS (
+                SEQ, LECTURE_SEQ, ADMIN_SEQ, ROUND, ROOM,
+                START_DT, END_DT, START_TM, END_TM, PEOPLE, 
+                REG_DT, USE_YN
+            ) VALUES (
+                #{seq}, #{lecture}, #{admin}, #{round}, #{room},
+                #{start_dt}, #{end_dt}, #{start_tm}, #{end_tm}, #{people},
+                SYSDATE, '1'
+            )
+        SELECT * FROM DUAL
     </insert>
 
     <update id="callSetTimetable" parameterType="String" statementType="CALLABLE">
@@ -180,7 +180,7 @@
         SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
         FROM CLASS
         WHERE USE_YN = 1
-        AND END_DT         <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        AND END_DT                                 <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
     </select>
 
     <select id="selectClassInfo" parameterType="int" resultType="map">

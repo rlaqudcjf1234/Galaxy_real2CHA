@@ -103,35 +103,31 @@ public class ApplyServiceImpl implements ApplyService {
     }
 
     @Override
-    public void CreateStudent(Long id) throws Exception {
+    public ApplyDto CreateStudent(Long id) throws Exception {
+        // 1. APPLY 데이터 조회
+        ApplyDto applyDto = applyMapper.selectApplyById(id);
+        if (applyDto == null) {
+            throw new Exception("신청 정보를 찾을 수 없습니다.");
+        }
+
         try {
-            // 1. SEQ_MANAGEMENT에 새 레코드 추가
-            applyMapper.insertSeqManagement();
-
-            // 2. APPLY 데이터 조회
-            ApplyDto applyDto = applyMapper.selectApplyById(id);
-            if (applyDto == null) {
-                throw new Exception("신청 정보를 찾을 수 없습니다.");
-            }
-
-            // 3. 학생 비밀번호 암호화 처리
+            // 2. 학생 비밀번호 암호화 처리
             // 예시: 주민등록번호 뒷자리(7번째 자리부터)를 기본 비밀번호로 사용
             String rawPassword = applyDto.getJumin().substring(6);
             String encodedPassword = passwordEncoder.encode(rawPassword);
             applyDto.setPassword(encodedPassword);
 
-            // 4. STUDENT 테이블에 데이터 삽입 (암호화된 비밀번호 사용)
+            // 3. STUDENT 테이블에 데이터 삽입 (암호화된 비밀번호 사용)
             applyMapper.insertStudent(applyDto);
 
-            // 5. APPLY 상태 업데이트
-            Map<String, Object> params = new HashMap<>();
-            params.put("id", id);
-            params.put("useYn", "Y");
-            applyMapper.updateApplyStatus(params);
+            // 4. APPLY 상태 업데이트
+            applyMapper.updateApplyStatus(id);
 
         } catch (Exception e) {
             e.printStackTrace();
             throw new Exception("학생 정보 저장 중 오류가 발생했습니다: " + e.getMessage());
         }
+
+        return applyDto;
     }
 }
