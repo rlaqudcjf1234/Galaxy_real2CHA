@@ -230,3 +230,23 @@ h2 {
     color: #333;
   }
   
+  .modal-search-button {
+    background: rgba(255, 255, 255, 0.5);
+    border: black solid 1px;
+    color: black; 
+    font-size: 14px;
+    padding: 5px 10px;
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
+}
+
+.modal-search-button:hover {
+    background: rgba(255, 255, 255, 0.8);
+    color: black;
+}
+
+.modal-search-button:focus {
+    outline: none; 
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.6); 
+}
