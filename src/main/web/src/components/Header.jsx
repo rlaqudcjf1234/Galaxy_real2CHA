@@ -30,6 +30,10 @@ function Header() {
                         <div className="box">
                             {[
                                 {
+                                    label: "코드관리",
+                                    // path: "group",
+                                },
+                                {
                                     label: "강사등록",
                                     path: "admin",
                                 },
@@ -44,7 +48,7 @@ function Header() {
                 </div>
                 <div className="menu-item">
                     <div className="menu-text">
-                        <Link to="/" className="nav-link px-2">
+                        <Link to="/lecture" className="nav-link px-2">
                             과정등록
                         </Link>
                     </div>
@@ -55,18 +59,18 @@ function Header() {
                                     label: "교육과정현황",
                                     path: "lecture",
                                 },
-                                {
-                                    label: "학습안내서",
-                                    path: "#",
-                                },
+                                // {
+                                //     label: "학습안내서",
+                                //     path: "#",
+                                // },
                                 {
                                     label: "강의현황",
                                     path: "class",
                                 },
-                                {
-                                    label: "시간표 현황",
-                                    path: "#",
-                                },
+                                // {
+                                //     label: "시간표 현황",
+                                //     path: "#",
+                                // },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
                                     {item.label}
@@ -90,17 +94,17 @@ function Header() {
                                     label: "접수현황",
                                     path: "apply",
                                 },
-                                {
-                                    label: "출석현황",
-                                    path: "#",
-                                },
-                                {
-                                    label: "자격증 안내",
-                                    path: "#",
-                                },
+                                // {
+                                //     label: "출석현황",
+                                //     path: "#",
+                                // },
+                                // {
+                                //     label: "자격증 안내",
+                                //     path: "#",
+                                // },
                                 {
                                     label: "시간표 조회",
-                                    path: "#",
+                                    path: "calendar",
                                 },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
@@ -114,7 +118,7 @@ function Header() {
 
                 <div className="menu-item">
                     <div className="menu-text">
-                        <Link to="/" className="nav-link px-2">
+                        <Link to="/aftercare" className="nav-link px-2">
                             사후관리
                         </Link>
                     </div>
@@ -123,7 +127,7 @@ function Header() {
                             {[
                                 {
                                     label: "사후 관리",
-                                    path: "#",
+                                    path: "aftercare",
                                 },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
@@ -137,7 +141,7 @@ function Header() {
 
                 <div className="menu-item">
                     <div className="menu-text">
-                        <Link to="/Survey_YN" className="nav-link px-2">
+                        <Link to="/survey" className="nav-link px-2">
                             설문평가
                         </Link>
                     </div>
@@ -146,11 +150,11 @@ function Header() {
                             {[
                                 {
                                     label: "설문작성",
-                                    path: "#",
+                                    path: "question",
                                 },
                                 {
                                     label: "설문결과",
-                                    path: "#",
+                                    path: "survey",
                                 },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
@@ -175,14 +179,14 @@ function Header() {
                                     label: "관리자 게시판",
                                     path: "adminCommunity",
                                 },
-                                {
-                                    label: "공지사항",
-                                    path: "#",
-                                },
-                                {
-                                    label: "Q&A",
-                                    path: "#",
-                                },
+                                // {
+                                //     label: "공지사항",
+                                //     path: "",
+                                // },
+                                // {
+                                //     label: "Q&A",
+                                //     path: "",
+                                // },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
                                     {item.label}
