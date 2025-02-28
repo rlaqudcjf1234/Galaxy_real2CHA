@@ -87,14 +87,14 @@ const List = () => {
                     <Link to="add" className="btn btn-primary">등록</Link>
                 </caption>
                 <colgroup>
-                    <col width="20%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="10%" />
+                    <col width="25%" />
+                    <col width="4%" />
+                    <col width="6%" />
+                    <col width="6%" />
+                    <col width="15%" />
                     <col width="7%" />
-                    <col width="10%" />
+                    <col width="7%" />
+                    <col width="7%" />
 
 
                 </colgroup>
@@ -104,7 +104,7 @@ const List = () => {
                         <th scope="col">회차</th>
                         <th scope="col">강사</th>
                         <th scope="col">강의실</th>
-                        <th scope="col">총인원</th>
+                        <th scope="col">수강 / 신청 / 모집인원</th>
                         <th scope="col">등록일자</th>
                         <th scope="col">강의상태</th>
                         <th scope="col">확정일자</th>
@@ -122,8 +122,8 @@ const List = () => {
                                         </td>
                                         <td>{item.ROUND}</td>
                                         <td>{item.ADMIN_NAME}</td>
-                                        <td>{item.ROOM}</td>
-                                        <td>{item.PEOPLE}</td>
+                                        <td>{item.ROOM_NAME}</td>
+                                        <td>{item.STUDENT_COUNT}   /   {item.APPLY_COUNT}   /   {item.PEOPLE}</td>
                                         <td>{item.REG_DT}</td>
                                         <td>{item.CODE_NAME}</td>
                                         <td>{item.CONFIRM_DT}</td>
