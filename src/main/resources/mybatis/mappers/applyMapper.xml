@@ -111,12 +111,27 @@
 
     <select id="selectApplyById" parameterType="Long" resultType="ApplyDto">
     SELECT 
-        ID, CLASS_SEQ as class_seq, NAME as name, JUMIN as jumin, PHONE as phone, 
-        EMAIL as email, REAL_ZIPCODE as real_zipcode, REAL_ADDRESS1 as real_address1, 
-        REAL_ADDRESS2 as real_address2, ZIPCODE as zipcode, ADDRESS1 as address1, 
-        ADDRESS2 as address2, PATH as path, REG_DT as reg_dt, USE_YN as use_yn
-    FROM APPLY
-    WHERE ID = #{id}
+        ID,
+        CLASS_SEQ as class_seq, 
+        GET_CLASS_NAME(CLASS_SEQ) as class_name,
+        B.ROOM as room,
+        B.ROUND as round,
+        NAME as name,
+        JUMIN as jumin,
+        PHONE as phone, 
+        EMAIL as email,
+        REAL_ZIPCODE as real_zipcode, 
+        REAL_ADDRESS1 as real_address1, 
+        REAL_ADDRESS2 as real_address2, 
+        ZIPCODE as zipcode, 
+        ADDRESS1 as address1, 
+        ADDRESS2 as address2, 
+        PATH as path,
+        A.REG_DT as reg_dt,
+        A.USE_YN as use_yn
+    FROM APPLY A, CLASS B
+    WHERE A.CLASS_SEQ = B.SEQ
+    AND ID = #{id}
     </select>
 
     <delete id="deleteApply" parameterType="Long">
@@ -150,55 +165,36 @@
         UPDATE APPLY SET USE_YN = #{useYn} WHERE ID = #{id}
     </update>
 
-    <insert id="insertStudent" parameterType="ApplyDto">
-    INSERT INTO STUDENT (
-        SEQ,
-        CLASS_SEQ,
-        JUMIN,
-        NAME,
-        REAL_ZIPCODE,
-        REAL_ADDRESS1,
-        REAL_ADDRESS2,
-        ZIPCODE,
-        ADDRESS1,
-        ADDRESS2,
-        EMAIL,
-        PHONE,
-        PATH,
-        ID,
-        PASSWORD,
-        REG_DATE
-    )
-    SELECT 
-        SM.SEQ,
-        #{class_seq,jdbcType=INTEGER},
-        #{jumin,jdbcType=VARCHAR},
-        #{name,jdbcType=VARCHAR},
-        #{real_zipcode,jdbcType=VARCHAR},
-        #{real_address1,jdbcType=VARCHAR},
-        #{real_address2,jdbcType=VARCHAR},
-        NVL(#{zipcode,jdbcType=VARCHAR}, ''),
-        NVL(#{address1,jdbcType=VARCHAR}, ''),
-        NVL(#{address2,jdbcType=VARCHAR}, ''),
-        #{email,jdbcType=VARCHAR},
-        #{phone,jdbcType=VARCHAR},
-        #{path,jdbcType=VARCHAR},
-        C.ROOM || C.ROUND || SM.SEQ,  -- ID 형식 단순화
-        #{password,jdbcType=VARCHAR},  <!-- 암호화된 비밀번호 사용 -->
-        SYSDATE
-    FROM 
-        (SELECT SEQ 
-        FROM SEQ_MANAGEMENT 
-        ORDER BY SEQ DESC 
-        FETCH FIRST 1 ROW ONLY) SM,
-        CLASS C
-    WHERE 
-        C.SEQ = #{class_seq,jdbcType=INTEGER}
+    <insert id="insertStudent" parameterType="applyDto">
+    <selectKey resultType="String" keyProperty="seq" order="BEFORE">
+        SELECT SEQ.NEXTVAL FROM DUAL
+    </selectKey>
+        INSERT ALL 
+            INTO SEQ_MANAGEMENT(
+                SEQ, TABLE_NM, REG_DT
+            ) VALUES (
+                #{seq}, 'STUDENT', SYSDATE
+            )
+            INTO STUDENT (
+                SEQ, CLASS_SEQ, JUMIN, NAME,
+                REAL_ZIPCODE, REAL_ADDRESS1, REAL_ADDRESS2,
+                ZIPCODE, ADDRESS1, ADDRESS2,
+                EMAIL, PHONE, PATH,
+                ID, PASSWORD, REG_DATE
+            ) VALUES (
+                #{seq}, #{class_seq, jdbcType=INTEGER}, #{jumin, jdbcType=VARCHAR}, #{name, jdbcType=VARCHAR}, 
+                #{real_zipcode, jdbcType=VARCHAR}, #{real_address1, jdbcType=VARCHAR}, #{real_address2, jdbcType=VARCHAR}, 
+                NVL(#{zipcode, jdbcType=VARCHAR}, ''), NVL(#{address1, jdbcType=VARCHAR}, ''), NVL(#{address2, jdbcType=VARCHAR}, ''), 
+                #{email, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{path, jdbcType=VARCHAR},
+                (SELECT C.ROOM || C.ROUND || #{seq} FROM CLASS C WHERE C.SEQ = #{class_seq, jdbcType=INTEGER}), 
+                #{password,jdbcType=VARCHAR}, SYSDATE
+            )
+        SELECT * FROM DUAL
     </insert>
 
-    <update id="updateApplyStatus" parameterType="map">
-        UPDATE APPLY 
-        SET USE_YN = 'Y'
+    <update id="updateApplyStatus" parameterType="Long">
+        UPDATE APPLY SET 
+            USE_YN = 'Y'
         WHERE ID = #{id}
     </update>
 
@@ -210,10 +206,5 @@
         FROM CLASS 
         WHERE SEQ = #{classSeq}
     </select>
-
-    <insert id="insertSeqManagement">
-        INSERT INTO SEQ_MANAGEMENT (TABLE_NM, REG_DT)
-        VALUES ('STUDENT', SYSDATE)
-    </insert>
 
 </mapper>

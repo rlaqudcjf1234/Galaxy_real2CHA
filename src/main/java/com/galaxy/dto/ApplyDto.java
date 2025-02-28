@@ -11,8 +11,14 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ApplyDto extends SeqDto {
-    
+
     private Long class_seq;
+
+    private String class_name;
+
+    private String room;
+
+    private Long round;
 
     @NotNull
     @NotBlank
@@ -61,4 +67,6 @@ public class ApplyDto extends SeqDto {
     private String use_yn; // 승인여부
 
     private String password;
+
+
 }

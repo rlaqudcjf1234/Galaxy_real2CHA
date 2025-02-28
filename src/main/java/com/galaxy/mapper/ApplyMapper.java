@@ -40,12 +40,9 @@ public interface ApplyMapper {
 
     Map<String, Object> selectClassInfo(Integer classSeq);
 
-    // SEQ_MANAGEMENT에 새 레코드 추가
-    void insertSeqManagement();
-
     // STUDENT 테이블에 데이터 삽입
     void insertStudent(ApplyDto applyDto);
 
     // APPLY 상태 업데이트
-    void updateApplyStatus(Map<String, Object> params);
+    void updateApplyStatus(Long id);
 }

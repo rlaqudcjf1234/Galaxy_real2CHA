@@ -8,10 +8,10 @@
 					AND B.QUESTION_SEQ IN (SELECT SEQ FROM QUESTION WHERE NAME TITLE '%'||TRIM(#{text})||'%')
 				</when>
 				<when test='select == "2"'>
-					AND B.CLASS_SEQ IN (SELECT SEQ FROM CLASS WHERE NAME LIKE '%'||TRIM(#{text})||'%')
+					AND GET_CLASS_NAME(B.CLASS_SEQ) LIKE '%'||TRIM(#{text})||'%'
 				</when>
 				<when test='select == "3"'>
-					AND A.STUDENT_SEQ IN (SELECT SEQ FROM STUDENT WHERE NAME LIKE '%'||TRIM(#{text})||'%')
+					AND GET_STUDENT_NAME(A.STUDENT_SEQ) LIKE '%'||TRIM(#{text})||'%'
 				</when>
 			</choose>
 		</if>

@@ -1,3 +1,4 @@
+// Aftercare.jsx
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 // 내부 API 호출: 인증이 필요한 요청은 authenticatedRequest를 axios2로 사용
@@ -6,7 +7,7 @@ import { authenticatedRequest as axios2 } from "../../plugins/axios";
 import axios from "axios";
 import "../../css/aftercare/AftercareInfo.css";
 
-const Aftercare = () => {
+const Aftercare = ({ hideEditButton = false }) => {
   const { seq } = useParams();
 
   // 사후관리 데이터, 로딩 상태, 수정 모드 여부 state
@@ -201,8 +202,6 @@ const Aftercare = () => {
   return (
     <div className="info-container">
       <h2>사후관리</h2>
-
-      {/* 상단 프로필 및 강의 정보 */}
       <div className="info-grid">
         <div className="info-box">
           <strong>학생 이름</strong>
@@ -222,7 +221,6 @@ const Aftercare = () => {
         </div>
       </div>
 
-      {/* 수정 모드 분기 */}
       {editMode ? (
         <>
           <div className="info-grid" style={{ marginTop: "20px" }}>
@@ -319,11 +317,14 @@ const Aftercare = () => {
               <span>{form.generalEmployment}</span>
             </div>
           </div>
-          <div style={{ marginTop: "20px" }}>
-            <button className="button-update" onClick={() => setEditMode(true)}>
-              수정
-            </button>
-          </div>
+          {/* 일반 READ 페이지에서는 수정 버튼을 보여줌 */}
+          {!hideEditButton && (
+            <div style={{ marginTop: "20px" }}>
+              <button className="button-update" onClick={() => setEditMode(true)}>
+                수정
+              </button>
+            </div>
+          )}
         </>
       )}
 
@@ -372,10 +373,10 @@ const Aftercare = () => {
                   type="text"
                   value={locationQuery}
                   onChange={(e) => setLocationQuery(e.target.value)}
-                  placeholder="예: London, Tokyo"
+                  placeholder="예: London, Tokyo, 대한민국"
                   style={{ width: "70%", marginRight: "10px", padding: "6px" }}
                 />
-                <button onClick={searchLocation}>검색</button>
+                <button onClick={searchLocation} className="modal-search-button">검색</button>
               </div>
               <ul>
                 {locationResults.map((loc, index) => (

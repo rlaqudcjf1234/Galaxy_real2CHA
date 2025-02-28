@@ -20,12 +20,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.ApplyDto;
+import com.galaxy.dto.EmailDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.mapper.ApplyMapper;
 import com.galaxy.dto.ListDto;
 import com.galaxy.service.ApplyService;
+import com.galaxy.service.EmailService;
 import com.galaxy.service.validator.ApplyValidator;
-
+import jakarta.mail.internet.MimeMessage;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 
@@ -38,7 +40,10 @@ public class ApplyController {
     private final ApplyMapper applyMapper;
 
     @Autowired
-    ApplyService applyService;
+    private ApplyService applyService;
+
+    @Autowired
+    EmailService emailService;
 
     @InitBinder
     public void validatorBinder(WebDataBinder binder) {
@@ -99,25 +104,21 @@ public class ApplyController {
     @PostMapping("/student-info")
     public ResponseEntity<?> getStudentApplyInfo(@RequestBody ApplyDto applyDto) {
         try {
-            ApplyDto applyInfo = applyService.getStudentApplyInfo(
-                    applyDto.getName(),
-                    applyDto.getEmail(),
-                    applyDto.getJumin());
+            ApplyDto applyInfo = applyService.getStudentApplyInfo(applyDto.getName(),
+                    applyDto.getEmail(), applyDto.getJumin());
 
             if (applyInfo == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body("신청 정보를 찾을 수 없습니다.");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("신청 정보를 찾을 수 없습니다.");
             }
 
             return ResponseEntity.ok(applyInfo);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("서버 오류가 발생했습니다.");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("서버 오류가 발생했습니다.");
         }
     }
-    
+
     @PostMapping("/admin-login")
     public ResponseEntity<?> adminLogin(@RequestBody AdminDto adminDto) {
         try {
@@ -132,7 +133,7 @@ public class ApplyController {
                 response.put("post", admin.getPost());
                 response.put("reg_dt", admin.getReg_dt());
                 response.put("use_yn", admin.getUse_yn());
-                
+
                 return ResponseEntity.ok(response);
             } else {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid credentials");
@@ -147,16 +148,16 @@ public class ApplyController {
     public ResponseEntity<?> approveApply(@RequestBody Map<String, Long> payload) {
         Long id = payload.get("id");
         try {
-            applyService.CreateStudent(id);
-            return ResponseEntity.ok()
-                    .body(Map.of(
-                            "success", true,
-                            "message", "승인이 완료되었습니다."));
+            ApplyDto dto = applyService.CreateStudent(id);
+
+            EmailDto emailDto = new EmailDto(dto);
+            MimeMessage message = emailService.createMessage(emailDto);
+            emailService.sendSimpleMessage(message);
+
+            return ResponseEntity.ok().body(Map.of("success", true, "message", "승인이 완료되었습니다."));
         } catch (Exception e) {
-            return ResponseEntity.internalServerError()
-                    .body(Map.of(
-                            "success", false,
-                            "message", "승인 처리 중 오류가 발생했습니다: " + e.getMessage()));
+            return ResponseEntity.internalServerError().body(
+                    Map.of("success", false, "message", "승인 처리 중 오류가 발생했습니다: " + e.getMessage()));
         }
     }
 }
