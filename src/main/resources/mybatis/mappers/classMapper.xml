@@ -180,7 +180,8 @@
         SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
         FROM CLASS
         WHERE USE_YN = 1
-        AND END_DT                                 <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        AND START_DT         <![CDATA[ <= ]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        AND END_DT         <![CDATA[ >= ]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
     </select>
 
     <select id="selectClassInfo" parameterType="int" resultType="map">
