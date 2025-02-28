@@ -18,6 +18,16 @@ public class MailConfig {
     private String host;
     @Value("${spring.mail.port}")
     private int port;
+    @Value("${spring.mail.properties.mail.debug}")
+    private String debug;
+    @Value("${spring.mail.properties.mail.smtp.auth}")
+    private String smtp_auth;
+    @Value("${spring.mail.properties.mail.smtp.ssl.enable}")
+    private String smtp_ssl_enable;
+    @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
+    private String smtp_starttls_enable;
+    @Value("${spring.mail.properties.mail.smtp.ssl.trust}")
+    private String smtp_ssl_trust;
 
 
     @Bean
@@ -36,11 +46,11 @@ public class MailConfig {
     private Properties getMailProperties() {
         Properties properties = new Properties();
         properties.setProperty("mail.transport.protocol", "smtp"); // 프로토콜 설정
-        properties.setProperty("mail.smtp.auth", "true"); // smtp 인증
-        properties.setProperty("mail.smtp.starttls.enable", "true"); // smtp starttls 사용
-        properties.setProperty("mail.debug", "true"); // 디버그 사용
-        properties.setProperty("mail.smtp.ssl.trust", "smtp.mailplug.co.kr"); // ssl 인증 서버 주소
-        properties.setProperty("mail.smtp.ssl.enable", "true"); // ssl 사용
+        properties.setProperty("mail.debug", debug); // 디버그
+        properties.setProperty("mail.smtp.auth", smtp_auth); // smtp 인증
+        properties.setProperty("mail.smtp.ssl.enable", smtp_ssl_enable); // ssl
+        properties.setProperty("mail.smtp.starttls.enable", smtp_starttls_enable); // smtp starttls
+        properties.setProperty("mail.smtp.ssl.trust", smtp_ssl_trust); // ssl 인증 서버 주소
         return properties;
     }
 }
