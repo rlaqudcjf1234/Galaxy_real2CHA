@@ -95,7 +95,7 @@ function LectureDocument() {
                     <span>
                         <em>홈</em>
                         <em>교육과정현황</em>
-                        <strong>과정설명(<small>{lecture.NAME}</small>)</strong>
+                        <strong>교육설명(<small>{lecture.NAME}</small>)</strong>
                     </span>
                     <Link to="add" className="btn btn-primary">등록</Link>
                 </caption>

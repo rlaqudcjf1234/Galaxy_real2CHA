@@ -119,7 +119,7 @@ const List = () => {
                         <th>과정명</th>
                         <th>등록자</th>
                         <th>등록일자</th>
-                        <th>과정설명</th>
+                        <th>교육설명</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -140,7 +140,7 @@ const List = () => {
                                         <td>
                                             {/*attach=임의경로*/}
                                             <button className="btn btn-info" onClick={() => handleClick(item.SEQ)}>
-                                                과정설명
+                                                교육설명
                                             </button>
                                         </td>
                                     </tr>
