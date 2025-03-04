@@ -571,7 +571,7 @@ const Calendar = () => {
                                                 setSelectedDate(day.date.toISOString());
                                             }}
                                         >
-                                            {`(${event.ADMIN_NAME || ''})-휴강 `}
+                                            {`${event.ADMIN_NAME || ''} - 휴강`}
                                         </div>
                                     ))}
 

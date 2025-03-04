@@ -17,10 +17,13 @@
 
 <select id="tablelist" parameterType="SearchDto" resultType="map">
      SELECT A.CLASS_SEQ, 
-           B.DAILY,
-           COALESCE(C.STATUS, 'normal') AS STATUS
+            GET_CLASS_NAME(A.CLASS_SEQ) AS CLASS_NAME,                        
+            B.DAILY,
+            COALESCE(C.STATUS, 'normal') AS STATUS,
+            GET_ADMIN_NAME(A.ADMIN_SEQ) AS ADMIN_NAME -- ADMIN 이름 추가
     FROM (
-        SELECT C.SEQ as CLASS_SEQ 
+        SELECT C.SEQ as CLASS_SEQ,
+               D.SEQ as ADMIN_SEQ  -- ADMIN SEQ 추가
         FROM CLASS C
         LEFT JOIN ADMIN D ON C.ADMIN_SEQ = D.SEQ
         WHERE 1=1
@@ -43,6 +46,7 @@
         AND EXTRACT(YEAR FROM C.DAILY) = #{year}
         AND EXTRACT(MONTH FROM C.DAILY) = #{month}
 </select>
+
 
 <select id="calendarDay" parameterType="String" resultType="map">
     SELECT * FROM TIMETABLE
