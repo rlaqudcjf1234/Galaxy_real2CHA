@@ -30,11 +30,7 @@ function Header() {
                         <div className="box">
                             {[
                                 {
-                                    label: "코드관리",
-                                    // path: "group",
-                                },
-                                {
-                                    label: "강사등록",
+                                    label: "강사현황",
                                     path: "admin",
                                 },
                             ].map((item, index) => (
@@ -59,18 +55,10 @@ function Header() {
                                     label: "교육과정현황",
                                     path: "lecture",
                                 },
-                                // {
-                                //     label: "학습안내서",
-                                //     path: "#",
-                                // },
                                 {
                                     label: "강의현황",
                                     path: "class",
-                                },
-                                // {
-                                //     label: "시간표 현황",
-                                //     path: "#",
-                                // },
+                                }
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
                                     {item.label}
@@ -94,16 +82,8 @@ function Header() {
                                     label: "접수현황",
                                     path: "apply",
                                 },
-                                // {
-                                //     label: "출석현황",
-                                //     path: "#",
-                                // },
-                                // {
-                                //     label: "자격증 안내",
-                                //     path: "#",
-                                // },
                                 {
-                                    label: "시간표 조회",
+                                    label: "일정현황",
                                     path: "calendar",
                                 },
                             ].map((item, index) => (
@@ -126,7 +106,7 @@ function Header() {
                         <div className="box">
                             {[
                                 {
-                                    label: "사후 관리",
+                                    label: "사후관리",
                                     path: "aftercare",
                                 },
                             ].map((item, index) => (
