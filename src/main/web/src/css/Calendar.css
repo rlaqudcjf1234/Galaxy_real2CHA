@@ -70,7 +70,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 5px;
     z-index: 1;
 }
 
@@ -93,22 +93,11 @@
 }
 
 /* 상태별 이벤트 스타일 */
-.calendar-event {
-    width:100px;
-    font-size: 0.8rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    margin-bottom: 2px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    cursor: pointer;
-    transition: background-color 0.2s;
-    position: relative;
-    z-index: 10;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    color: #1f2937;
+.calendar-events {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
 }
 
 .calendar-event.status-normal,
@@ -211,4 +200,106 @@
         position: static;
         margin-top: 1rem;
     }
+}
+
+.calendar-day:hover{
+    cursor: pointer;
+}
+
+.calendar-event.cancel-event {
+    background-color: #ff4d4d;
+    color: white;
+    font-size: 0.7rem;
+    padding: 3px 6px;
+    border: none;
+    width: 100%;
+    margin-bottom: 2px;
+}
+
+/* 스크롤바 커스터마이징 */
+.calendar-events::-webkit-scrollbar {
+    width: 6px;
+}
+
+.calendar-events::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.calendar-events::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 3px;
+}
+
+.calendar-events::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.calendar-event.absence-event {
+  background-color: #ef4444;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.perception-event {
+  background-color: #f59e0b;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.early-event {
+  background-color: #10b981;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.outing-event {
+  background-color: #3b82f6;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.illness-event {
+  background-color: #8b5cf6;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.attend-event {
+  background-color: #6b7280;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
+}
+
+.calendar-event.vacation-event {
+  background-color: #ec4899;
+  color: white;
+  font-size: 0.7rem;
+  padding: 3px 6px;
+  border: none;
+  width: 100%;
+  margin-bottom: 2px;
 }

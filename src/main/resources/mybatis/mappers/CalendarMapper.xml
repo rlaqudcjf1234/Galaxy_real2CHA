@@ -24,19 +24,16 @@
     JOIN ADMIN D ON C.ADMIN_SEQ = D.SEQ
     WHERE 1=1
     AND EXTRACT(YEAR FROM A.DAILY) = #{year}
-    AND EXTRACT(MONTH FROM A.DAILY) = #{month}
-    AND (
-        (D.DIVISION = 'system') -- system 권한일 경우 전체 조회
-        OR 
-        (D.DIVISION = 'admin' AND D.SEQ = #{seq}) -- admin 권한일 경우 자신의 반만 조회
-    )
+    AND EXTRACT(MONTH FROM A.DAILY) = #{month}   
 </select>
-<select id="calendarread" parameterType="SeqDto" resultType="map">
+
+
+<select id="calendarread" parameterType="CalendarDto" resultType="map">
    SELECT 
         C.SEQ AS CLASS_SEQ,
         B.SEQ AS STUDENT_SEQ,
         B.NAME AS STUDENT_NAME,
-        TO_CHAR(A.DAILY, 'YYYY-MM-DD') AS DAILY,
+        A.DAILY,
         GET_CODE_NAME('7', A.DIVISION) AS DIVISION,
         A.MEMO,
         D.NAME AS ADMIN_NAME,
@@ -46,7 +43,9 @@
     JOIN STUDENT B ON A.STUDENT_SEQ = B.SEQ
     JOIN CLASS C ON A.CLASS_SEQ = C.SEQ
     JOIN ADMIN D ON C.ADMIN_SEQ = D.SEQ
-    WHERE A.STUDENT_SEQ = #{seq}
+    WHERE A.DAILY = #{daily}
+    AND A.STUDENT_SEQ = #{seq}          
+    
 </select>
 
 </mapper>

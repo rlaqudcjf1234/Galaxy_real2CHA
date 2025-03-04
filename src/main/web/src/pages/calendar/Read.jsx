@@ -1,51 +1,93 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useLocation } from 'react-router-dom';
 import { authenticatedRequest as axios } from "../../plugins/axios";
 import '../../css/CalendarRead.css';
 
 const CalendarRead = () => {
     const [eventInfo, setEventInfo] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const { classseq } = useParams();
+    const [loading, setLoading] = useState(true);
+    
+    // 경로 파라미터에서 seq 가져오기
+    const { seq } = useParams();
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    
+    // 쿼리 파라미터에서 daily 가져오기
+    const daily = queryParams.get('daily');
+    
+    // studentSeq는 경로 파라미터의 seq 사용
+    const studentSeq = seq;
+    
     const [codes, setCodes] = useState({
         division: []
     });
 
+    console.log("Route params:", { seq, daily });
+    // 이벤트 정보 가져오기
     const fetchEventInfo = async () => {
         try {
-            const response = await axios.get(`/api/calendar/read`, {
-                params: { classSeq: classseq }
+            console.log("Fetching data for student:", studentSeq, "and date:", daily);
+    
+            if (!studentSeq || !daily) {
+                console.error("Missing required parameters: studentSeq or daily");
+                setLoading(false);
+                return;
+            }
+    
+            const response = await axios.get('/api/calendar/read', {
+                params: { 
+                    seq: studentSeq,
+                    daily: daily  // ✅ 변환 없이 그대로 전달
+                }
             });
-            setEventInfo(response.data);
+    
+            console.log("Response data:", response.data);
+    
+            if (response.data && Array.isArray(response.data)) {
+                setEventInfo(response.data);
+            } else {
+                setEventInfo(response.data ? [response.data] : []);
+            }
         } catch (error) {
             console.error('Error:', error);
             alert("정보를 불러오지 못했습니다.");
-        }
-    };
-
-    const fetchCodes = async () => {
-        setLoading(true);
-        try {
-            const response = await axios.get("/api/code/use", {
-                params: { "text": "calendar" }
-            });
-            const data = {}
-            response.data.forEach(item => {
-                data[item.name] = item.value
-            });
-            setCodes(data);
-        } catch (error) {
-            console.error('Error fetching data:', error);
         } finally {
             setLoading(false);
         }
     };
+    
+    // 코드 목록 가져오기
+    const fetchCodes = async () => {
+        try {
+            const response = await axios.get("/api/code/use", {
+                params: { "text": "calendar" }
+            });
+            
+            const data = {};
+            if (Array.isArray(response.data)) {
+                response.data.forEach(item => {
+                    data[item.name] = item.value;
+                });
+            }
+            setCodes(data);
+        } catch (error) {
+            console.error('Error fetching codes:', error);
+        }
+    };
 
+    // 컴포넌트 마운트 시 데이터 가져오기
     useEffect(() => {
-        fetchEventInfo();
-        fetchCodes();
-    }, [classseq]); 
+        if (studentSeq && daily) {
+            console.log("Student SEQ and daily found:", studentSeq, daily);
+            fetchEventInfo();
+            fetchCodes();
+        } else {
+            console.error("Missing required parameters:", { studentSeq, daily });
+            setLoading(false);
+        }
+    }, [studentSeq, daily]);
 
+    // 로딩 중 화면
     if (loading) {
         return (
             <div className="calendar-read-loading">
@@ -54,6 +96,21 @@ const CalendarRead = () => {
         );
     }
 
+    // 학생 정보가 없는 경우
+    if (!studentSeq) {
+        return (
+            <div className="calendar-read-container">
+                <div className="calendar-read-header">
+                    <h2 className="calendar-read-title">오류</h2>
+                </div>
+                <div className="calendar-read-content">
+                    학생 정보가 제공되지 않았습니다.
+                </div>
+            </div>
+        );
+    }
+
+    // 이벤트 정보가 없는 경우
     if (!eventInfo || eventInfo.length === 0) {
         return (
             <div className="calendar-read-container">
@@ -67,6 +124,7 @@ const CalendarRead = () => {
         );
     }
 
+    // 이벤트 정보 표시
     return (
         <div className="calendar-read-container">
             <div className="calendar-read-header">

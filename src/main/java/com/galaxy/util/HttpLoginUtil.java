@@ -62,7 +62,7 @@ public class HttpLoginUtil {
         return seq;
     }
 
-    public String getEmail() {
+    public static String getEmail() {
 
         String email = "";
 
@@ -90,7 +90,7 @@ public class HttpLoginUtil {
         return email;
     }
 
-    public String getName() {
+    public static String getName() {
 
         String name = "";
 
@@ -116,5 +116,33 @@ public class HttpLoginUtil {
         }
 
         return name;
+    }
+
+    public static String getDivision() {
+
+        String division = "";
+
+        try {
+            SecretKey secretKey = Keys.hmacShaKeyFor(
+                HttpLoginUtil.key.getBytes(StandardCharsets.UTF_8)
+            );
+            HttpServletRequest request = getRequest();
+            String accessToken = Optional.ofNullable(request.getHeader(AUTHORIZATION_HEADER))  
+                .filter(token -> token.startsWith(BEARER))  
+                .map(token -> token.replace(BEARER, ""))
+                .orElseThrow(() -> new AuthenticationServiceException("No access token"));
+
+            division = Jwts
+                .parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(accessToken)
+                .getPayload()
+                .get("division", String.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return division;
     }
 }

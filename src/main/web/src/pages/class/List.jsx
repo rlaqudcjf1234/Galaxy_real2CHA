@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { authenticatedRequest as axios } from '../../plugins/axios';
+import { authenticatedRequest as axios } from "../../plugins/axios";
 import Pagination from "../../components/Pagination";
-
 
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
@@ -29,15 +28,15 @@ const List = () => {
     const handlePageChange = (pageIndex) => {
         setParams({
             ...params,
-            pageIndex: pageIndex
+            pageIndex: pageIndex,
         });
     };
 
     // 검색어 변경 핸들러
     const handleSearchChange = (e) => {
         setSearch({
-            ...search,  // 이전: ...params였던 것을 수정
-            [e.target.name]: e.target.value
+            ...search, // 이전: ...params였던 것을 수정
+            [e.target.name]: e.target.value,
         });
     };
 
@@ -54,7 +53,7 @@ const List = () => {
             ...params,
             pageIndex: 1,
             select: search.select,
-            text: search.text
+            text: search.text,
         });
     };
 
@@ -75,28 +74,28 @@ const List = () => {
                     <button className="btn btn-primary">등록</button>
                 </Link>
 
-            </div> */
-            }
+            </div> */}
             <table className="table">
                 {/* 제목 영역 */}
                 <caption>
                     <span>
                         <em>홈</em>
+                        <em>과정등록</em>
                         <strong>강의현황</strong>
                     </span>
-                    <Link to="add" className="btn btn-primary">등록</Link>
+                    <Link to="add" className="btn btn-primary">
+                        등록
+                    </Link>
                 </caption>
                 <colgroup>
-                    <col width="20%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="5%" />
-                    <col width="10%" />
+                    <col width="25%" />
+                    <col width="4%" />
+                    <col width="6%" />
+                    <col width="6%" />
+                    <col width="15%" />
                     <col width="7%" />
-                    <col width="10%" />
-
-
+                    <col width="7%" />
+                    <col width="7%" />
                 </colgroup>
                 <thead>
                     <tr>
@@ -104,45 +103,44 @@ const List = () => {
                         <th scope="col">회차</th>
                         <th scope="col">강사</th>
                         <th scope="col">강의실</th>
-                        <th scope="col">총인원</th>
+                        <th scope="col">수강 / 신청 / 모집인원</th>
                         <th scope="col">등록일자</th>
                         <th scope="col">강의상태</th>
                         <th scope="col">확정일자</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {
-                        items.length > 0
-                            ? items.map((item) => {
-                                const read = `read/${item.SEQ}`;
-                                return (
-                                    <tr key={item.SEQ}>
-                                        <td>
-                                            <Link to={read}>{item.LECTURE_NAME}</Link>
-                                        </td>
-                                        <td>{item.ROUND}</td>
-                                        <td>{item.ADMIN_NAME}</td>
-                                        <td>{item.ROOM}</td>
-                                        <td>{item.PEOPLE}</td>
-                                        <td>{item.REG_DT}</td>
-                                        <td>{item.CODE_NAME}</td>
-                                        <td>{item.CONFIRM_DT}</td>
-                                    </tr>
-                                )
-                            })
-                            : (
-                                <tr>
-                                    <td colSpan="8" className="text-center">데이터가 없습니다.</td>
+                    {items.length > 0 ? (
+                        items.map((item) => {
+                            const read = `read/${item.SEQ}`;
+                            return (
+                                <tr key={item.SEQ}>
+                                    <td>
+                                        <Link to={read}>{item.LECTURE_NAME}</Link>
+                                    </td>
+                                    <td>{item.ROUND}</td>
+                                    <td>{item.ADMIN_NAME}</td>
+                                    <td>{item.ROOM_NAME}</td>
+                                    <td>
+                                        {item.STUDENT_COUNT} / {item.APPLY_COUNT} / {item.PEOPLE}
+                                    </td>
+                                    <td>{item.REG_DT}</td>
+                                    <td>{item.CODE_NAME}</td>
+                                    <td>{item.CONFIRM_DT}</td>
                                 </tr>
-                            )
-                    }
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="8" className="text-center">
+                                데이터가 없습니다.
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 
-            <Pagination
-                currentPage={params.pageIndex}
-                totalCount={totalCount}
-                onPageChange={handlePageChange} />
+            <Pagination currentPage={params.pageIndex} totalCount={totalCount} onPageChange={handlePageChange} />
 
             <div className="d-flex gap-2 justify-content-center py-1">
                 <div>
@@ -151,7 +149,8 @@ const List = () => {
                         defaultValue={search.select}
                         onChange={handleSearchChange}
                         className="form-control"
-                        required="required">
+                        required="required"
+                    >
                         <option value="1">과정명</option>
                         <option value="2">강사</option>
                         <option value="3">교실</option>
@@ -165,12 +164,15 @@ const List = () => {
                         onChange={handleSearchChange}
                         onKeyDown={handleKeyPress}
                         className="form-control"
-                        placeholder="검색어를 입력하세요" />
+                        placeholder="검색어를 입력하세요"
+                    />
                 </div>
-                <button onClick={handleSearch} className="btn btn-primary">검색</button>
+                <button onClick={handleSearch} className="btn btn-primary">
+                    검색
+                </button>
             </div>
         </div>
     );
-}
+};
 
 export default List;

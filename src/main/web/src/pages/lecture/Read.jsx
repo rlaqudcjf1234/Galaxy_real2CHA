@@ -24,7 +24,7 @@ const Read = () => {
             setLecture(response.data);
         } catch (error) {
             console.error('Error fetching lecture:', error);
-            alert("강의 정보를 불러오는데 실패했습니다.");
+            alert("과정 정보를 불러오는데 실패했습니다.");
             navigate("/lecture");
         } finally {
             setLoading(false);
@@ -65,7 +65,7 @@ const Read = () => {
  
 
     if (loading) return <div>로딩중...</div>;
-    if (!lecture) return <div>강의를 찾을 수 없습니다.</div>;
+    if (!lecture) return <div>과정를 찾을 수 없습니다.</div>;
 
     return (
         <div>
@@ -76,7 +76,7 @@ const Read = () => {
                         <span>
                             <em>홈</em>
                             <em>교육과정현황</em>
-                            <strong>강의상세</strong>
+                            <strong>과정상세</strong>
                         </span>
                     </caption>
                     <colgroup>
@@ -113,7 +113,7 @@ const Read = () => {
                             </td>
                         </tr>
                         <tr>
-                            <th>강의명</th>
+                            <th>과정명</th>
                             <td>
                                 <input
                                     type="text"

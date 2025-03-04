@@ -68,14 +68,14 @@
             AND CD.CODE_NAME =
                 CASE
                 WHEN A.USE_YN = 0 THEN '강의취소'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT
-                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> START_DT
-                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> END_DT THEN '종료'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> START_DT
+                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> END_DT THEN '종료'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> START_DT
+                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> END_DT THEN '종료'
                 END
         ) AS CODE_NAME
     FROM (
@@ -89,7 +89,7 @@
     )A
     OFFSET (#{pageIndex} - 1) * #{pageSize} ROWS
     FETCH NEXT #{pageSize} ROWS ONLY
-</select>
+    </select>
 
     <update id="updateClass" parameterType="map">
     UPDATE CLASS 
@@ -157,19 +157,19 @@
             AND CD.CODE_NAME = 
                 CASE
                     WHEN C.USE_YN = 0 THEN '강의취소'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT
-                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<]]> C.START_DT THEN '진행예정'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>=]]> C.START_DT
-                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[<=]]> C.END_DT THEN '진행중'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) <![CDATA[>]]> C.END_DT THEN '종료'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> C.START_DT THEN '진행예정'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> C.START_DT
+                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> C.END_DT THEN '진행중'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> C.END_DT THEN '종료'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> C.START_DT THEN '진행예정'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> C.START_DT
+                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> C.END_DT THEN '진행중'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> C.END_DT THEN '종료'
                 END
         ) AS CODE_NAME
    FROM CLASS C
    WHERE SEQ = #{seq}
-</select>
+    </select>
 
     <select id="getAdminList" resultType="adminDto">
         SELECT name FROM admin WHERE division = 'admin' or use_yn ='1';
@@ -202,10 +202,13 @@
     </update>
 
     <select id="selectUseList" resultType="map">
-        SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
-        FROM CLASS
-        WHERE USE_YN = 1
-        AND END_DT <![CDATA[<]]> TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        <![CDATA[
+            SELECT SEQ, GET_CLASS_NAME(SEQ) AS CLASS_NAME, USE_YN 
+            FROM CLASS
+            WHERE USE_YN = 1
+            AND START_DT <=  TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+            AND END_DT >= TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD')) + 1
+        ]]>
     </select>
 
     <select id="selectClassInfo" parameterType="int" resultType="map">

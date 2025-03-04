@@ -117,8 +117,8 @@ const Read = () => {
                             <td>{items.END_TM}</td>
                         </tr>
                         <tr>
-                            <th scope="row">총인원</th>
-                            <td>{items.PEOPLE}</td>
+                            <th scope="row">수강/신청/모집인원</th>
+                            <td>{items.STUDENT_COUNT} / {items.APPLY_COUNT} / {items.PEOPLE}</td>
                             <th scope="row">등록일자</th>
                             <td>{items.REG_DT}</td>
                         </tr>
@@ -152,7 +152,7 @@ const Read = () => {
             {items && (
                 <div className="d-flex justify-content-center mt-3">
                     <div className="d-flex gap-2">
-                        <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
+                        <button className="btn btn-secondary" onClick={() => navigate("/class")}>목록</button>
                         <button className="btn btn-primary" onClick={() => navigate(`/class/update/${seq}`)}>수정</button>
                         {renderActionButton()}
                     </div>

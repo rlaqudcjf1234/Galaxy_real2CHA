@@ -19,7 +19,7 @@
                 A.ADDRESS1 AS address1,
                 A.ADDRESS2 AS address2,
                 A.EMAIL AS email,
-                A.PHONE AS phone,
+                GET_PHONE_FORMAT(A.PHONE) AS phone,
                 A.PATH AS path,
                 TO_CHAR(A.REG_DT, 'YYYY-MM-DD') AS reg_dt,
                 A.USE_YN AS use_yn,
@@ -87,8 +87,8 @@
         A.ID, 
         A.CLASS_SEQ as seq, 
         A.NAME, 
-        A.JUMIN, 
-        A.PHONE, 
+        GET_MASK_JUMIN_FORMAT(A.JUMIN) AS JUMIN, 
+        GET_PHONE_FORMAT(A.PHONE) AS PHONE, 
         A.EMAIL, 
         A.REAL_ZIPCODE, 
         A.REAL_ADDRESS1, 
@@ -166,9 +166,9 @@
     </update>
 
     <insert id="insertStudent" parameterType="applyDto">
-    <selectKey resultType="String" keyProperty="seq" order="BEFORE">
+        <selectKey resultType="String" keyProperty="seq" order="BEFORE">
         SELECT SEQ.NEXTVAL FROM DUAL
-    </selectKey>
+        </selectKey>
         INSERT ALL 
             INTO SEQ_MANAGEMENT(
                 SEQ, TABLE_NM, REG_DT
@@ -186,8 +186,7 @@
                 #{real_zipcode, jdbcType=VARCHAR}, #{real_address1, jdbcType=VARCHAR}, #{real_address2, jdbcType=VARCHAR}, 
                 NVL(#{zipcode, jdbcType=VARCHAR}, ''), NVL(#{address1, jdbcType=VARCHAR}, ''), NVL(#{address2, jdbcType=VARCHAR}, ''), 
                 #{email, jdbcType=VARCHAR}, #{phone, jdbcType=VARCHAR}, #{path, jdbcType=VARCHAR},
-                (SELECT C.ROOM || C.ROUND || #{seq} FROM CLASS C WHERE C.SEQ = #{class_seq, jdbcType=INTEGER}), 
-                #{password,jdbcType=VARCHAR}, SYSDATE
+                (SELECT C.ROOM || C.ROUND || #{seq} FROM CLASS C WHERE C.SEQ = #{class_seq, jdbcType=INTEGER}), #{password,jdbcType=VARCHAR}, SYSDATE
             )
         SELECT * FROM DUAL
     </insert>

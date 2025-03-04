@@ -150,7 +150,7 @@ const List = () => {
                 </td>
                 <td>
                   <Link
-                    to={`/student/read/${item.SEQ}`}
+                    to={`/aftercare/read/${item.SEQ}`}
                     state={{ profile: { name: item.NAME, email: item.EMAIL } }}
                     className="name-link"
                   >

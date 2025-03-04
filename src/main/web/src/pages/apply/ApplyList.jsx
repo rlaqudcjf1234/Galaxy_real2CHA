@@ -77,6 +77,7 @@ const ApplyList = () => {
                 <caption>
                     <span>
                         <em>홈</em>
+                        <em>학적부</em>
                         <strong>접수현황</strong>
                     </span>
                     {/* 등록 버튼 */}
@@ -108,9 +109,7 @@ const ApplyList = () => {
                             <tr key={item.ID}>
                                 <td>{item.RNUM}</td>
                                 <td>
-                                    <Link to={`/apply/read/${item.ID}`}>
-                                        {item.NAME}
-                                    </Link>
+                                    <Link to={`/apply/read/${item.ID}`}>{item.NAME}</Link>
                                 </td>
                                 <td>{item.EMAIL}</td>
                                 <td>{item.PHONE}</td>
@@ -130,9 +129,7 @@ const ApplyList = () => {
             <Pagination
                 currentPage={params.pageIndex}
                 totalCount={totalCount}
-                onPageChange={(pageIndex) =>
-                    setParams((prev) => ({ ...prev, pageIndex }))
-                }
+                onPageChange={(pageIndex) => setParams((prev) => ({ ...prev, pageIndex }))}
             />
         </div>
     );

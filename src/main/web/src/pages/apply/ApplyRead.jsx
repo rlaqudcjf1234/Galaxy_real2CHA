@@ -96,8 +96,8 @@ function ApplyRead() {
     if (!apply) return <div>등록 정보를 찾을 수 없습니다.</div>;
 
     // 버튼 공통 스타일
-    const buttonStyle = { minWidth: "58px", minHeight: "38px"};
-    const buttonStyle1 = { minWidth: "90px", minHeight: "38px"};
+    const buttonStyle = { minWidth: "58px", minHeight: "38px" };
+    const buttonStyle1 = { minWidth: "90px", minHeight: "38px" };
 
     return (
         <div>
@@ -114,17 +114,9 @@ function ApplyRead() {
                 <tbody>
                     <tr>
                         <th scope="row">강의</th>
-                        <td>
-                            {classInfo
-                                ? `${classInfo.round}회 - ${classInfo.lecture_name}`
-                                : "정보 없음"}
-                        </td>
+                        <td>{classInfo ? `${classInfo.round}회 - ${classInfo.lecture_name}` : "정보 없음"}</td>
                         <th scope="row">교육 기간</th>
-                        <td>
-                            {classInfo
-                                ? `${classInfo.start_dt} ~ ${classInfo.end_dt}`
-                                : "정보 없음"}
-                        </td>
+                        <td>{classInfo ? `${classInfo.start_dt} ~ ${classInfo.end_dt}` : "정보 없음"}</td>
                     </tr>
                     <tr>
                         <th scope="row">학생명</th>
@@ -180,11 +172,7 @@ function ApplyRead() {
                                         신청 취소
                                     </button>
                                     {apply.USE_YN !== "Y" && (
-                                        <button
-                                            className="btn btn-primary"
-                                            onClick={handleApprove}
-                                            style={buttonStyle}
-                                        >
+                                        <button className="btn btn-primary" onClick={handleApprove} style={buttonStyle}>
                                             승인
                                         </button>
                                     )}

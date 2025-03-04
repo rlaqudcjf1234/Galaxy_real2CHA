@@ -42,7 +42,7 @@ function Mod() {
             setLoading(false);
         }
     };
-    // 기존 강의 정보 불러오기    
+    // 기존 과정 정보 불러오기    
     const fetchLecture = async () => {
         try {
             const response = await axios.get('/api/lecture/mod', {
@@ -59,7 +59,7 @@ function Mod() {
             console.error('Error fetching lecture:', error);
             setErrors(prev => ({
                 ...prev,
-                general: '강의 정보를 불러오는데 실패했습니다.'
+                general: '과정 정보를 불러오는데 실패했습니다.'
             }));
         }
     };
@@ -83,7 +83,7 @@ function Mod() {
     const validateForm = () => {
         const newErrors = {};
         if (!formData.name.trim()) {
-            newErrors.name = '강의명을 입력해주세요.';
+            newErrors.name = '과정명을 입력해주세요.';
         }
         return newErrors;
     };
@@ -116,7 +116,7 @@ function Mod() {
         } catch (error) {
             console.error('Error:', error);
             setErrors({
-                general: error.response?.data?.message || '강의 수정 중 오류가 발생했습니다.'
+                general: error.response?.data?.message || '과정 수정 중 오류가 발생했습니다.'
             });
         } finally {
             setLoading(false);
@@ -153,7 +153,7 @@ function Mod() {
                         <span>
                             <em>홈</em>
                             <em>교육과정현황</em>
-                            <em>강의상세</em>
+                            <em>과정상세</em>
                             <strong>교육과정수정</strong>
                         </span>
                     </caption>
@@ -189,7 +189,7 @@ function Mod() {
                             </td>
                         </tr>
                         <tr>
-                            <th>강의명</th>
+                            <th>과정명</th>
                             <td>
                                 <input
                                     id="name"
@@ -198,7 +198,7 @@ function Mod() {
                                     name="name"
                                     value={formData.name}
                                     onChange={handleChange}
-                                    placeholder="강의명을 입력해주세요."
+                                    placeholder="과정명을 입력해주세요."
                                 />
                                 {errors.name && (
                                     <div className="invalid-feedback">

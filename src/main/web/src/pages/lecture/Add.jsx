@@ -127,14 +127,14 @@ const Add = () => {
                             </td>
                         </tr>
                         <tr>
-                            <th>강의명</th>
+                            <th>과정명</th>
                             <td>
                                 <input
                                     type="text"
                                     className={`form-control ${errors.name ? 'is-invalid' : ''}`}
                                     name="name"
                                     required="required"
-                                    placeholder="강의명을 입력해주세요."
+                                    placeholder="과정명을 입력해주세요."
                                 />
                                 {errors.name && (
                                     <div className="invalid-feedback d-block">

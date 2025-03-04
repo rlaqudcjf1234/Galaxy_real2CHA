@@ -103,7 +103,7 @@ const List = () => {
                         <th>번호</th>
                         <th>제목</th>
                         <th>작성자</th>
-                        <th>등록일자</th>
+                        <th>작성일자</th>
                         <th>설문배포</th>
                     </tr>
                 </thead>

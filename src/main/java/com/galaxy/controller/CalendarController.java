@@ -1,6 +1,8 @@
 package com.galaxy.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.galaxy.dto.AdminDto;
 import com.galaxy.dto.CalendarDto;
 import com.galaxy.dto.ListDto;
 import com.galaxy.dto.SearchDto;
 import com.galaxy.dto.SeqDto;
 import com.galaxy.service.CalendarService;
 import com.galaxy.util.HttpLoginUtil;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import jakarta.validation.Valid;
 
@@ -78,19 +81,42 @@ public class CalendarController {
     }
 
     @GetMapping("/read")
-public ResponseEntity<?> readCalendar(@RequestParam("classSeq") String classSeq) throws Exception {
-    SeqDto dto = new SeqDto();
-    dto.setSeq(classSeq);
+    public ResponseEntity<?> calendarRead(@RequestParam("seq") String student_seq,
+            @RequestParam(value = "daily", required = false) String daily) {
+        try {
+            System.out.println("📌 Reading calendar for student: " + student_seq);
+            System.out.println("📅 Received daily: " + daily);
 
-    List<Map<String, Object>> results = calendarService.calendarread(dto);
+            if (daily == null || daily.isEmpty()) {
+                return ResponseEntity.badRequest().body(Map.of("error", "날짜가 제공되지 않았습니다."));
+            }
 
-    if (results.isEmpty()) {
-        return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
-                .body(Map.of("message", "일정 정보를 찾을 수 없습니다."));
+            // 1️⃣ String → java.util.Date 변환
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            Date utilDate = sdf.parse(daily); // String을 java.util.Date로 변환
+
+            // 2️⃣ java.util.Date → java.sql.Date 변환
+            java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+            // 3️⃣ DTO에 설정
+            CalendarDto calendarDto = new CalendarDto();
+            calendarDto.setSeq(student_seq);
+            calendarDto.setDaily(sqlDate); // ✅ 올바르게 변환된 Date 저장
+
+            // 4️⃣ DB 조회
+            List<Map<String, Object>> resultList = calendarService.calendarread(calendarDto);
+
+            if (resultList == null || resultList.isEmpty()) {
+                System.out.println("🚫 No data found for student: " + student_seq);
+                return ResponseEntity.noContent().build();
+            }
+
+            return ResponseEntity.ok(resultList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", e.getMessage()));
+        }
     }
-
-    return ResponseEntity.ok(results);
-}
 
 }

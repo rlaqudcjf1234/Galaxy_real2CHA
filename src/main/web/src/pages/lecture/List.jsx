@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {authenticatedRequest as axios} from"../../plugins/axios";
+import { authenticatedRequest as axios } from "../../plugins/axios";
 import Pagination from "../../components/Pagination";
-
 
 const List = () => {
     const [items, setItems] = useState([]); // 목록 데이터
@@ -29,15 +28,15 @@ const List = () => {
     const handlePageChange = (pageIndex) => {
         setParams({
             ...params,
-            pageIndex: pageIndex
+            pageIndex: pageIndex,
         });
     };
-    
+
     // 검색어 변경 핸들러
     const handleSearchChange = (e) => {
         setSearch({
             ...search,
-            [e.target.name]: e.target.value // search를 업데이트합니다
+            [e.target.name]: e.target.value, // search를 업데이트합니다
         });
     };
 
@@ -53,7 +52,7 @@ const List = () => {
             ...params,
             pageIndex: 1,
             select: search.select,
-            text: search.text
+            text: search.text,
         });
     };
 
@@ -71,12 +70,11 @@ const List = () => {
         const top = 15;
         // 팝업창 열기
         window.open(
-            `/lecture/doc/${seq}`,  // URL 경로
-            '학과문서',  // 팝업창 이름
+            `/lecture/doc/${seq}`, // URL 경로
+            "학과문서", // 팝업창 이름
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
     };
-
 
     return (
         <div>
@@ -89,17 +87,19 @@ const List = () => {
                 <div className="header-right">
                     <button onClick={() => navigate('/lecture/add')} className="write-button">등록</button>
                 </div>
-            </div> */
-            }
+            </div> */}
 
             <table className="table">
                 {/* 제목 영역 */}
                 <caption>
                     <span>
                         <em>홈</em>
+                        <em>과정등록</em>
                         <strong>교육과정현황</strong>
                     </span>
-                    <Link to="add" className="btn btn-primary">등록</Link>
+                    <Link to="add" className="btn btn-primary">
+                        등록
+                    </Link>
                 </caption>
 
                 <colgroup>
@@ -123,6 +123,7 @@ const List = () => {
                     </tr>
                 </thead>
                 <tbody>
+<<<<<<< HEAD
                     {
                         items.length > 0
                             ? (items.map((item) => {
@@ -152,16 +153,41 @@ const List = () => {
                             : (
                                 <tr>
                                     <td colSpan="7" className="text-center">데이터가 없습니다.</td>
+=======
+                    {items.length > 0 ? (
+                        items.map((item) => {
+                            const read = `read/${item.SEQ}`;
+                            return (
+                                <tr key={item.SEQ}>
+                                    <td>{item.RNUM}</td>
+                                    <td>{item.DIVISION}</td>
+                                    <td>{item.CATEGORY}</td>
+                                    <td>
+                                        <Link to={read}>{item.LECTURE_NAME}</Link>
+                                    </td>
+                                    <td>{item.ADMIN_NAME}</td>
+                                    <td>{item.REG_DT}</td>
+                                    <td>
+                                        {/*attach=임의경로*/}
+                                        <button onClick={() => handleClick(item.SEQ)} className="btn btn-primary">
+                                            문서
+                                        </button>
+                                    </td>
+>>>>>>> 2432afcafa96b444172d96ef29321d870cc7c40b
                                 </tr>
-                            )
-                    }
+                            );
+                        })
+                    ) : (
+                        <tr>
+                            <td colSpan="5" className="text-center">
+                                데이터가 없습니다.
+                            </td>
+                        </tr>
+                    )}
                 </tbody>
             </table>
 
-            <Pagination
-                currentPage={params.pageIndex}
-                totalCount={totalCount}
-                onPageChange={handlePageChange} />
+            <Pagination currentPage={params.pageIndex} totalCount={totalCount} onPageChange={handlePageChange} />
 
             <div className="d-flex gap-2 justify-content-center py-1">
                 <div>
@@ -170,8 +196,14 @@ const List = () => {
                         defaultValue={search.select}
                         onChange={handleSearchChange}
                         className="form-control"
+<<<<<<< HEAD
                         required="required">
                         <option value="1">과정명</option>
+=======
+                        required="required"
+                    >
+                        <option value="1">학과명</option>
+>>>>>>> 2432afcafa96b444172d96ef29321d870cc7c40b
                         <option value="2">강사명</option>
                     </select>
                 </div>
@@ -183,11 +215,14 @@ const List = () => {
                         onChange={handleSearchChange}
                         onKeyDown={handleKeyPress}
                         className="form-control"
-                        placeholder="검색어를 입력하세요" />
+                        placeholder="검색어를 입력하세요"
+                    />
                 </div>
-                <button onClick={handleSearch} className="btn btn-primary">검색</button>
+                <button onClick={handleSearch} className="btn btn-primary">
+                    검색
+                </button>
             </div>
         </div>
     );
-}
+};
 export default List;
