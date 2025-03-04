@@ -67,7 +67,7 @@ function AdcList() {
             searchKeyword: searchInput,
         }));
         setCurrentPage(1);
-        fetchData(1);
+        // fetchData(1) 호출 제거 - useEffect에서 처리됨
     };
 
     const handleKeyPress = (e) => {
@@ -81,8 +81,35 @@ function AdcList() {
             navigate("/login");
             return;
         }
-        fetchData(currentPage);
-    }, [currentPage, accessToken]);
+
+        // params 상태가 변경될 때마다 데이터를 가져오도록 수정
+        const fetchCurrentData = async () => {
+            setLoading(true);
+            setError(null);
+
+            try {
+                const response = await axios.get("/api/adminCommunity/list", {
+                    params: {
+                        ...params,
+                        pageIndex: currentPage,
+                    },
+                });
+                setItems(response.data.items);
+                setTotalCount(response.data.totalCount);
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                if (error.response?.status === 401) {
+                    navigate("/login");
+                    return;
+                }
+                setError(error.response?.data?.message || "데이터를 불러오는데 실패했습니다.");
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCurrentData();
+    }, [currentPage, params, accessToken, navigate]);
 
     if (loading) {
         return <div className="text-center p-4">데이터를 불러오는 중입니다...</div>;
@@ -94,26 +121,38 @@ function AdcList() {
 
     return (
         <div>
-            <div className="d-flex justify-content-between align-items-center mb-3">
-                <div className="d-flex gap-2">
-                    <input
-                        type="text"
-                        className="form-control"
-                        placeholder="검색어를 입력하세요"
-                        value={searchInput}
-                        onChange={(e) => setSearchInput(e.target.value)}
-                        onKeyPress={handleKeyPress}
-                    />
-                    <button className="btn btn-secondary" onClick={handleSearch}>
-                        검색
-                    </button>
+            <div className="row mb-3">
+                <div className="col-md-6">
+                    <div className="input-group">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="검색어를 입력하세요"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            onKeyPress={handleKeyPress}
+                        />
+                        <div className="input-group-append">
+                            <button className="btn btn-secondary" onClick={handleSearch}>
+                                검색
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <Link to="/adminCommunity/add">
-                    <button className="btn btn-primary">글쓰기</button>
-                </Link>
+                <div className="col-md-6 text-end">
+                    <Link to={`/adminCommunity/add`}>
+                        <button className="btn btn-primary">글쓰기</button>
+                    </Link>
+                </div>
             </div>
 
-            <table className="table table-hover">
+            <table className="table">
+                <caption>
+                    <span>
+                        <em>홈</em>
+                        <strong>관리자 게시판</strong>
+                    </span>
+                </caption>
                 <thead>
                     <tr>
                         <th scope="col">번호</th>
