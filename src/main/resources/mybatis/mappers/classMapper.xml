@@ -68,14 +68,14 @@
             AND CD.CODE_NAME =
                 CASE
                 WHEN A.USE_YN = 0 THEN '강의취소'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>=]]> START_DT
-                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>]]> END_DT THEN '종료'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<]]> START_DT THEN '진행예정'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>=]]> START_DT
-                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<=]]> END_DT THEN '진행중'
-                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>]]> END_DT THEN '종료'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> START_DT
+                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> END_DT THEN '종료'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> START_DT THEN '진행예정'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> START_DT
+                     AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> END_DT THEN '진행중'
+                WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> END_DT THEN '종료'
                 END
         ) AS CODE_NAME
     FROM (
@@ -157,14 +157,14 @@
             AND CD.CODE_NAME = 
                 CASE
                     WHEN C.USE_YN = 0 THEN '강의취소'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<]]> C.START_DT THEN '진행예정'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>=]]> C.START_DT
-                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<=]]> C.END_DT THEN '진행중'
-                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>]]> C.END_DT THEN '종료'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<]]> C.START_DT THEN '진행예정'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>=]]> C.START_DT
-                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[<=]]> C.END_DT THEN '진행중'
-                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))                                                         <![CDATA[>]]> C.END_DT THEN '종료'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> C.START_DT THEN '진행예정'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> C.START_DT
+                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> C.END_DT THEN '진행중'
+                    WHEN C.CONFIRM_DT IS NOT NULL AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> C.END_DT THEN '종료'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<]]> C.START_DT THEN '진행예정'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>=]]> C.START_DT
+                          AND TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[<=]]> C.END_DT THEN '진행중'
+                    WHEN TO_DATE(TO_CHAR(SYSDATE, 'YYYYMMDD'))  <![CDATA[>]]> C.END_DT THEN '종료'
                 END
         ) AS CODE_NAME
    FROM CLASS C
