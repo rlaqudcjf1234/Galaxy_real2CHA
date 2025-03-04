@@ -16,18 +16,32 @@
 </select>
 
 <select id="tablelist" parameterType="SearchDto" resultType="map">
-    SELECT A.CLASS_SEQ,
-        GET_CLASS_NAME(A.CLASS_SEQ) AS CLASS_NAME,
-        GET_ADMIN_NAME(B.ADMIN_SEQ) AS ADMIN_NAME,
-        A.DAILY,
-        A.STATUS
-    FROM TIMETABLE A, CLASS B
-    WHERE A.CLASS_SEQ = B.SEQ
-    AND EXTRACT(YEAR FROM A.DAILY) = #{year}
-    AND EXTRACT(MONTH FROM A.DAILY) = #{month}
-    <if test='@com.galaxy.util.HttpLoginUtil@getDivision() == "admin"'>
-        AND B.ADMIN_SEQ = #{seq}
-    </if>
+     SELECT A.CLASS_SEQ, 
+           B.DAILY,
+           COALESCE(C.STATUS, 'normal') AS STATUS
+    FROM (
+        SELECT C.SEQ as CLASS_SEQ 
+        FROM CLASS C
+        LEFT JOIN ADMIN D ON C.ADMIN_SEQ = D.SEQ
+        WHERE 1=1
+        <!-- 관리자(system)는 모든 반, 선생(admin)은 자기 반만 -->
+        AND (
+            EXISTS (SELECT 1 FROM ADMIN WHERE SEQ = #{seq} AND DIVISION = 'system')
+            OR 
+            (D.SEQ = #{seq} AND DIVISION = 'admin')
+        )
+    ) A
+    CROSS JOIN (
+        SELECT DISTINCT DAILY 
+        FROM TIMETABLE
+        WHERE EXTRACT(YEAR FROM DAILY) = #{year}
+        AND EXTRACT(MONTH FROM DAILY) = #{month}
+    ) B
+    LEFT JOIN TIMETABLE C
+        ON C.CLASS_SEQ = A.CLASS_SEQ
+        AND C.DAILY = B.DAILY
+        AND EXTRACT(YEAR FROM C.DAILY) = #{year}
+        AND EXTRACT(MONTH FROM C.DAILY) = #{month}
 </select>
 
 <select id="calendarDay" parameterType="String" resultType="map">
