@@ -94,7 +94,14 @@ function AdcList() {
                         pageIndex: currentPage,
                     },
                 });
-                setItems(response.data.items);
+
+                // 각 아이템에 rnum 속성 추가
+                const itemsWithReverseRnum = response.data.items.map((item, index) => ({
+                    ...item,
+                    rnum: response.data.totalCount - (currentPage - 1) * params.pageSize - index,
+                }));
+
+                setItems(itemsWithReverseRnum);
                 setTotalCount(response.data.totalCount);
             } catch (error) {
                 console.error("Error fetching data:", error);
@@ -166,11 +173,11 @@ function AdcList() {
                     {Array.isArray(items) && items.length > 0 ? (
                         items.map((item) => (
                             <tr key={item.seq}>
-                                <td>{item.seq}</td>
+                                <td>{item.rnum}</td>
+                                <td>{item.division}</td>
                                 <td>
                                     <Link to={`/adminCommunity/read/${item.seq}`}>{item.title}</Link>
                                 </td>
-                                <td>{item.division}</td>
                                 <td>{item.name}</td>
                                 <td>{item.regDt}</td>
                             </tr>
