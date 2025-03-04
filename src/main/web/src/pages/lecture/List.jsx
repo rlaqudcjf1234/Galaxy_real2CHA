@@ -84,7 +84,7 @@ const List = () => {
                 <div className="board-navigation">
                     <span onClick={() => navigate('/')} style={{ cursor: 'pointer' }}>홈</span>
                     <span>{'>'}</span>
-                    <span onClick={() => navigate('/lecture')} style={{ cursor: 'pointer' }}>강의관리</span>
+                    <span onClick={() => navigate('/lecture')} style={{ cursor: 'pointer' }}>과정관리</span>
                 </div>
                 <div className="header-right">
                     <button onClick={() => navigate('/lecture/add')} className="write-button">등록</button>
@@ -116,7 +116,7 @@ const List = () => {
                         <th>번호</th>
                         <th>구분</th>
                         <th>카테고리</th>
-                        <th>학과이름</th>
+                        <th>과정명</th>
                         <th>등록자</th>
                         <th>등록일자</th>
                         <th>문서</th>
@@ -151,7 +151,7 @@ const List = () => {
                             }))
                             : (
                                 <tr>
-                                    <td colSpan="5" className="text-center">데이터가 없습니다.</td>
+                                    <td colSpan="7" className="text-center">데이터가 없습니다.</td>
                                 </tr>
                             )
                     }
@@ -171,7 +171,7 @@ const List = () => {
                         onChange={handleSearchChange}
                         className="form-control"
                         required="required">
-                        <option value="1">학과명</option>
+                        <option value="1">과정명</option>
                         <option value="2">강사명</option>
                     </select>
                 </div>

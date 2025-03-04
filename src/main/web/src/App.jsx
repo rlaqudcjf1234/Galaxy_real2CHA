@@ -143,7 +143,7 @@ function App() {
 
                         <Route path="calendar" element={<Container />}>
                             <Route index="index" element={<Calendar />} />
-                            <Route path="read/:classseq" element={<CalendarRead />} />
+                            <Route path="/calendar/read/:seq" element={<CalendarRead />} />
                         </Route>
 
                         <Route path="question" element={<Container />}>
