@@ -152,7 +152,7 @@ const Read = () => {
             {items && (
                 <div className="d-flex justify-content-center mt-3">
                     <div className="d-flex gap-2">
-                        <button className="btn btn-secondary" onClick={() => navigate(-1)}>목록</button>
+                        <button className="btn btn-secondary" onClick={() => navigate("/class")}>목록</button>
                         <button className="btn btn-primary" onClick={() => navigate(`/class/update/${seq}`)}>수정</button>
                         {renderActionButton()}
                     </div>
