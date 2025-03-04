@@ -87,7 +87,7 @@ function Login() {
                 {/* 이메일 입력 */}
                 <div className="mb-3">
                     <label htmlFor="email" className="form-label">
-                        이메일
+                        아이디
                     </label>
                     <input
                         type="text"
@@ -137,12 +137,12 @@ function Login() {
                     <button className="btn btn-primary" type="submit">
                         로그인
                     </button>
-                    <button
+                    {/* <button
                         className="btn btn-secondary"
                         type="button"
                         onClick={() => alert("비밀번호 찾기 기능 준비 중입니다.")}>
                         비밀번호 찾기
-                    </button>
+                    </button> */}
                 </div>
             </form>
         </div>
