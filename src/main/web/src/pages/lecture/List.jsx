@@ -119,7 +119,7 @@ const List = () => {
                         <th>과정명</th>
                         <th>등록자</th>
                         <th>등록일자</th>
-                        <th>문서</th>
+                        <th>과정설명</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -139,11 +139,8 @@ const List = () => {
                                         <td>{item.REG_DT}</td>
                                         <td>
                                             {/*attach=임의경로*/}
-                                            <button
-                                                onClick={() => handleClick(item.SEQ)}
-                                                className="btn btn-primary"
-                                            >
-                                                문서
+                                            <button className="btn btn-info" onClick={() => handleClick(item.SEQ)}>
+                                                과정설명
                                             </button>
                                         </td>
                                     </tr>
@@ -153,7 +150,7 @@ const List = () => {
                                 <tr>
                                     <td colSpan="7" className="text-center">데이터가 없습니다.</td>
                                 </tr>
-                            )}                    
+                            )}
                 </tbody>
             </table>
 

@@ -111,7 +111,7 @@ function Mod() {
                         <span>
                             <em>홈</em>
                             <em>교육과정현황</em>
-                            <strong>안내문서(<small>{lecture.NAME}</small>)</strong>
+                            <strong>과정설명(<small>{lecture.NAME}</small>)</strong>
                         </span>
                     </caption>
                     <colgroup>
@@ -168,7 +168,7 @@ function Mod() {
                             <th>순번</th>
                             <td>
                                 <input
-                                    type="text"
+                                    type="number"
                                     className="form-control"
                                     name="sort"
                                     defaultValue="1"
