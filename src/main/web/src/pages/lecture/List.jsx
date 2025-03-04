@@ -123,7 +123,6 @@ const List = () => {
                     </tr>
                 </thead>
                 <tbody>
-<<<<<<< HEAD
                     {
                         items.length > 0
                             ? (items.map((item) => {
@@ -153,37 +152,8 @@ const List = () => {
                             : (
                                 <tr>
                                     <td colSpan="7" className="text-center">데이터가 없습니다.</td>
-=======
-                    {items.length > 0 ? (
-                        items.map((item) => {
-                            const read = `read/${item.SEQ}`;
-                            return (
-                                <tr key={item.SEQ}>
-                                    <td>{item.RNUM}</td>
-                                    <td>{item.DIVISION}</td>
-                                    <td>{item.CATEGORY}</td>
-                                    <td>
-                                        <Link to={read}>{item.LECTURE_NAME}</Link>
-                                    </td>
-                                    <td>{item.ADMIN_NAME}</td>
-                                    <td>{item.REG_DT}</td>
-                                    <td>
-                                        {/*attach=임의경로*/}
-                                        <button onClick={() => handleClick(item.SEQ)} className="btn btn-primary">
-                                            문서
-                                        </button>
-                                    </td>
->>>>>>> 2432afcafa96b444172d96ef29321d870cc7c40b
                                 </tr>
-                            );
-                        })
-                    ) : (
-                        <tr>
-                            <td colSpan="5" className="text-center">
-                                데이터가 없습니다.
-                            </td>
-                        </tr>
-                    )}
+                            )}                    
                 </tbody>
             </table>
 
@@ -196,14 +166,8 @@ const List = () => {
                         defaultValue={search.select}
                         onChange={handleSearchChange}
                         className="form-control"
-<<<<<<< HEAD
                         required="required">
                         <option value="1">과정명</option>
-=======
-                        required="required"
-                    >
-                        <option value="1">학과명</option>
->>>>>>> 2432afcafa96b444172d96ef29321d870cc7c40b
                         <option value="2">강사명</option>
                     </select>
                 </div>
