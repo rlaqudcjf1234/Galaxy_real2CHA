@@ -43,10 +43,10 @@ const LectureDocAdd = lazy(() => import("./pages/lectureDoc/Add"));
 const LectureDocRead = lazy(() => import("./pages/lectureDoc/Read"));
 const LectureDocMod = lazy(() => import("./pages/lectureDoc/Mod"));
 
-const CodeList = lazy(()=> import('./pages/codegroup/List'));
-const CodeAdd= lazy(()=>import('./pages/codegroup/Add'));
-const CodeRead= lazy(()=>import('./pages/codegroup/Read'));
-const CodeMod= lazy(()=>import('./pages/codegroup/Mod'));
+const CodeList = lazy(() => import("./pages/codegroup/List"));
+const CodeAdd = lazy(() => import("./pages/codegroup/Add"));
+const CodeRead = lazy(() => import("./pages/codegroup/Read"));
+const CodeMod = lazy(() => import("./pages/codegroup/Mod"));
 
 const QuestionList = lazy(() => import("./pages/question/List"));
 const QuestionAdd = lazy(() => import("./pages/question/Add"));
@@ -121,13 +121,6 @@ function App() {
                             <Route index="index" element={<AdcList />} />
                             <Route path="add" element={<AdcAdd />} />
                             <Route path="read/:seq" element={<AdcRead />} />
-                            <Route path="delete" />
-                        </Route>
-
-                        <Route path="classComunity" element={<Container />}>
-                            <Route /*index*/ element="" />
-                            <Route path="add" />
-                            <Route path="read" />
                             <Route path="delete" />
                         </Route>
 
