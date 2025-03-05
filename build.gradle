@@ -35,9 +35,16 @@ dependencies {
 	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
 	runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.5'
 
+	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	implementation files('libs/aud7-embedded.jar')
+	implementation 'com.google.code.gson:gson:2.11.0'
+	compileOnly 'javax.servlet:servlet-api:2.5'
+
 }
 
 tasks.named('test') {
