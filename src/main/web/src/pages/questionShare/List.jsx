@@ -95,10 +95,10 @@ const List = () => {
                     </span>
                 </caption>
                 <colgroup>
+                    <col width="100px" />
                     <col />
-                    <col />
-                    <col />
-                    <col />
+                    <col width="150px" />
+                    <col width="100px" />
                 </colgroup>
                 <thead>
                     <tr>
