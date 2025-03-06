@@ -121,9 +121,6 @@ const List = () => {
                                     <td>
                                         <button className="btn btn-info" onClick={() => handleClick(item.SEQ)}>
                                             배포하기
-                                        </button>&nbsp;&nbsp;
-                                        <button className="btn btn-success" onClick={() => handleClick(item.SEQ)}>
-                                            결과확인
                                         </button>
                                     </td>
                                 </tr>
