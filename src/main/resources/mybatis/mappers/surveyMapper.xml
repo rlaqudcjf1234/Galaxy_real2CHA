@@ -5,7 +5,7 @@
 		<if test='text != null and text != ""'>
 			<choose>
 				<when test='select == "1"'>
-					AND B.QUESTION_SEQ IN (SELECT SEQ FROM QUESTION WHERE NAME TITLE '%'||TRIM(#{text})||'%')
+					AND A.QUESTION_SEQ IN (SELECT SEQ FROM QUESTION WHERE TITLE LIKE '%'||TRIM(#{text})||'%')
 				</when>
 				<when test='select == "2"'>
 					AND GET_CLASS_NAME(B.CLASS_SEQ) LIKE '%'||TRIM(#{text})||'%'
