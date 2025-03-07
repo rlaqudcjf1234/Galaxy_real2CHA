@@ -23,7 +23,7 @@ function Header() {
                 <div className="menu-item">
                     <div className="menu-text">
                         <Link to="/admin" className="nav-link px-2">
-                            통합관리
+                            강사현황
                         </Link>
                     </div>
                     <div className="sub-menu">
@@ -58,7 +58,7 @@ function Header() {
                                 {
                                     label: "강의현황",
                                     path: "class",
-                                }
+                                },
                             ].map((item, index) => (
                                 <Link key={index} to={`/${item.path}`}>
                                     {item.label}
