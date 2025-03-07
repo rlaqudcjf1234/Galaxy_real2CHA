@@ -233,7 +233,7 @@ const Aftercare = ({ hideEditButton = false }) => {
               </select>
             </div>
             <div className="info-box">
-              <strong>회사 규모</strong>
+              <strong>희망 회사 규모</strong>
               <select name="companyLevel" value={form.companyLevel} onChange={handleChange}>
                 <option value="">선택</option>
                 {codeOptions.map((option) => (
@@ -244,17 +244,17 @@ const Aftercare = ({ hideEditButton = false }) => {
               </select>
             </div>
             <div className="info-box">
-              <strong>회사 업종</strong>
+              <strong>희망 회사 업종</strong>
               <input type="text" name="companyType" value={form.companyType} onChange={handleChange} />
             </div>
             <div className="info-box">
-              <strong>회사 국적</strong>
+              <strong>희망 회사 국적</strong>
               <div className="country-select" onClick={() => setShowCountryModal(true)}>
                 {form.companyNation || "선택"}
               </div>
             </div>
             <div className="info-box">
-              <strong>근무지역</strong>
+              <strong>희망 근무지역</strong>
               <div className="country-select" onClick={() => setShowLocationModal(true)}>
                 {form.companyLocation || "선택"}
               </div>
@@ -293,19 +293,19 @@ const Aftercare = ({ hideEditButton = false }) => {
               <span>{form.employmentHope}</span>
             </div>
             <div className="info-box">
-              <strong>회사 규모</strong>
+              <strong>희망 회사 규모</strong>
               <span>{form.companyLevel}</span>
             </div>
             <div className="info-box">
-              <strong>회사 업종</strong>
+              <strong>희망 업종</strong>
               <span>{form.companyType}</span>
             </div>
             <div className="info-box">
-              <strong>회사 국적</strong>
+              <strong>희망 회사 국적</strong>
               <span>{form.companyNation}</span>
             </div>
             <div className="info-box">
-              <strong>근무지역</strong>
+              <strong>희망 근무지역</strong>
               <span>{form.companyLocation}</span>
             </div>
             <div className="info-box">
@@ -333,7 +333,7 @@ const Aftercare = ({ hideEditButton = false }) => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3>국가 선택</h3>
+              <h3>희망 국가 선택</h3>
               <button className="modal-close" onClick={() => setShowCountryModal(false)}>
                 X
               </button>
@@ -362,7 +362,7 @@ const Aftercare = ({ hideEditButton = false }) => {
         <div className="modal-overlay">
           <div className="modal-content">
             <div className="modal-header">
-              <h3>근무지역 검색</h3>
+              <h3>희망 근무지역 검색</h3>
               <button className="modal-close" onClick={() => setShowLocationModal(false)}>
                 X
               </button>
